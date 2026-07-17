@@ -53,6 +53,7 @@ export const user_settings_schema = z.object({
     enable_login_emails: z.boolean(),
     enable_marketing_emails: z.boolean(),
     enable_online_push_notifications: z.boolean(),
+    enable_web_push_notifications: z.boolean(),
     enter_sends: z.boolean(),
     fluid_layout_width: z.boolean(),
     hide_ai_features: z.boolean(),
