@@ -1,10 +1,15 @@
 import base64
+import os
+import tempfile
+import time
 from unittest import mock
 
 import orjson
 import requests
+import responses
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
+from django.conf import settings
 from django.test import override_settings
 from pywebpush import WebPushException
 from typing_extensions import override
@@ -15,6 +20,7 @@ from zerver.lib.avatar import get_avatar_for_inaccessible_user
 from zerver.lib.outgoing_http import OutgoingSession
 from zerver.lib.push_notifications import (
     WEB_PUSH_REQUEST_TIMEOUT_SECONDS,
+    WebPushSession,
     handle_push_notification,
     has_webpush_credentials,
     push_notifications_configured,
@@ -26,8 +32,12 @@ from zerver.models.push_notifications import PushDeviceToken, WebPushSubscriptio
 from zerver.models.recipients import get_or_create_direct_message_group
 from zerver.models.scheduled_jobs import NotificationTriggers
 from zerver.models.users import UserProfile
+from zerver.views.service_worker import SERVICE_WORKER_BUNDLE, get_service_worker_path
 
 EXAMPLE_ENDPOINT = "https://fcm.googleapis.com/fcm/send/example-endpoint"
+# Stands in for whatever internal service a crafted push endpoint would try to
+# aim the server's own delivery request at.
+INTERNAL_METADATA_URL = "http://169.254.169.254/latest/meta-data/"
 # A valid p256dh key is the unpadded base64url encoding of the 65-byte
 # uncompressed P-256 public point (leading 0x04); auth is 16 random bytes.
 EXAMPLE_P256DH_KEY = (
@@ -241,6 +251,32 @@ class WebPushSubscriptionEndpointTest(ZulipTestCase):
         self.assert_json_error(result, "Invalid endpoint: Value error, Not an https URL")
         self.assertEqual(WebPushSubscription.objects.count(), 0)
 
+    def test_non_public_endpoint_host_rejected(self) -> None:
+        user = self.example_user("hamlet")
+        # An endpoint we would POST to is client-supplied, so a host that
+        # cannot be a public push service — loopback, RFC 1918, the cloud
+        # metadata link-local address, an IPv4-mapped IPv6 loopback — must be
+        # refused rather than stored and later fetched by the notification
+        # worker.
+        for bad_endpoint in (
+            "https://localhost/push",
+            "https://127.0.0.1/push",
+            "https://10.0.0.5:8443/push",
+            "https://192.168.1.1/push",
+            "https://169.254.169.254/latest/meta-data/",
+            "https://[::1]/push",
+            "https://[::ffff:127.0.0.1]/push",
+        ):
+            payload = {**EXAMPLE_SUBSCRIPTION, "endpoint": bad_endpoint}
+            result = self.api_post(user, self.ENDPOINT, payload)
+            self.assert_json_error(result, "Invalid endpoint: Value error, Invalid push endpoint")
+        self.assertEqual(WebPushSubscription.objects.count(), 0)
+
+        # A public IP literal is not what real push services use, but it is not
+        # our business to forbid it; only the non-routable ranges are refused.
+        payload = {**EXAMPLE_SUBSCRIPTION, "endpoint": "https://93.184.216.34/push"}
+        self.assert_json_success(self.api_post(user, self.ENDPOINT, payload))
+
     def test_malformed_p256dh_key_rejected(self) -> None:
         user = self.example_user("hamlet")
         # Not base64url, wrong length, a valid-length point without the 0x04
@@ -391,6 +427,56 @@ class WebPushSendTest(ZulipTestCase):
         self.assertTrue(WebPushSubscription.objects.filter(id=subscription.id).exists())
         self.assertIn("Web push connection error", logs.output[0])
 
+    def test_send_budget_stops_iterating_over_subscriptions(self) -> None:
+        # The per-request timeout bounds one POST, not the loop: a user's
+        # subscriptions can each take it in turn. Since this runs in the worker
+        # that carries every user's mobile push notifications, the loop must
+        # stop once its wall-clock budget is spent, skipping — not retrying —
+        # what is left, and keeping those subscriptions for the next send.
+        subscriptions = [
+            self.create_subscription(f"{EXAMPLE_ENDPOINT}-{index}") for index in range(4)
+        ]
+
+        def slow_send(*args: object, **kwargs: object) -> None:
+            time.sleep(0.05)
+
+        with (
+            override_settings(WEB_PUSH_ENABLED=True, WEB_PUSH_VAPID_PRIVATE_KEY=self.vapid_key),
+            mock.patch("zerver.lib.push_notifications.WEB_PUSH_SEND_BUDGET_SECONDS", 0.06),
+            mock.patch("pywebpush.webpush", side_effect=slow_send) as mock_webpush,
+            self.assertLogs("zerver.lib.push_notifications", level="WARNING") as logs,
+        ):
+            send_web_push_notifications(self.user, {"type": "message"}, subscriptions)
+
+        self.assertGreaterEqual(mock_webpush.call_count, 1)
+        self.assertLess(mock_webpush.call_count, len(subscriptions))
+        self.assertIn("Web push send budget", logs.output[0])
+        self.assertEqual(
+            WebPushSubscription.objects.filter(user=self.user).count(), len(subscriptions)
+        )
+
+    def test_rate_limited_response_is_logged_and_not_retried(self) -> None:
+        # A push service telling us to back off is not a dead endpoint: keep the
+        # subscription, and log the throttling distinctly from a generic
+        # failure. We deliberately do not honor Retry-After by waiting, which
+        # would block the shared notification queue.
+        subscription = self.create_subscription()
+        with (
+            override_settings(WEB_PUSH_ENABLED=True, WEB_PUSH_VAPID_PRIVATE_KEY=self.vapid_key),
+            mock.patch("pywebpush.webpush") as mock_webpush,
+            self.assertLogs("zerver.lib.push_notifications", level="WARNING") as logs,
+        ):
+            mock_webpush.side_effect = WebPushException(
+                "Too many requests",
+                response=mock.Mock(status_code=429, headers={"Retry-After": "120"}),
+            )
+            send_web_push_notifications(self.user, {"type": "message"}, [subscription])
+
+        self.assertEqual(mock_webpush.call_count, 1)
+        self.assertIn("rate-limited", logs.output[0])
+        self.assertIn("120", logs.output[0])
+        self.assertTrue(WebPushSubscription.objects.filter(id=subscription.id).exists())
+
     def test_webpush_uses_proxy_session_and_bounded_timeout(self) -> None:
         # Requests go through the Smokescreen-aware outgoing session (SSRF
         # guard) with a bounded timeout so a hung push service can't wedge the
@@ -404,6 +490,57 @@ class WebPushSendTest(ZulipTestCase):
         _args, kwargs = mock_webpush.call_args
         self.assertIsInstance(kwargs["requests_session"], OutgoingSession)
         self.assertEqual(kwargs["timeout"], WEB_PUSH_REQUEST_TIMEOUT_SECONDS)
+
+    def test_web_push_session_does_not_follow_redirects(self) -> None:
+        # WebPushSession is the seam that turns redirect following off; assert
+        # it directly so the guarantee survives any refactor of the send loop.
+        # requests downgrades a redirected POST to GET, so the internal service
+        # is registered for GET — it must never be reached.
+        with responses.RequestsMock(assert_all_requests_are_fired=False) as mock_requests:
+            mock_requests.add(
+                responses.POST,
+                EXAMPLE_ENDPOINT,
+                status=302,
+                headers={"Location": INTERNAL_METADATA_URL},
+            )
+            mock_requests.add(responses.GET, INTERNAL_METADATA_URL, status=200, body="credentials")
+            response = WebPushSession().post(EXAMPLE_ENDPOINT, data=b"encrypted")
+            # Leaving the block resets the mock, dropping its recorded calls.
+            calls = [call.request.url for call in mock_requests.calls]
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(calls, [EXAMPLE_ENDPOINT])
+
+    def test_redirect_from_push_service_is_not_followed(self) -> None:
+        # End-to-end through the real pywebpush: a push service that answers
+        # our delivery POST with a 302 to an internal address must not get the
+        # request — and the VAPID Authorization JWT — re-issued there. Nothing
+        # here is mocked below the HTTP transport, so this also fails if the
+        # send loop stops routing through WebPushSession, since a plain
+        # requests call follows redirects.
+        subscription = self.create_subscription()
+        with (
+            responses.RequestsMock(assert_all_requests_are_fired=False) as mock_requests,
+            override_settings(WEB_PUSH_ENABLED=True, WEB_PUSH_VAPID_PRIVATE_KEY=self.vapid_key),
+            self.assertLogs("zerver.lib.push_notifications", level="WARNING") as logs,
+        ):
+            mock_requests.add(
+                responses.POST,
+                EXAMPLE_ENDPOINT,
+                status=302,
+                headers={"Location": INTERNAL_METADATA_URL},
+            )
+            mock_requests.add(responses.GET, INTERNAL_METADATA_URL, status=200, body="credentials")
+            send_web_push_notifications(self.user, {"type": "message"}, [subscription])
+            # Leaving the block resets the mock, dropping its recorded calls.
+            calls = [call.request.url for call in mock_requests.calls]
+
+        self.assertEqual(calls, [EXAMPLE_ENDPOINT])
+        # The unfollowed redirect is just a failed delivery: it is logged, and
+        # the subscription is kept since only 404/410 mean the endpoint is gone.
+        self.assertIn("Web push notification failed", logs.output[0])
+        self.assertIn("status 302", logs.output[0])
+        self.assertTrue(WebPushSubscription.objects.filter(id=subscription.id).exists())
 
     def test_handle_push_notification_sends_web_push(self) -> None:
         # Web push must work even though no mobile push is configured.
@@ -537,6 +674,45 @@ class WebPushSendTest(ZulipTestCase):
         mock_webpush.assert_called_once()
         mock_legacy.assert_not_called()
 
+    def test_channel_push_user_with_offline_push_off_still_gets_mobile(self) -> None:
+        # Mobile push for the channel-push and followed-topic triggers is
+        # governed by their own opt-in settings, not by
+        # enable_offline_push_notifications. So a user who turned that setting
+        # off — reaching the push worker for a channel message because they
+        # opted into channel push notifications, and for web push — must still
+        # have their mobile devices notified. Deciding mobile eligibility from
+        # enable_offline_push_notifications alone would silently cut off every
+        # channel-push subscriber who does not use it.
+        do_change_user_setting(
+            self.user, "enable_offline_push_notifications", False, acting_user=None
+        )
+        do_change_user_setting(
+            self.user, "enable_online_push_notifications", False, acting_user=None
+        )
+        do_change_user_setting(
+            self.user, "enable_stream_push_notifications", True, acting_user=None
+        )
+        PushDeviceToken.objects.create(
+            user=self.user, token="mobile-token", kind=PushDeviceToken.FCM
+        )
+        self.subscribe(self.user, "Denmark")
+        message_id = self.send_stream_message(
+            self.sender, "Denmark", "hello", topic_name="web push"
+        )
+        missed_message = {
+            "message_id": message_id,
+            "trigger": NotificationTriggers.STREAM_PUSH,
+        }
+        with (
+            override_settings(WEB_PUSH_ENABLED=True, WEB_PUSH_VAPID_PRIVATE_KEY=self.vapid_key),
+            mock.patch(
+                "zerver.lib.push_notifications.send_push_notifications_legacy"
+            ) as mock_legacy,
+            self.assertLogs("zerver.lib.push_notifications", level="INFO"),
+        ):
+            handle_push_notification(self.user.id, missed_message)
+        mock_legacy.assert_called_once()
+
     def test_mobile_user_without_web_gets_mobile_only(self) -> None:
         # Mobile push on, web push off: the DM must reach the mobile device and
         # NOT fire web push, even though a subscription is registered.
@@ -621,3 +797,92 @@ class WebPushDeviceRegisteredTest(ZulipTestCase):
         )
         do_change_user_setting(othello, "enable_web_push_notifications", False, acting_user=None)
         self.assertIn(othello.id, self._dm_push_disabled_ids(hamlet.id, othello))
+
+
+class ServiceWorkerTest(ZulipTestCase):
+    @override_settings(STATIC_ROOT="/srv/zulip-static")
+    def test_get_service_worker_path_production(self) -> None:
+        # With DEBUG off (the test default), the bundle resolves to its stable
+        # location under STATIC_ROOT. The test environment leaves STATIC_ROOT
+        # unset, so pin one for the assertion.
+        self.assertFalse(settings.DEBUG)
+        self.assertEqual(
+            get_service_worker_path(),
+            os.path.join("/srv/zulip-static", SERVICE_WORKER_BUNDLE),
+        )
+
+    @override_settings(DEBUG=True)
+    def test_get_service_worker_path_debug_uses_staticfiles_finder(self) -> None:
+        # In the dev server webpack serves the bundle from memory, so the
+        # on-disk copy (if any) is located through the staticfiles finders.
+        with mock.patch(
+            "django.contrib.staticfiles.finders.find",
+            return_value="/srv/zulip/service-worker.js",
+        ) as mock_find:
+            path = get_service_worker_path()
+        mock_find.assert_called_once_with(SERVICE_WORKER_BUNDLE)
+        self.assertEqual(path, "/srv/zulip/service-worker.js")
+
+    def test_service_worker_missing_bundle_returns_404(self) -> None:
+        with mock.patch("zerver.views.service_worker.get_service_worker_path", return_value=None):
+            result = self.client_get("/service-worker.js")
+        self.assertEqual(result.status_code, 404)
+
+    def test_service_worker_served_with_root_scope(self) -> None:
+        with tempfile.NamedTemporaryFile(suffix=".js") as f:
+            f.write(b"// service worker bundle")
+            f.flush()
+            with mock.patch(
+                "zerver.views.service_worker.get_service_worker_path",
+                return_value=f.name,
+            ):
+                result = self.client_get("/service-worker.js")
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result["Service-Worker-Allowed"], "/")
+        self.assertEqual(result["Cache-Control"], "no-cache")
+        self.assertEqual(result.getvalue(), b"// service worker bundle")
+
+
+# Web Push subscriptions and credential revocation.
+class WebPushRevocationTest(ZulipTestCase):
+    def create_subscription(self, user: UserProfile, endpoint: str) -> WebPushSubscription:
+        return WebPushSubscription.objects.create(
+            user=user,
+            endpoint=endpoint,
+            p256dh_key=EXAMPLE_P256DH_KEY,
+            auth_secret=EXAMPLE_AUTH_SECRET,
+        )
+
+    def test_regenerate_api_key_deletes_web_push_subscriptions(self) -> None:
+        # Regenerating a user's API key is Zulip's credential-revocation
+        # hammer: `manage.py logout_all_users --rotate-api-keys` and the SAML
+        # IdP-initiated logout handler both use it to cut a user off from every
+        # client, and it already clears mobile push tokens and Device rows for
+        # exactly that reason. Web Push subscriptions must die with them --
+        # this server delivers those notifications itself, so a subscription
+        # that outlives the rotation keeps pushing message content (sender and,
+        # by default, body) to a browser the revocation was meant to cut off.
+        from zerver.actions.user_settings import do_regenerate_api_key
+
+        hamlet = self.example_user("hamlet")
+        cordelia = self.example_user("cordelia")
+        self.create_subscription(hamlet, f"{EXAMPLE_ENDPOINT}-hamlet-laptop")
+        self.create_subscription(hamlet, f"{EXAMPLE_ENDPOINT}-hamlet-shared")
+        cordelia_sub = self.create_subscription(cordelia, f"{EXAMPLE_ENDPOINT}-cordelia")
+
+        do_regenerate_api_key(hamlet, hamlet)
+
+        self.assertEqual(WebPushSubscription.objects.filter(user=hamlet).count(), 0)
+        # Only the rotating user's subscriptions are revoked.
+        self.assertTrue(WebPushSubscription.objects.filter(id=cordelia_sub.id).exists())
+
+    def test_regenerate_api_key_endpoint_deletes_web_push_subscriptions(self) -> None:
+        # The same revocation must hold over the endpoint a user hits when they
+        # believe a credential of theirs has been compromised.
+        hamlet = self.example_user("hamlet")
+        self.create_subscription(hamlet, EXAMPLE_ENDPOINT)
+
+        result = self.api_post(hamlet, "/api/v1/users/me/api_key/regenerate")
+        self.assert_json_success(result)
+
+        self.assertEqual(WebPushSubscription.objects.filter(user=hamlet).count(), 0)
