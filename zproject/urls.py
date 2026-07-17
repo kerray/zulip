@@ -182,6 +182,7 @@ from zerver.views.scheduled_messages import (
     update_scheduled_message_backend,
 )
 from zerver.views.sentry import sentry_tunnel
+from zerver.views.service_worker import serve_service_worker
 from zerver.views.storage import get_storage, remove_storage, update_storage
 from zerver.views.streams import (
     add_default_stream,
@@ -865,6 +866,12 @@ urls += [
 urls += [
     path("manifest.webmanifest", web_app_manifest),
     path("manifest/icon-<int:size>.png", web_app_manifest_icon),
+]
+
+# The web push service worker, served from the site root so its scope covers
+# the whole app.
+urls += [
+    path("service-worker.js", serve_service_worker),
 ]
 
 # Incoming webhook URLs

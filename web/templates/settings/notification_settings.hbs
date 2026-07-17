@@ -164,6 +164,7 @@
               setting_name=this
               is_checked=(lookup ../settings_object this)
               label=(lookup ../settings_label this)
+              help_icon_tooltip_text=(and (eq this "enable_web_push_notifications") (t "To receive notifications in a browser, enable this setting while using that browser."))
               prefix=../prefix
               show_reset_button=../for_realm_settings}}
         {{/each}}
