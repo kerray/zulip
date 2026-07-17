@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "exactOptionalPropertyTypes": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "strict": true,
+
+        "module": "preserve",
+        "moduleResolution": "bundler",
+        "verbatimModuleSyntax": true,
+
+        "noEmit": true,
+        "erasableSyntaxOnly": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+
+        "lib": ["ES2022", "WebWorker"],
+        "target": "ES2022"
+    },
+    "include": ["./src/service-worker.ts"]
+}

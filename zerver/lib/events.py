@@ -577,6 +577,11 @@ def fetch_initial_state_data(
 
         state["server_can_summarize_topics"] = settings.TOPIC_SUMMARIZATION_MODEL is not None
 
+        # The browser applicationServerKey for Web Push subscriptions; empty
+        # when no VAPID keypair is configured, in which case clients skip the
+        # whole subscribe flow.
+        state["server_web_push_vapid_public_key"] = settings.WEB_PUSH_VAPID_PUBLIC_KEY or ""
+
         for channel_field in [
             "moderation_request_channel_id",
             "new_stream_announcements_stream_id",
