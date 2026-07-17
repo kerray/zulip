@@ -525,6 +525,17 @@ APNS_SANDBOX = True
 # ZULIP_IOS_APP_ID is obsolete. Clients now pass the iOS app ID to use for APNs.
 ANDROID_FCM_CREDENTIALS_PATH: str | None = None
 
+# Web Push (browser PWA push notifications, RFC 8291). One VAPID keypair
+# per server; unlike mobile push this needs no push notification bouncer.
+# The private key is stored as base64url-encoded PKCS#8 DER (a single
+# secrets.conf line); the public key that browsers use as the
+# applicationServerKey is derived from it at runtime, so the two halves
+# cannot drift apart.
+WEB_PUSH_VAPID_PRIVATE_KEY = get_secret("web_push_vapid_private_key")
+# Contact address included in the VAPID JWT 'sub' claim; push services
+# want a mailto:. Defaults to ZULIP_ADMINISTRATOR when left unset.
+WEB_PUSH_VAPID_CONTACT_EMAIL: str | None = None
+
 # Limits related to the size of file uploads; last few in MB.
 DATA_UPLOAD_MAX_MEMORY_SIZE = 25 * 1024 * 1024
 MAX_AVATAR_FILE_SIZE_MIB = 5
