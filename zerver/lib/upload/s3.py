@@ -403,6 +403,11 @@ class S3UploadBackend(ZulipUploadBackend):
         return public_url + f"?version={version}"
 
     @override
+    def get_realm_icon_image(self, realm: Realm) -> bytes:
+        file_path = os.path.join(self.realm_avatar_and_logo_path(realm), "icon.original")
+        return self.avatar_bucket.Object(file_path).get()["Body"].read()
+
+    @override
     def store_realm_icon_image(
         self, icon_file: IO[bytes], user_profile: UserProfile, content_type: str
     ) -> None:
