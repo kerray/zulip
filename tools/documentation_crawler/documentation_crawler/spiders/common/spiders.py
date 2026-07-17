@@ -39,6 +39,10 @@ EXCLUDED_URLS = [
     "https://giphy.com",
     "https://giphy.com/apps/giphycapture",
     "https://www.udemy.com/course/the-complete-react-native-and-redux-course/",
+    # The production web push notifications page is added by the same series
+    # that adds this entry; it does not exist on zulip.readthedocs.io until
+    # these commits merge. Drop this entry once the page is published.
+    "https://zulip.readthedocs.io/en/stable/production/web-push-notifications.html",
 ]
 
 VNU_IGNORE = [
