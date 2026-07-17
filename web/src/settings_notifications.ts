@@ -37,6 +37,7 @@ import {
     user_settings_schema,
 } from "./user_settings.ts";
 import * as util from "./util.ts";
+import * as web_push from "./web_push.ts";
 
 export let user_settings_panel: SettingsPanel | undefined;
 let customize_stream_notifications_widget: dropdown_widget.DropdownWidget;
@@ -520,6 +521,12 @@ export function set_up(settings_panel: SettingsPanel): void {
                 });
                 return;
             }
+        }
+
+        if (setting_name === "enable_web_push_notifications") {
+            // Subscribe or unsubscribe this browser from within the same user
+            // gesture, so the permission prompt is allowed to appear.
+            void web_push.handle_setting_change(setting_value === true);
         }
 
         change_notification_setting(
