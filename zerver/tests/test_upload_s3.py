@@ -576,6 +576,21 @@ class S3Test(ZulipTestCase):
         self.assertEqual(DEFAULT_AVATAR_SIZE, resized_image.width)
 
     @use_s3_backend
+    def test_get_realm_icon_image(self) -> None:
+        # The web app manifest resizes a realm's uploaded icon on the fly and
+        # so reads back the retained lossless original from storage.
+        create_s3_buckets(settings.S3_AVATAR_BUCKET)
+
+        user_profile = self.example_user("hamlet")
+        with get_test_image_file("img.png") as image_file:
+            zerver.lib.upload.get_upload_backend().store_realm_icon_image(
+                image_file, user_profile, content_type="image/png"
+            )
+
+        icon_bytes = zerver.lib.upload.get_upload_backend().get_realm_icon_image(user_profile.realm)
+        self.assertEqual(read_test_image_file("img.png"), icon_bytes)
+
+    @use_s3_backend
     def _test_upload_logo_image(self, night: bool, file_name: str) -> None:
         bucket = create_s3_buckets(settings.S3_AVATAR_BUCKET)[0]
 
