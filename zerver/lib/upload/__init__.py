@@ -504,6 +504,10 @@ def get_uploaded_realm_icon_url(realm_id: int, version: int) -> str:
     return get_upload_backend().get_realm_icon_url(realm_id, version)
 
 
+def get_realm_icon_image(realm: Realm) -> bytes:
+    return get_upload_backend().get_realm_icon_image(realm)
+
+
 def get_uploaded_realm_logo_url(realm_id: int, version: int, night: bool) -> str:
     return get_upload_backend().get_realm_logo_url(realm_id, version, night)
 
