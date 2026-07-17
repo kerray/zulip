@@ -21904,6 +21904,19 @@ paths:
                           is set or not.
 
                           **Changes**: New in Zulip 10.0 (feature level 350).
+                      server_web_push_vapid_public_key:
+                        type: string
+                        description: |
+                          Present if `realm` is present in `fetch_event_types`.
+
+                          The browser `applicationServerKey` (a base64url-encoded
+                          VAPID P-256 public key) that a web client passes to
+                          `PushManager.subscribe` when registering for browser Web
+                          Push (RFC 8291) notifications. The empty string when the
+                          server has no VAPID keypair configured, in which case
+                          clients skip the web push subscription flow.
+
+                          **Changes**: New in Zulip 13.0 (feature level ZF-0d381c).
                       event_queue_longpoll_timeout_seconds:
                         type: integer
                         description: |

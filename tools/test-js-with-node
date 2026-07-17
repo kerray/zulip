@@ -230,6 +230,10 @@ EXEMPT_FILES = make_set(
         "web/src/server_event_types.ts",
         "web/src/server_events.js",
         "web/src/server_events_state.ts",
+        # The service worker runs in a ServiceWorkerGlobalScope the node test
+        # harness cannot provide; its behavior is covered indirectly via
+        # web_push tests and manual/puppeteer testing.
+        "web/src/service-worker.ts",
         "web/src/settings.ts",
         "web/src/settings_account.ts",
         "web/src/settings_banner.ts",
@@ -321,6 +325,7 @@ EXEMPT_FILES = make_set(
         "web/src/user_topics.ts",
         "web/src/user_topics_ui.ts",
         "web/src/views_util.ts",
+        "web/src/web_push.ts",
         "web/src/widget_data.ts",
         "web/src/widget_modal.ts",
         "web/src/zcommand.ts",

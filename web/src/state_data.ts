@@ -635,6 +635,7 @@ export const realm_schema = z.object({
     server_typing_started_wait_period_milliseconds: z.number(),
     server_typing_stopped_wait_period_milliseconds: z.number(),
     server_web_public_streams_enabled: z.boolean(),
+    server_web_push_vapid_public_key: z.string(),
     settings_send_digest_emails: z.boolean(),
     stop_words: z.array(z.string()),
     tenor_api_key: z.string(),

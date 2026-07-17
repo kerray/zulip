@@ -1,10 +1,13 @@
 import base64
+import os
+import tempfile
 from unittest import mock
 
 import orjson
 import requests
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
+from django.conf import settings
 from django.test import override_settings
 from pywebpush import WebPushException
 from typing_extensions import override
@@ -26,6 +29,7 @@ from zerver.models.push_notifications import PushDeviceToken, WebPushSubscriptio
 from zerver.models.recipients import get_or_create_direct_message_group
 from zerver.models.scheduled_jobs import NotificationTriggers
 from zerver.models.users import UserProfile
+from zerver.views.service_worker import SERVICE_WORKER_BUNDLE, get_service_worker_path
 
 EXAMPLE_ENDPOINT = "https://fcm.googleapis.com/fcm/send/example-endpoint"
 # A valid p256dh key is the unpadded base64url encoding of the 65-byte
@@ -616,3 +620,47 @@ class WebPushDeviceRegisteredTest(ZulipTestCase):
         )
         do_change_user_setting(othello, "enable_web_push_notifications", False, acting_user=None)
         self.assertIn(othello.id, self._dm_push_disabled_ids(hamlet.id, othello))
+
+
+class ServiceWorkerTest(ZulipTestCase):
+    @override_settings(STATIC_ROOT="/srv/zulip-static")
+    def test_get_service_worker_path_production(self) -> None:
+        # With DEBUG off (the test default), the bundle resolves to its stable
+        # location under STATIC_ROOT. The test environment leaves STATIC_ROOT
+        # unset, so pin one for the assertion.
+        self.assertFalse(settings.DEBUG)
+        self.assertEqual(
+            get_service_worker_path(),
+            os.path.join("/srv/zulip-static", SERVICE_WORKER_BUNDLE),
+        )
+
+    @override_settings(DEBUG=True)
+    def test_get_service_worker_path_debug_uses_staticfiles_finder(self) -> None:
+        # In the dev server webpack serves the bundle from memory, so the
+        # on-disk copy (if any) is located through the staticfiles finders.
+        with mock.patch(
+            "django.contrib.staticfiles.finders.find",
+            return_value="/srv/zulip/service-worker.js",
+        ) as mock_find:
+            path = get_service_worker_path()
+        mock_find.assert_called_once_with(SERVICE_WORKER_BUNDLE)
+        self.assertEqual(path, "/srv/zulip/service-worker.js")
+
+    def test_service_worker_missing_bundle_returns_404(self) -> None:
+        with mock.patch("zerver.views.service_worker.get_service_worker_path", return_value=None):
+            result = self.client_get("/service-worker.js")
+        self.assertEqual(result.status_code, 404)
+
+    def test_service_worker_served_with_root_scope(self) -> None:
+        with tempfile.NamedTemporaryFile(suffix=".js") as f:
+            f.write(b"// service worker bundle")
+            f.flush()
+            with mock.patch(
+                "zerver.views.service_worker.get_service_worker_path",
+                return_value=f.name,
+            ):
+                result = self.client_get("/service-worker.js")
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result["Service-Worker-Allowed"], "/")
+        self.assertEqual(result["Cache-Control"], "no-cache")
+        self.assertEqual(result.getvalue(), b"// service worker bundle")
