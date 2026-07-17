@@ -68,6 +68,52 @@ and [mentions](/help/mention-a-user-or-group), or to include messages in
      **Unread count badge** dropdown.
 </FlattenedSteps>
 
+## Web push notifications
+
+With web push notifications, your browser can show notifications for new messages
+even when no Zulip tab is open. This is unlike regular desktop notifications,
+which require Zulip to be open in a browser tab or the [desktop
+app](/help/desktop-app-install-guide). Web push notifications also work when you
+have installed Zulip as an app on your device's home screen.
+
+<FlattenedSteps>
+  <NavigationSteps target="settings/notifications" />
+
+  1. Under **Desktop message notifications**, toggle **Enable web push
+     notifications**.
+  1. When your browser asks for permission to show notifications, select
+     **Allow**.
+</FlattenedSteps>
+
+The **Enable web push notifications** setting applies to your whole account,
+while the browser subscription that actually delivers notifications is
+per-browser. Turning the setting on subscribes the browser you are currently
+using.
+
+### Receiving notifications in another browser or device
+
+To also receive web push notifications in a different browser or device, open
+Zulip there while the setting is on:
+
+* If you have **already granted** that browser permission to show
+  notifications, it subscribes automatically when you open Zulip — there is
+  nothing else to do.
+* Otherwise, an **Enable push notifications in this browser** button appears in
+  your notification settings. Click it, and select **Allow** when your browser
+  asks for permission.
+
+<ZulipNote>
+  On iPhone and iPad, web push notifications require iOS/iPadOS 16.4 or later,
+  and only work when you have added Zulip to your **Home Screen** and open it
+  from there. The permission prompt only appears in response to a tap, so turn
+  the setting on (or use the **Enable push notifications in this browser**
+  button) directly on your device.
+</ZulipNote>
+
+Web push notifications require your Zulip server to be reachable over HTTPS, with
+web push [configured by your server
+administrator](https://zulip.readthedocs.io/en/stable/production/web-push-notifications.html).
+
 ## Testing desktop notifications
 
 <ZulipNote>
