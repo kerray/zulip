@@ -12,6 +12,7 @@ management-commands
 settings
 system-configuration
 mobile-push-notifications
+web-push-notifications
 upgrade
 modify
 securing-your-zulip-server
