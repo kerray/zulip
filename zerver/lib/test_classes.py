@@ -2810,6 +2810,19 @@ class MigrationsTestCase(ZulipTransactionTestCase):  # nocoverage
 
         self.apps = executor.loader.project_state(migrate_to).apps
 
+    @override
+    def tearDown(self) -> None:
+        # Migrate back up to the current state before
+        # ZulipTransactionTestCase's tearDown, which queries every table
+        # the current models declare: any table created by a migration
+        # newer than migrate_to does not exist while we are rolled back,
+        # and the query for it fails with UndefinedTable.  (A newer
+        # *column* is harmless there, since only "id" is selected.)
+        executor = MigrationExecutor(connection)
+        executor.loader.build_graph()
+        executor.migrate(executor.loader.graph.leaf_nodes(self.app))
+        super().tearDown()
+
     def setUpBeforeMigration(self, apps: StateApps) -> None:
         pass  # nocoverage
 

@@ -275,6 +275,7 @@ from zerver.views.video_calls import (
     register_webex_user,
     register_zoom_user,
 )
+from zerver.views.web_push import add_web_push_subscription, remove_web_push_subscription
 from zerver.views.welcome_bot_custom_message import send_test_welcome_bot_custom_message
 from zproject import dev_urls
 
@@ -481,6 +482,12 @@ v1_api_and_json_patterns = [
     rest_path("mobile_push/test_notification", POST=send_test_push_notification_api),
     rest_path("mobile_push/e2ee/test_notification", POST=send_e2ee_test_push_notification_api),
     rest_path("mobile_push/register", POST=register_push_device),
+    # Endpoint used by browsers to register their Web Push subscriptions.
+    rest_path(
+        "users/me/web_push_subscriptions",
+        POST=add_web_push_subscription,
+        DELETE=remove_web_push_subscription,
+    ),
     # users/*/presence => zerver.views.presence.
     rest_path(
         "users/me/presence", POST=(update_active_status_backend, {"narrow_user_session_cache"})
