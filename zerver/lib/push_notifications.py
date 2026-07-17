@@ -5,11 +5,12 @@ import copy
 import logging
 import re
 import time
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import asdict, dataclass
 from email.headerregistry import Address
 from functools import cache
 from typing import TYPE_CHECKING, Any, Final, Literal, Optional, TypeAlias, Union, cast
+from urllib.parse import urljoin
 
 import lxml.html
 import orjson
@@ -18,6 +19,7 @@ from django.conf import settings
 from django.db import transaction
 from django.db.models import F, Q, QuerySet
 from django.db.models.functions import Lower
+from django.templatetags.static import static
 from django.utils.timezone import now as timezone_now
 from django.utils.translation import gettext as _
 from django.utils.translation import override as override_language
@@ -47,6 +49,7 @@ from zerver.lib.message import (
     access_message_and_usermessage,
     direct_message_group_users,
 )
+from zerver.lib.message_cache import MessageDict
 from zerver.lib.notification_data import get_mentioned_user_group
 from zerver.lib.remote_server import (
     PushNotificationBouncerError,
@@ -62,7 +65,9 @@ from zerver.lib.tex import change_katex_to_raw_latex
 from zerver.lib.timestamp import datetime_to_timestamp
 from zerver.lib.topic import get_topic_display_name
 from zerver.lib.url_decoding import is_same_server_message_link
+from zerver.lib.url_encoding import message_link_url
 from zerver.lib.users import check_can_access_user
+from zerver.lib.web_push_vapid import get_vapid_private_key_pem
 from zerver.models import (
     AbstractPushDeviceToken,
     ArchivedMessage,
@@ -74,6 +79,7 @@ from zerver.models import (
     Stream,
     UserMessage,
     UserProfile,
+    WebPushSubscription,
 )
 from zerver.models.realms import get_fake_email_domain
 from zerver.models.scheduled_jobs import NotificationTriggers
@@ -1236,6 +1242,64 @@ def get_message_payload_gcm(
     return message_payload, gcm_options
 
 
+def get_message_payload_webpush(
+    message_payload: Mapping[str, Any],
+    user_profile: UserProfile,
+    message: Message,
+    can_access_sender: bool = True,
+) -> dict[str, Any]:
+    """A compact `message` payload for a browser Web Push service worker.
+
+    Derived from the shared modern (`for_legacy_clients=False`) message
+    payload, flattened to just what the service worker needs to render and
+    deep-link the OS notification. Unlike E2EE mobile push, the payload is
+    visible to the browser, so direct message content is redacted here when
+    the user has `pm_content_in_desktop_notifications` disabled.
+    """
+    if can_access_sender:
+        icon = absolute_avatar_url(message.sender, message.realm.url)
+    else:
+        icon = get_avatar_for_inaccessible_user()
+
+    assert message.rendered_content is not None
+    with override_language(user_profile.default_language):
+        if message.is_channel_message:
+            channel_id = message_payload["channel_id"]
+            topic_display_name = message_payload["topic"]
+            title = get_apns_alert_title(
+                message, message_payload["channel_name"], topic_display_name
+            )
+            tag = f"channel:{channel_id}:{topic_display_name}"
+        else:
+            recipient_user_ids = message_payload["recipient_user_ids"]
+            title = get_apns_alert_title(message)
+            tag = "dm:" + ",".join(str(user_id) for user_id in recipient_user_ids)
+
+        if not message.is_channel_message and not user_profile.pm_content_in_desktop_notifications:
+            body = _("New direct message")
+        else:
+            body, _truncated = truncate_content(get_mobile_push_content(message.rendered_content))
+
+    # Build the deep link (an absolute `near/<id>` narrow URL) server-side, so
+    # the service worker just navigates to it. The client can't safely
+    # reconstruct it: Zulip's hash encoding is not encodeURIComponent, so
+    # topics containing "." or non-ASCII would be mis-encoded.
+    url = message_link_url(message.realm, MessageDict.wide_dict(message))
+
+    return {
+        "type": "message",
+        "message_id": message.id,
+        "realm_url": message_payload["realm_url"],
+        "realm_name": message_payload["realm_name"],
+        "title": title,
+        "body": body,
+        "icon": icon,
+        "badge": urljoin(message.realm.url, static("images/logo/zulip-icon-512x512.png")),
+        "tag": tag,
+        "url": url,
+    }
+
+
 def get_remove_payload_gcm(
     user_profile: UserProfile,
     message_ids: list[int],
@@ -1341,6 +1405,10 @@ def handle_remove_push_notification(user_profile_id: int, message_ids: list[int]
         )
         return payload_data_to_encrypt
 
+    # No web push payload is passed: under userVisibleOnly:true, a push that
+    # shows no notification produces a junk browser notification and, after a
+    # few of them, revocation of the subscription. Handling remove events for
+    # web push is deferred until we can do it without that cost.
     prepare_payload_and_send_push_notifications(
         user_profile,
         get_payload_legacy,
@@ -1643,6 +1711,62 @@ def send_push_notifications(
         raise NoActivePushDeviceError
 
 
+def send_web_push_notifications(
+    user_profile: UserProfile,
+    payload: dict[str, Any],
+    subscriptions: Iterable[WebPushSubscription],
+) -> None:
+    """Deliver a payload to each of a user's browser Web Push subscriptions.
+
+    Web Push has no multicast, so each subscription is a separate encrypted
+    HTTPS POST performed serially in the worker thread (users have few browser
+    subscriptions). Failures are isolated per subscription so a single dead
+    endpoint never aborts the loop or the mobile channels; a 404/410 Gone
+    prunes the now-defunct subscription.
+    """
+    # We lazily import pywebpush to keep Zulip's base import time low, the
+    # same reason aioapns is imported lazily.
+    from pywebpush import WebPushException, webpush
+
+    assert settings.WEB_PUSH_VAPID_PRIVATE_KEY is not None
+    vapid_private_key = get_vapid_private_key_pem(settings.WEB_PUSH_VAPID_PRIVATE_KEY)
+    contact = settings.WEB_PUSH_VAPID_CONTACT_EMAIL or settings.ZULIP_ADMINISTRATOR
+    vapid_claims = {"sub": f"mailto:{contact}"}
+    data = orjson.dumps(payload)
+
+    for subscription in subscriptions:
+        subscription_info = {
+            "endpoint": subscription.endpoint,
+            "keys": {"p256dh": subscription.p256dh_key, "auth": subscription.auth_secret},
+        }
+        try:
+            webpush(
+                subscription_info,
+                data,
+                vapid_private_key=vapid_private_key,
+                # py_vapid mutates vapid_claims in place (inserting an `exp`),
+                # so pass a fresh copy for each send to avoid a stale claim.
+                vapid_claims=dict(vapid_claims),
+                ttl=24 * 60 * 60,
+            )
+        except WebPushException as e:
+            status_code = getattr(e.response, "status_code", None)
+            if status_code in (404, 410):
+                subscription.delete()
+                logger.info(
+                    "Removed expired web push subscription %s for user %s",
+                    subscription.id,
+                    user_profile.id,
+                )
+            else:
+                logger.warning(
+                    "Web push notification failed for user %s (status %s): %s",
+                    user_profile.id,
+                    status_code,
+                    e,
+                )
+
+
 def prepare_payload_and_send_push_notifications(
     user_profile: UserProfile,
     get_payload_legacy: Callable[
@@ -1650,6 +1774,7 @@ def prepare_payload_and_send_push_notifications(
         tuple[dict[str, Any], dict[str, Any], dict[str, Any]],
     ],
     get_payload_to_encrypt: Callable[[], dict[str, Any]],
+    get_payload_webpush: Callable[[], dict[str, Any]] | None = None,
 ) -> None:
     if not user_profile.realm.require_e2ee_push_notifications:
         # Send legacy/non-E2EE push notifications.
@@ -1687,13 +1812,31 @@ def prepare_payload_and_send_push_notifications(
             user_profile.id,
         )
 
+    # Send browser Web Push notifications. Unlike mobile push, this needs no
+    # bouncer, so it runs whenever a VAPID keypair is configured. Callers that
+    # have no web push payload to send (e.g. remove events, see below) pass
+    # get_payload_webpush=None to skip this entirely.
+    if (
+        get_payload_webpush is not None
+        and has_webpush_credentials()
+        and user_profile.enable_web_push_notifications
+    ):
+        web_push_subscriptions = WebPushSubscription.objects.filter(user=user_profile)
+        if web_push_subscriptions:
+            send_web_push_notifications(user_profile, get_payload_webpush(), web_push_subscriptions)
+        else:
+            logger.info(
+                "Skipping web push notifications for user %s because there are no subscriptions",
+                user_profile.id,
+            )
+
 
 def handle_push_notification(user_profile_id: int, missed_message: dict[str, Any]) -> None:
     """
     missed_message is the event received by the
     zerver.worker.missedmessage_mobile_notifications.PushNotificationWorker.consume function.
     """
-    if not push_notifications_configured():
+    if not push_notifications_configured() and not has_webpush_credentials():
         return
 
     user_profile = get_user_profile_by_id(user_profile_id)
@@ -1882,10 +2025,27 @@ def handle_push_notification(user_profile_id: int, missed_message: dict[str, Any
         )
         return payload_data_to_encrypt
 
+    def get_payload_webpush() -> dict[str, Any]:
+        message_payload = get_message_payload(
+            user_profile,
+            message,
+            mentioned_user_group_id,
+            mentioned_user_group_name,
+            can_access_sender,
+            for_legacy_clients=False,
+        )
+        return get_message_payload_webpush(
+            message_payload,
+            user_profile,
+            message,
+            can_access_sender,
+        )
+
     prepare_payload_and_send_push_notifications(
         user_profile,
         get_payload_legacy,
         get_payload_to_encrypt,
+        get_payload_webpush,
     )
 
 

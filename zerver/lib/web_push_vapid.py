@@ -41,3 +41,16 @@ def derive_vapid_public_key(private_key_b64: str) -> str:
         serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint
     )
     return b64url_encode(point)
+
+
+def get_vapid_private_key_pem(private_key_b64: str) -> str:
+    """Return the VAPID private key as PKCS#8 PEM, the form pywebpush expects."""
+    return (
+        load_vapid_private_key(private_key_b64)
+        .private_bytes(
+            serialization.Encoding.PEM,
+            serialization.PrivateFormat.PKCS8,
+            serialization.NoEncryption(),
+        )
+        .decode()
+    )

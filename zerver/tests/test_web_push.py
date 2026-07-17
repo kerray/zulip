@@ -1,13 +1,23 @@
 import base64
+from unittest import mock
 
+import orjson
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from django.test import override_settings
+from pywebpush import WebPushException
 
-from zerver.lib.push_notifications import has_webpush_credentials
+from zerver.actions.user_settings import do_change_user_setting
+from zerver.lib.push_notifications import (
+    handle_push_notification,
+    has_webpush_credentials,
+    push_notifications_configured,
+    send_web_push_notifications,
+)
 from zerver.lib.test_classes import ZulipTestCase
 from zerver.lib.web_push_vapid import derive_vapid_public_key
 from zerver.models.push_notifications import WebPushSubscription
+from zerver.models.scheduled_jobs import NotificationTriggers
 
 EXAMPLE_ENDPOINT = "https://fcm.googleapis.com/fcm/send/example-endpoint"
 EXAMPLE_SUBSCRIPTION = {
@@ -116,3 +126,147 @@ class WebPushSubscriptionEndpointTest(ZulipTestCase):
         self.assert_json_error(
             result, "Not logged in: API authentication or user session required", status_code=401
         )
+
+
+class WebPushSendTest(ZulipTestCase):
+    def setUp(self) -> None:
+        super().setUp()
+        self.vapid_key = generate_vapid_private_key_b64()
+        self.user = self.example_user("hamlet")
+        self.sender = self.example_user("iago")
+
+    def create_subscription(self, endpoint: str = EXAMPLE_ENDPOINT) -> WebPushSubscription:
+        return WebPushSubscription.objects.create(
+            user=self.user,
+            endpoint=endpoint,
+            p256dh_key=EXAMPLE_SUBSCRIPTION["p256dh_key"],
+            auth_secret=EXAMPLE_SUBSCRIPTION["auth_secret"],
+            user_agent=EXAMPLE_SUBSCRIPTION["user_agent"],
+        )
+
+    def send_dm_and_handle(self, content: str = "hello there") -> tuple[int, mock.MagicMock]:
+        message_id = self.send_personal_message(self.sender, self.user, content)
+        missed_message = {
+            "message_id": message_id,
+            "trigger": NotificationTriggers.DIRECT_MESSAGE,
+        }
+        with (
+            override_settings(WEB_PUSH_VAPID_PRIVATE_KEY=self.vapid_key),
+            mock.patch("pywebpush.webpush") as mock_webpush,
+            self.assertLogs("zerver.lib.push_notifications", level="INFO"),
+        ):
+            handle_push_notification(self.user.id, missed_message)
+        return message_id, mock_webpush
+
+    def test_send_web_push_notifications_calls_webpush(self) -> None:
+        subscription = self.create_subscription()
+        payload = {"type": "message", "message_id": 1}
+        with (
+            override_settings(WEB_PUSH_VAPID_PRIVATE_KEY=self.vapid_key),
+            mock.patch("pywebpush.webpush") as mock_webpush,
+        ):
+            send_web_push_notifications(self.user, payload, [subscription])
+
+        mock_webpush.assert_called_once()
+        args, kwargs = mock_webpush.call_args
+        self.assertEqual(args[0]["endpoint"], subscription.endpoint)
+        self.assertEqual(args[0]["keys"]["p256dh"], subscription.p256dh_key)
+        self.assertEqual(args[0]["keys"]["auth"], subscription.auth_secret)
+        self.assertEqual(orjson.loads(args[1])["type"], "message")
+        self.assertTrue(kwargs["vapid_private_key"].startswith("-----BEGIN PRIVATE KEY-----"))
+        self.assertTrue(kwargs["vapid_claims"]["sub"].startswith("mailto:"))
+
+    def test_send_to_each_subscription(self) -> None:
+        self.create_subscription(EXAMPLE_ENDPOINT)
+        self.create_subscription(EXAMPLE_ENDPOINT + "-2")
+        subscriptions = list(WebPushSubscription.objects.filter(user=self.user))
+        with (
+            override_settings(WEB_PUSH_VAPID_PRIVATE_KEY=self.vapid_key),
+            mock.patch("pywebpush.webpush") as mock_webpush,
+        ):
+            send_web_push_notifications(self.user, {"type": "message"}, subscriptions)
+        self.assertEqual(mock_webpush.call_count, 2)
+
+    def test_gone_subscription_is_pruned(self) -> None:
+        subscription = self.create_subscription()
+        with (
+            override_settings(WEB_PUSH_VAPID_PRIVATE_KEY=self.vapid_key),
+            mock.patch("pywebpush.webpush") as mock_webpush,
+            self.assertLogs("zerver.lib.push_notifications", level="INFO"),
+        ):
+            mock_webpush.side_effect = WebPushException("Gone", response=mock.Mock(status_code=410))
+            send_web_push_notifications(self.user, {"type": "message"}, [subscription])
+        self.assertFalse(WebPushSubscription.objects.filter(id=subscription.id).exists())
+
+    def test_other_error_keeps_subscription(self) -> None:
+        subscription = self.create_subscription()
+        with (
+            override_settings(WEB_PUSH_VAPID_PRIVATE_KEY=self.vapid_key),
+            mock.patch("pywebpush.webpush") as mock_webpush,
+            self.assertLogs("zerver.lib.push_notifications", level="WARNING"),
+        ):
+            mock_webpush.side_effect = WebPushException(
+                "Server error", response=mock.Mock(status_code=500)
+            )
+            # The failure must not escape the loop.
+            send_web_push_notifications(self.user, {"type": "message"}, [subscription])
+        self.assertTrue(WebPushSubscription.objects.filter(id=subscription.id).exists())
+
+    def test_handle_push_notification_sends_web_push(self) -> None:
+        # Web push must work even though no mobile push is configured.
+        self.assertFalse(push_notifications_configured())
+        self.create_subscription()
+        message_id, mock_webpush = self.send_dm_and_handle()
+
+        mock_webpush.assert_called_once()
+        data = orjson.loads(mock_webpush.call_args[0][1])
+        self.assertEqual(data["type"], "message")
+        self.assertEqual(data["message_id"], message_id)
+        self.assertEqual(data["title"], self.sender.full_name)
+        self.assertEqual(data["realm_name"], self.user.realm.name)
+        # The deep link is built server-side (an absolute `near/<id>` narrow
+        # URL); the service worker just navigates to it.
+        self.assertTrue(data["url"].startswith(f"{self.user.realm.url}/#narrow/dm/"))
+        self.assertTrue(data["url"].endswith(f"/near/{message_id}"))
+        self.assertNotIn("narrow", data)
+
+    def test_disabled_setting_skips_web_push(self) -> None:
+        do_change_user_setting(self.user, "enable_web_push_notifications", False, acting_user=None)
+        self.create_subscription()
+        _message_id, mock_webpush = self.send_dm_and_handle()
+        mock_webpush.assert_not_called()
+
+    def test_no_subscription_skips_web_push(self) -> None:
+        _message_id, mock_webpush = self.send_dm_and_handle()
+        mock_webpush.assert_not_called()
+
+    def test_no_vapid_configured_skips(self) -> None:
+        self.create_subscription()
+        message_id = self.send_personal_message(self.sender, self.user, "hello")
+        missed_message = {
+            "message_id": message_id,
+            "trigger": NotificationTriggers.DIRECT_MESSAGE,
+        }
+        with (
+            override_settings(WEB_PUSH_VAPID_PRIVATE_KEY=None),
+            mock.patch("pywebpush.webpush") as mock_webpush,
+        ):
+            # No mobile push and no VAPID: the worker guard returns early.
+            handle_push_notification(self.user.id, missed_message)
+        mock_webpush.assert_not_called()
+
+    def test_dm_content_redacted_when_disabled(self) -> None:
+        do_change_user_setting(
+            self.user, "pm_content_in_desktop_notifications", False, acting_user=None
+        )
+        self.create_subscription()
+        _message_id, mock_webpush = self.send_dm_and_handle(content="a secret plan")
+        data = orjson.loads(mock_webpush.call_args[0][1])
+        self.assertEqual(data["body"], "New direct message")
+        self.assertNotIn("secret", data["body"])
+
+    def test_payload_stays_under_size_limit(self) -> None:
+        self.create_subscription()
+        _message_id, mock_webpush = self.send_dm_and_handle(content="lorem ipsum " * 500)
+        serialized = mock_webpush.call_args[0][1]
+        self.assertLess(len(serialized), 3500)
