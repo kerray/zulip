@@ -115,6 +115,14 @@ class ZulipUploadBackend:
     def get_realm_icon_url(self, realm_id: int, version: int) -> str:
         raise NotImplementedError
 
+    def get_realm_icon_image(self, realm: Realm) -> bytes:
+        """Return the bytes of the lossless original uploaded realm icon.
+
+        Used to render honest higher-resolution icons (e.g. for the web app
+        manifest) than the 100x100 icon.png the icon URLs point at.
+        """
+        raise NotImplementedError
+
     def store_realm_icon_image(
         self, icon_file: IO[bytes], user_profile: UserProfile, content_type: str
     ) -> None:
