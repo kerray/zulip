@@ -1,9 +1,12 @@
+import base64
+import binascii
 import re
 import zoneinfo
 from collections.abc import Collection
 from enum import Enum
 from typing import TypeVar
 
+from cryptography.hazmat.primitives.asymmetric import ec
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.utils.translation import gettext as _
@@ -56,6 +59,61 @@ def check_url(val: str) -> str:
         return val
     except ValidationError:
         raise ValueError(_("Not a URL"))
+
+
+def check_https_url(val: str) -> str:
+    validate = URLValidator(schemes=["https"])
+    try:
+        validate(val)
+        return val
+    except ValidationError:
+        raise ValueError(_("Not an https URL"))
+
+
+_BASE64URL_RE = re.compile(r"^[A-Za-z0-9_-]*$")
+
+
+def _decode_base64url(val: str) -> bytes:
+    # Browser Web Push keys are unpadded base64url; restore the padding before
+    # decoding so pywebpush (which base64url-decodes them at send time) never
+    # chokes on values we accepted. urlsafe_b64decode silently drops bytes
+    # outside the base64url alphabet, so reject those up front (and let a bad
+    # length surface as the binascii.Error the decode raises) — we only want to
+    # accept material that round-trips to exactly what a browser produced.
+    if _BASE64URL_RE.fullmatch(val) is None:
+        raise binascii.Error("Non-base64url character")
+    return base64.urlsafe_b64decode(val + "=" * (-len(val) % 4))
+
+
+def check_web_push_p256dh_key(val: str) -> str:
+    # PushSubscription.getKey("p256dh") is the 65-byte uncompressed P-256
+    # public point (leading 0x04 marker), base64url-encoded. Reject malformed
+    # material at registration so it can't later raise deep inside pywebpush
+    # and abort the notification worker's queue job.
+    try:
+        point = _decode_base64url(val)
+    except (binascii.Error, ValueError):
+        raise ValueError(_("Invalid p256dh key"))
+    if len(point) != 65 or point[0] != 0x04:
+        raise ValueError(_("Invalid p256dh key"))
+    # A well-formed-looking blob can still be off the curve; verify it is an
+    # actual P-256 point so pywebpush's ECDH cannot fail at send time.
+    try:
+        ec.EllipticCurvePublicKey.from_encoded_point(ec.SECP256R1(), point)
+    except ValueError:
+        raise ValueError(_("Invalid p256dh key"))
+    return val
+
+
+def check_web_push_auth_secret(val: str) -> str:
+    # PushSubscription.getKey("auth") is 16 random bytes, base64url-encoded.
+    try:
+        secret = _decode_base64url(val)
+    except (binascii.Error, ValueError):
+        raise ValueError(_("Invalid auth secret"))
+    if len(secret) != 16:
+        raise ValueError(_("Invalid auth secret"))
+    return val
 
 
 def to_timezone_or_empty(s: str) -> str:

@@ -14569,6 +14569,89 @@ paths:
                           }
                         description: |
                           A typical failed JSON response for when the token does not exist:
+  /users/me/web_push_subscriptions:
+    post:
+      operationId: add-web-push-subscription
+      summary: Add a web push subscription
+      tags: ["mobile"]
+      description: |
+        Register a browser [Web Push](https://web.dev/articles/push-notifications-overview)
+        subscription so that this server can deliver push notifications to the
+        browser using [VAPID](https://datatracker.ietf.org/doc/html/rfc8292), with
+        no push notification bouncer involved.
+
+        Registering the same `endpoint` again updates the stored keys instead of
+        creating a duplicate subscription.
+
+        **Changes**: New in Zulip 13.0 (feature level ZF-16420a).
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                endpoint:
+                  description: |
+                    The push service URL (`PushSubscription.endpoint`) that the
+                    browser returned. Must be an `https` URL.
+                  type: string
+                  example: https://fcm.googleapis.com/fcm/send/abcdef
+                p256dh_key:
+                  description: |
+                    The base64url-encoded P-256 ECDH public key
+                    (`PushSubscription.getKey("p256dh")`) used to encrypt payloads.
+                    This is the 65-byte uncompressed public point.
+                  type: string
+                  example: BM0RXeBm6BH-5Q_T43um3GJzYxGKpa6yJto75AAb1MnPHds6N_Q_68YezVFcBceNwHKF3ktRjE9ALS8sKClqByg
+                auth_secret:
+                  description: |
+                    The base64url-encoded authentication secret
+                    (`PushSubscription.getKey("auth")`).
+                  type: string
+                  example: tBHItJI5svbpez7KI4CCXg
+                user_agent:
+                  description: |
+                    The browser's `User-Agent` string, stored to help the user
+                    identify the subscription later.
+                  type: string
+                  example: Mozilla/5.0
+              required:
+                - endpoint
+                - p256dh_key
+                - auth_secret
+      responses:
+        "200":
+          $ref: "#/components/responses/SimpleSuccess"
+    delete:
+      operationId: remove-web-push-subscription
+      summary: Remove a web push subscription
+      tags: ["mobile"]
+      description: |
+        Remove a browser Web Push subscription previously registered with
+        [`POST /users/me/web_push_subscriptions`](/api/add-web-push-subscription).
+
+        Removing an `endpoint` that is not registered is a successful no-op.
+
+        **Changes**: New in Zulip 13.0 (feature level ZF-16420a).
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                endpoint:
+                  description: |
+                    The push service URL (`PushSubscription.endpoint`) of the
+                    subscription to remove.
+                  type: string
+                  example: https://fcm.googleapis.com/fcm/send/abcdef
+              required:
+                - endpoint
+      responses:
+        "200":
+          $ref: "#/components/responses/SimpleSuccess"
   /users/{user_id}/subscriptions/{stream_id}:
     get:
       operationId: get-subscription-status
