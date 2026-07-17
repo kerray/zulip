@@ -39,6 +39,12 @@ clients must not key off a feature-level number to detect them.
   subscriptions, which the server uses to deliver push notifications directly
   to a browser using VAPID, with no push notification bouncer.
 
+* [`POST /register`](/api/register-queue): Added
+  `server_web_push_vapid_public_key`, the browser `applicationServerKey` a
+  client passes to `PushManager.subscribe` when registering for browser Web
+  Push (RFC 8291) notifications. It is the empty string when the server has
+  no VAPID keypair configured, in which case clients skip web push.
+
 ## Changes in Zulip 12.1
 
 **Feature level 500**

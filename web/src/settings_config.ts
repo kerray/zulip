@@ -723,6 +723,9 @@ export const notification_settings_labels = {
     enable_online_push_notifications: $t({
         defaultMessage: "Send mobile notifications even if I'm online",
     }),
+    enable_web_push_notifications: $t({
+        defaultMessage: "Enable web push notifications",
+    }),
     enable_digest_emails: $t({defaultMessage: "Send digest emails when I'm away"}),
     enable_login_emails: $t({
         defaultMessage: "Send email notifications for new logins to my account",
@@ -1050,7 +1053,10 @@ export const followed_topic_notification_settings: (keyof FollowedTopicNotificat
     "enable_followed_topic_wildcard_mentions_notify",
 ];
 
-const desktop_notification_settings = ["pm_content_in_desktop_notifications"];
+const desktop_notification_settings = [
+    "pm_content_in_desktop_notifications",
+    "enable_web_push_notifications",
+];
 
 const mobile_notification_settings = ["enable_online_push_notifications"];
 
