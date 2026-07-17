@@ -158,6 +158,16 @@ LOGIN_URL = "/accounts/login/"
 APNS_TOKEN_KEY_FILE: str | None = None
 APNS_CERT_FILE: str | None = None
 
+# Ignore the dev VAPID keypair that generate_secrets seeds, and the
+# WEB_PUSH_ENABLED that dev_settings.py turns on; leaving them set would
+# activate the Web Push branch across the whole test suite. Null both key
+# halves too, since computed_settings.py has already derived the public key
+# from the private one by the time this file is imported. Tests that need
+# web push active use override_settings for all three.
+WEB_PUSH_ENABLED = False
+WEB_PUSH_VAPID_PRIVATE_KEY: str | None = None
+WEB_PUSH_VAPID_PUBLIC_KEY: str | None = None
+
 # By default will not send emails when login occurs.
 # Explicitly set this to True within tests that must have this on.
 SEND_LOGIN_EMAILS = False

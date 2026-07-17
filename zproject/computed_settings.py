@@ -7,6 +7,8 @@ from copy import deepcopy
 from typing import Any, Final, Literal
 from urllib.parse import urljoin
 
+from django.core.exceptions import ImproperlyConfigured
+
 from scripts.lib.zulip_tools import get_tornado_ports
 from zerver.lib.db import TimeTrackingConnection, TimeTrackingCursor
 from zerver.lib.types import AnalyticsDataUploadLevel
@@ -70,6 +72,8 @@ from .configured_settings import (
     TORNADO_PORTS,
     USING_CAPTCHA,
     USING_PGROONGA,
+    WEB_PUSH_ENABLED,
+    WEB_PUSH_VAPID_PRIVATE_KEY,
     ZULIP_ADMINISTRATOR,
     ZULIP_SERVICE_PUSH_NOTIFICATIONS,
     ZULIP_SERVICE_SECURITY_ALERTS,
@@ -105,6 +109,29 @@ raw_keys: str | None = get_secret("push_registration_encryption_keys")
 PUSH_REGISTRATION_ENCRYPTION_KEYS: dict[str, str] = {}
 if raw_keys is not None:
     PUSH_REGISTRATION_ENCRYPTION_KEYS = json.loads(raw_keys)
+
+# Derive the browser applicationServerKey (base64url uncompressed EC point)
+# from the VAPID private key once at import, so the public and private
+# halves can never drift apart.  Only when the operator has enabled web
+# push: generate-secrets seeds a keypair on every server, and servers that
+# never opted in should not pay the cryptography import, nor be exposed to
+# a malformed secret breaking settings import.
+WEB_PUSH_VAPID_PUBLIC_KEY: str | None = None
+if WEB_PUSH_ENABLED and WEB_PUSH_VAPID_PRIVATE_KEY is not None:
+    from zerver.lib.web_push_vapid import derive_vapid_public_key
+
+    try:
+        WEB_PUSH_VAPID_PUBLIC_KEY = derive_vapid_public_key(WEB_PUSH_VAPID_PRIVATE_KEY)
+    except Exception as e:
+        # Every Zulip process imports settings, so an unhandled exception
+        # here takes the whole server down.  Fail loudly, but with an
+        # actionable message rather than a raw base64 or ASN.1 error.
+        raise ImproperlyConfigured(
+            "The web_push_vapid_private_key secret is not a valid base64url-encoded "
+            "PKCS#8 DER P-256 private key.  Remove it from "
+            "/etc/zulip/zulip-secrets.conf and re-run generate-secrets to "
+            "replace it, or set WEB_PUSH_ENABLED = False to disable web push."
+        ) from e
 
 
 service_name_to_required_upload_level = {

@@ -176,6 +176,13 @@ def has_apns_credentials() -> bool:
     return settings.APNS_TOKEN_KEY_FILE is not None or settings.APNS_CERT_FILE is not None
 
 
+def has_webpush_credentials() -> bool:
+    # generate-secrets seeds a VAPID keypair on every server, so the secret
+    # being present says nothing about whether the operator wants web push;
+    # WEB_PUSH_ENABLED is the opt-in.
+    return settings.WEB_PUSH_ENABLED and settings.WEB_PUSH_VAPID_PRIVATE_KEY is not None
+
+
 @cache
 def get_apns_context() -> APNsContext | None:
     # We lazily do this import as part of optimizing Zulip's base
