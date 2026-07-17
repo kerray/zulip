@@ -164,3 +164,37 @@ structure of the system, when thinking about changes to it:
   sending a message), adding a mention when editing a message should
   send a notification to the newly mentioned user(s), and deleting a
   message should cancel any unsent notifications for it.
+
+## Web Push notifications
+
+Web Push (RFC 8030/8291) is a third notification delivery channel, alongside
+email and mobile push, used to deliver browser and installed-PWA notifications.
+Unlike mobile push, it needs no [mobile push notification
+service](../production/mobile-push-notifications.md) bouncer: the Zulip server
+talks directly to the browser's push service, authenticating its requests with
+a per-server VAPID keypair.
+
+- It reuses the same trigger and enqueue logic as mobile push. Eligible
+  messages are already placed on the `missedmessage_mobile_notifications` queue
+  by `maybe_enqueue_notifications`, independent of whether any push service is
+  configured, so no new queue or trigger logic is needed.
+- In the `PushNotificationsWorker`, `handle_push_notification` fans out to a
+  third branch after the legacy and E2EE mobile branches: if a VAPID keypair is
+  configured (`has_webpush_credentials()`) and the user has
+  `enable_web_push_notifications` enabled, `send_web_push_notifications`
+  delivers a compact payload (built by `get_message_payload_webpush`) to each
+  of the user's `WebPushSubscription` rows.
+- Because Web Push works without a bouncer, the worker's early return is relaxed
+  to proceed when either mobile push is configured _or_ a VAPID keypair is
+  present. This is what makes push notifications work at all on a bouncer-less
+  self-hosted server.
+- Each subscription is a separate encrypted HTTPS POST (Web Push has no
+  multicast). A `404`/`410 Gone` response prunes a now-defunct subscription;
+  other failures are isolated so that one dead endpoint never aborts the loop or
+  the other notification channels.
+- Unlike E2EE mobile push, the payload is visible to the browser, so direct
+  message content is redacted server-side when the recipient has
+  `pm_content_in_desktop_notifications` disabled.
+
+See [Web Push notifications](../production/web-push-notifications.md) for
+operator-facing setup and browser support details.
