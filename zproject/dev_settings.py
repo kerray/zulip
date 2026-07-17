@@ -217,6 +217,12 @@ ZULIP_SERVICES_URL = f"http://{EXTERNAL_HOST}"
 ZULIP_SERVICE_PUSH_NOTIFICATIONS = True
 ZULIP_SERVICE_SUBMIT_USAGE_STATISTICS = True
 
+# Web push is opt-in in production, but on in the development environment
+# so contributors exercise it by default.  (Browsers only allow service
+# workers and the Push API on secure origins, so this has an effect only
+# when the development server is reached over HTTPS or via localhost.)
+WEB_PUSH_ENABLED = True
+
 # This value needs to be lower in development than usual to allow
 # for quicker testing of the feature.
 RESOLVE_TOPIC_UNDO_GRACE_PERIOD_SECONDS = 5
