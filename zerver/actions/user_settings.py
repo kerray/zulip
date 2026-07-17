@@ -44,6 +44,7 @@ from zerver.models import (
     ScheduledMessageNotificationEmail,
     UserPresence,
     UserProfile,
+    WebPushSubscription,
 )
 from zerver.models.clients import get_client
 from zerver.models.realm_audit_logs import AuditLogEventType
@@ -342,6 +343,13 @@ def do_regenerate_api_key(user_profile: UserProfile, acting_user: UserProfile) -
 
     # Delete all of the user's Device records to stop sending E2EE push notifications.
     Device.objects.filter(user_id=user_profile.id).delete()
+
+    # Web Push subscriptions are delivered directly by this server rather than
+    # through the bouncer, so they survive every other step of this function;
+    # without deleting them, a browser cut off by this rotation would keep
+    # receiving notification content. A browser the user still controls
+    # re-registers its subscription on its next page load.
+    WebPushSubscription.objects.filter(user_id=user_profile.id).delete()
 
     return new_api_key
 
