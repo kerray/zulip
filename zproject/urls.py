@@ -70,6 +70,7 @@ from zerver.views.invite import (
     revoke_user_invite,
 )
 from zerver.views.llms_txt import llms_txt
+from zerver.views.manifest import web_app_manifest, web_app_manifest_icon
 from zerver.views.message_edit import (
     delete_message_backend,
     get_message_edit_history,
@@ -856,6 +857,14 @@ urls += [
 # following the llms.txt specification (https://llmstxt.org/).
 urls += [
     path("llms.txt", llms_txt),
+]
+
+# The per-realm PWA web app manifest and its resized realm-icon assets. These
+# are public (installable without logging in) and served at the site root so
+# their scope covers the whole app.
+urls += [
+    path("manifest.webmanifest", web_app_manifest),
+    path("manifest/icon-<int:size>.png", web_app_manifest_icon),
 ]
 
 # Incoming webhook URLs
