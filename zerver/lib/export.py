@@ -216,6 +216,7 @@ ALL_ZULIP_TABLES = {
     "zerver_userprofile_user_permissions",
     "zerver_userstatus",
     "zerver_usertopic",
+    "zerver_webpushsubscription",
     "zerver_muteduser",
 }
 
@@ -247,6 +248,7 @@ NON_EXPORTED_TABLES = {
     # reregister for push notifications anyway.
     "zerver_device",
     "zerver_pushdevicetoken",
+    "zerver_webpushsubscription",
     # We don't use these generated Django tables
     "zerver_userprofile_groups",
     "zerver_userprofile_user_permissions",

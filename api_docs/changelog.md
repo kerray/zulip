@@ -32,6 +32,13 @@ clients must not key off a feature-level number to detect them.
   whether the server sends browser Web Push (RFC 8291) notifications for
   messages the user would be notified about.
 
+* [`POST /users/me/web_push_subscriptions`](/api/add-web-push-subscription),
+  [`DELETE
+  /users/me/web_push_subscriptions`](/api/remove-web-push-subscription): Added
+  new endpoints for registering and removing browser Web Push (RFC 8291)
+  subscriptions, which the server uses to deliver push notifications directly
+  to a browser using VAPID, with no push notification bouncer.
+
 ## Changes in Zulip 12.1
 
 **Feature level 500**

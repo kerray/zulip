@@ -58,6 +58,15 @@ def check_url(val: str) -> str:
         raise ValueError(_("Not a URL"))
 
 
+def check_https_url(val: str) -> str:
+    validate = URLValidator(schemes=["https"])
+    try:
+        validate(val)
+        return val
+    except ValidationError:
+        raise ValueError(_("Not an https URL"))
+
+
 def to_timezone_or_empty(s: str) -> str:
     try:
         s = canonicalize_timezone(s)
