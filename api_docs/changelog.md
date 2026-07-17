@@ -18,6 +18,20 @@ clients should check the `zulip_feature_level` field, present in the
 /register`](/api/register-queue) responses, to determine the API
 format used by the Zulip server that they are interacting with.
 
+## Unreleased local changes (urur web push fork)
+
+These entries document API additions made by this deployment's Web Push
+(RFC 8291) fork on top of Zulip 12.1. The API feature level is
+intentionally **not** bumped: these changes ship only in this fork, so
+clients must not key off a feature-level number to detect them.
+
+* [`PATCH /settings`](/api/update-settings), [`PATCH
+  /realm/user_settings_defaults`](/api/update-realm-user-settings-defaults),
+  [`POST /register`](/api/register-queue), [`GET /events`](/api/get-events):
+  Added `enable_web_push_notifications` personal setting, which controls
+  whether the server sends browser Web Push (RFC 8291) notifications for
+  messages the user would be notified about.
+
 ## Changes in Zulip 12.1
 
 **Feature level 500**

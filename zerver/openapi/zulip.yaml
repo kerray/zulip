@@ -15748,6 +15748,14 @@ paths:
                     when the user is online.
                   type: boolean
                   example: true
+                enable_web_push_notifications:
+                  description: |
+                    Whether to send browser Web Push (RFC 8291) notifications to the user's
+                    subscribed browsers for messages they would be notified about.
+
+                    **Changes**: New in Zulip 13.0 (feature level ZF-4adb48).
+                  type: boolean
+                  example: true
                 enable_digest_emails:
                   description: |
                     Enable digest emails when the user is away.
@@ -16019,6 +16027,8 @@ paths:
               enable_offline_push_notifications:
                 contentType: application/json
               enable_online_push_notifications:
+                contentType: application/json
+              enable_web_push_notifications:
                 contentType: application/json
               enable_digest_emails:
                 contentType: application/json
@@ -19676,6 +19686,13 @@ paths:
                             description: |
                               Enable mobile notification for direct messages and @-mentions received
                               when the user is online.
+                          enable_web_push_notifications:
+                            type: boolean
+                            description: |
+                              Whether to send browser Web Push (RFC 8291) notifications to the
+                              user's subscribed browsers for messages they would be notified about.
+
+                              **Changes**: New in Zulip 13.0 (feature level ZF-4adb48).
                           enable_digest_emails:
                             type: boolean
                             description: |
@@ -22037,6 +22054,13 @@ paths:
                             description: |
                               Enable mobile notification for direct messages and @-mentions received
                               when the user is online.
+                          enable_web_push_notifications:
+                            type: boolean
+                            description: |
+                              Whether to send browser Web Push (RFC 8291) notifications to the
+                              user's subscribed browsers for messages they would be notified about.
+
+                              **Changes**: New in Zulip 13.0 (feature level ZF-4adb48).
                           enable_followed_topic_desktop_notifications:
                             type: boolean
                             description: |
@@ -23470,6 +23494,14 @@ paths:
                     the `PATCH /settings/notifications` endpoint.
                   type: boolean
                   example: true
+                enable_web_push_notifications:
+                  description: |
+                    Whether to send browser Web Push (RFC 8291) notifications to the user's
+                    subscribed browsers for messages they would be notified about.
+
+                    **Changes**: New in Zulip 13.0 (feature level ZF-4adb48).
+                  type: boolean
+                  example: true
                 enable_followed_topic_desktop_notifications:
                   description: |
                     Enable visual desktop notifications for messages sent to followed topics.
@@ -23805,6 +23837,8 @@ paths:
               enable_offline_push_notifications:
                 contentType: application/json
               enable_online_push_notifications:
+                contentType: application/json
+              enable_web_push_notifications:
                 contentType: application/json
               enable_followed_topic_desktop_notifications:
                 contentType: application/json

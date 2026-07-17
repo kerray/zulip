@@ -220,6 +220,9 @@ class UserBaseSettings(models.Model):
     message_content_in_email_notifications = models.BooleanField(default=True)
     enable_offline_push_notifications = models.BooleanField(default=True)
     enable_online_push_notifications = models.BooleanField(default=True)
+    # Master toggle for browser Web Push (RFC 8291) notifications; the browser
+    # permission + subscription is the real opt-in, so this defaults on.
+    enable_web_push_notifications = models.BooleanField(default=True, db_default=True)
 
     DESKTOP_ICON_COUNT_DISPLAY_MESSAGES = 1
     DESKTOP_ICON_COUNT_DISPLAY_DM_MENTION_FOLLOWED_TOPIC = 2
@@ -348,6 +351,7 @@ class UserBaseSettings(models.Model):
         enable_stream_desktop_notifications=bool,
         enable_stream_email_notifications=bool,
         enable_stream_push_notifications=bool,
+        enable_web_push_notifications=bool,
         message_content_in_email_notifications=bool,
         notification_sound=str,
         pm_content_in_desktop_notifications=bool,
