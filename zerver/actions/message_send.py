@@ -115,6 +115,7 @@ from zerver.models import (
     UserPresence,
     UserProfile,
     UserTopic,
+    WebPushSubscription,
 )
 from zerver.models.clients import get_client
 from zerver.models.groups import SystemGroups, get_realm_system_groups_name_dict
@@ -230,6 +231,7 @@ class ActiveUserDict(TypedDict):
     enable_online_push_notifications: bool
     enable_offline_email_notifications: bool
     enable_offline_push_notifications: bool
+    enable_web_push_notifications: bool
     long_term_idle: bool
     is_bot: bool
     bot_type: int | None
@@ -467,12 +469,17 @@ def get_recipient_info(
                         Device.objects.filter(user_id=OuterRef("id"), push_token_id__isnull=False)
                     )
                     | Exists(PushDeviceToken.objects.filter(user_id=OuterRef("id")))
+                    # Web push subscriptions count as push devices too; without
+                    # this, users with only a browser subscription never pass
+                    # the push_device_registered gate and web push never fires.
+                    | Exists(WebPushSubscription.objects.filter(user_id=OuterRef("id")))
                 )
                 .values(
                     "id",
                     "enable_online_push_notifications",
                     "enable_offline_email_notifications",
                     "enable_offline_push_notifications",
+                    "enable_web_push_notifications",
                     "is_bot",
                     "bot_type",
                     "long_term_idle",
@@ -521,8 +528,15 @@ def get_recipient_info(
     dm_mention_email_disabled_user_ids = get_ids_for(
         lambda r: not r["enable_offline_email_notifications"]
     )
+    # A user is push-disabled for the DM/@-mention triggers only if they have
+    # disabled BOTH mobile offline push and browser web push. Web-push-only
+    # users (mobile off, web on) must stay eligible so the message reaches the
+    # push worker and fires web push; the worker re-checks each channel's own
+    # setting before delivering, so this does not send them mobile push.
     dm_mention_push_disabled_user_ids = get_ids_for(
-        lambda r: not r["enable_offline_push_notifications"]
+        lambda r: (
+            not r["enable_offline_push_notifications"] and not r["enable_web_push_notifications"]
+        )
     )
 
     um_eligible_user_ids = get_ids_for(lambda r: True)
