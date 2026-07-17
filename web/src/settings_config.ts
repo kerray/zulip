@@ -723,6 +723,9 @@ export const notification_settings_labels = {
     enable_online_push_notifications: $t({
         defaultMessage: "Send mobile notifications even if I'm online",
     }),
+    enable_web_push_notifications: $t({
+        defaultMessage: "Enable web push notifications",
+    }),
     enable_digest_emails: $t({defaultMessage: "Send digest emails when I'm away"}),
     enable_login_emails: $t({
         defaultMessage: "Send email notifications for new logins to my account",
@@ -1050,7 +1053,10 @@ export const followed_topic_notification_settings: (keyof FollowedTopicNotificat
     "enable_followed_topic_wildcard_mentions_notify",
 ];
 
-const desktop_notification_settings = ["pm_content_in_desktop_notifications"];
+const desktop_notification_settings = [
+    "pm_content_in_desktop_notifications",
+    "enable_web_push_notifications",
+];
 
 const mobile_notification_settings = ["enable_online_push_notifications"];
 
@@ -1232,7 +1238,15 @@ export const all_notifications = (settings_object: Settings): AllNotifications =
         },
     ],
     settings: {
-        desktop_notification_settings,
+        // Web push is opt-in per server, so on a server that has not
+        // enabled it the setting would be a checkbox that can never
+        // deliver anything; leave it out entirely rather than showing a
+        // control that does nothing.
+        desktop_notification_settings: desktop_notification_settings.filter(
+            (setting) =>
+                setting !== "enable_web_push_notifications" ||
+                realm.server_web_push_vapid_public_key !== "",
+        ),
         mobile_notification_settings,
         email_message_notification_settings,
         other_email_settings,

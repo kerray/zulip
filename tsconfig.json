@@ -43,6 +43,13 @@
         // This is a separate package with its own TypeScript configuration.
         "starlight_help",
 
+        // The service worker needs the WebWorker lib, which collides with the
+        // DOM lib used by the rest of the app if both are pulled into one
+        // program (TS6200). It is type-checked on its own instead, against
+        // web/tsconfig.service-worker.json.
+        "web/src/service-worker.ts",
+        "web/src/service_worker_handlers.ts",
+
         // Skip walking large generated directories.
         ".venv",
         "docs/_build",
