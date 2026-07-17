@@ -128,6 +128,29 @@ def generate_secrets(development: bool = False) -> None:
     if need_secret("camo_key"):
         add_secret("camo_key", random_string(64))
 
+    # VAPID keypair for browser Web Push notifications (RFC 8291). Stored as
+    # the base64url-encoded PKCS#8 DER of a P-256 private key so it stays on a
+    # single secrets.conf line; the public applicationServerKey is derived from
+    # it at runtime.
+    if need_secret("web_push_vapid_private_key"):
+        # We do in-function imports so that we only do the expensive work of
+        # importing cryptography modules when necessary.
+        import base64
+
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import ec
+
+        vapid_private_key = ec.generate_private_key(ec.SECP256R1())
+        vapid_der = vapid_private_key.private_bytes(
+            serialization.Encoding.DER,
+            serialization.PrivateFormat.PKCS8,
+            serialization.NoEncryption(),
+        )
+        add_secret(
+            "web_push_vapid_private_key",
+            base64.urlsafe_b64encode(vapid_der).rstrip(b"=").decode(),
+        )
+
     # We enable Altcha in development
     if development and need_secret("altcha_hmac"):
         add_secret("altcha_hmac", random_token())
