@@ -748,6 +748,7 @@ def update_realm_user_settings_defaults(
     enable_stream_desktop_notifications: Json[bool] | None = None,
     enable_stream_email_notifications: Json[bool] | None = None,
     enable_stream_push_notifications: Json[bool] | None = None,
+    enable_web_push_notifications: Json[bool] | None = None,
     # enable_login_emails is not included here, because we don't want
     # security-related settings to be controlled by organization administrators.
     # enable_marketing_emails is not included here, since we don't at
