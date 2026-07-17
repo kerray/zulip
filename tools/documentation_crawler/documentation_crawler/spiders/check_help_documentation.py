@@ -7,7 +7,9 @@ class HelpDocumentationSpider(BaseDocumentationSpider):
     name = "help_documentation_crawler"
     start_urls = ["http://localhost:9981/help"]
     deny_domains: list[str] = []
-    deny = ["/policies/privacy"]
+    deny = [
+        "/policies/privacy",
+    ]
 
     @override
     def _is_external_url(self, url: str) -> bool:
