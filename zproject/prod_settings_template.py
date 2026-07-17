@@ -854,6 +854,21 @@ SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {
 ##
 # ZULIP_SERVICE_PUSH_NOTIFICATIONS = True
 
+## Web push notifications deliver browser notifications to the Zulip web
+## app and installed progressive web app, even when Zulip is closed. They
+## are independent of mobile push notifications above: your server talks
+## directly to each browser's push service, with no Zulip Mobile Push
+## Notification Service involved. For complete documentation, see:
+##
+##   https://zulip.readthedocs.io/en/stable/production/web-push-notifications.html
+##
+# WEB_PUSH_ENABLED = True
+
+## The VAPID request that carries each web push notification identifies
+## your server to the browser push services with a `mailto:` contact
+## address. This defaults to ZULIP_ADMINISTRATOR.
+# WEB_PUSH_VAPID_CONTACT_EMAIL = "zulip-admin@example.com"
+
 ## By default, a Zulip server that has registered for Zulip services
 ## submits both basic metadata (required for billing and for determining
 ## free plan eligibility), as well as aggregate usage statistics. You
