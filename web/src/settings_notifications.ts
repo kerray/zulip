@@ -37,6 +37,7 @@ import {
     user_settings_schema,
 } from "./user_settings.ts";
 import * as util from "./util.ts";
+import * as web_push from "./web_push.ts";
 
 export let user_settings_panel: SettingsPanel | undefined;
 let customize_stream_notifications_widget: dropdown_widget.DropdownWidget;
@@ -56,6 +57,50 @@ const DESKTOP_NOTIFICATIONS_BANNER: banners.Banner = {
     ],
     close_button: true,
     custom_classes: "desktop-setting-notifications",
+};
+
+const WEB_PUSH_NOTIFICATIONS_BLOCKED_BANNER: banners.Banner = {
+    intent: "warning",
+    label: $t({
+        defaultMessage: "Zulip needs your permission to send push notifications from this browser.",
+    }),
+    buttons: [],
+    close_button: true,
+    custom_classes: "web-push-setting-notifications",
+};
+
+// Shown when the toggle change was reverted because the server rejected the
+// subscription update (as opposed to the browser withholding permission, which
+// uses WEB_PUSH_NOTIFICATIONS_BLOCKED_BANNER above). The permission copy would
+// be misleading here: permission was granted, the server call just failed.
+const WEB_PUSH_NOTIFICATIONS_SERVER_ERROR_BANNER: banners.Banner = {
+    intent: "danger",
+    label: $t({
+        defaultMessage: "Could not update web push subscription on the server. Please try again.",
+    }),
+    buttons: [],
+    close_button: true,
+    custom_classes: "web-push-setting-server-error",
+};
+
+// Shown when web push is enabled for the account but this particular browser
+// has no subscription. Its button requests permission (a no-op if already
+// granted) and subscribes inside the click's user gesture.
+const WEB_PUSH_ENABLE_IN_BROWSER_BANNER: banners.Banner = {
+    intent: "info",
+    label: $t({
+        defaultMessage:
+            "Web push notifications are enabled for your account. Turn them on in this browser to receive them here.",
+    }),
+    buttons: [
+        {
+            label: $t({defaultMessage: "Enable push notifications in this browser"}),
+            custom_classes: "web-push-enable-in-browser",
+            variant: "solid",
+        },
+    ],
+    close_button: true,
+    custom_classes: "web-push-enable-in-browser-banner",
 };
 
 const MOBILE_PUSH_NOTIFICATION_BANNER: banners.Banner = {
@@ -119,6 +164,30 @@ function rerender_ui(): void {
         );
     }
     update_desktop_notification_banner();
+    update_web_push_enrollment_banner();
+}
+
+// Surfaces the per-browser enrollment banner when the account has web push on
+// but this browser holds no subscription. Enrolling a browser is always an
+// explicit user action, so for any browser other than the one the setting was
+// turned on in, this banner is the way in. Otherwise removes any stale banner.
+function update_web_push_enrollment_banner(): void {
+    if (util.is_mobile() || !web_push.is_web_push_configured()) {
+        return;
+    }
+    const $banner_container = $(".desktop-notification-settings-banners");
+    void (async () => {
+        const needs_enrollment =
+            user_settings.enable_web_push_notifications &&
+            !(await web_push.has_local_subscription());
+        if (needs_enrollment) {
+            if ($banner_container.find(".web-push-enable-in-browser-banner").length === 0) {
+                banners.append(WEB_PUSH_ENABLE_IN_BROWSER_BANNER, $banner_container);
+            }
+        } else {
+            banners.close($banner_container.find(".web-push-enable-in-browser-banner"));
+        }
+    })();
 }
 
 function update_desktop_notification_banner(): void {
@@ -414,6 +483,27 @@ export function set_up(settings_panel: SettingsPanel): void {
         })();
     });
 
+    $container.on("click", ".web-push-enable-in-browser", (e) => {
+        e.preventDefault();
+        // The click is a user gesture, so handle_setting_change may prompt for
+        // the Notification permission and subscribe this browser. The setting
+        // is already on server-side, so we only need the browser-side half.
+        void (async () => {
+            let result: web_push.SettingChangeResult;
+            try {
+                result = await web_push.handle_setting_change(true);
+            } catch (error) {
+                blueslip.warn("Failed to enable web push in this browser", {error});
+                return;
+            }
+            if (result === "applied") {
+                banners.close(
+                    $(".desktop-notification-settings-banners .web-push-enable-in-browser-banner"),
+                );
+            }
+        })();
+    });
+
     set_enable_digest_emails_visibility($container, for_realm_settings);
     settings_banner.set_up_banner(
         $(".mobile-push-notifications-banner-container"),
@@ -520,6 +610,49 @@ export function set_up(settings_panel: SettingsPanel): void {
                 });
                 return;
             }
+        }
+
+        if (setting_name === "enable_web_push_notifications") {
+            // Subscribe or unsubscribe this browser from within the same user
+            // gesture, so the permission prompt is allowed to appear. Persist
+            // the setting only after the browser-side change has actually taken
+            // effect and the server has stored (or dropped) the subscription —
+            // otherwise a denied permission or a failed registration would
+            // leave the toggle claiming web push is on with nothing behind it.
+            const revert_web_push_toggle = (banner: banners.Banner): void => {
+                $input_elem.prop("checked", user_settings[setting_name]);
+                const $banner_container = $(".desktop-notification-settings-banners");
+                if ($banner_container.find(`.${banner.custom_classes}`).length === 0) {
+                    banners.append(banner, $banner_container);
+                }
+            };
+            void (async () => {
+                let result: web_push.SettingChangeResult;
+                try {
+                    result = await web_push.handle_setting_change(setting_value === true);
+                } catch (error) {
+                    // handle_setting_change rejects when the server rejects the
+                    // subscription create/delete, so show the server-error copy
+                    // rather than the permission-denied banner.
+                    blueslip.warn("Failed to update web push subscription", {error});
+                    revert_web_push_toggle(WEB_PUSH_NOTIFICATIONS_SERVER_ERROR_BANNER);
+                    return;
+                }
+                if (result === "applied") {
+                    change_notification_setting(
+                        setting_name,
+                        setting_value,
+                        $input_elem.closest(".subsection-parent").find(".alert-notification"),
+                    );
+                } else if (result === "permission-denied") {
+                    // Enabling failed because the browser withheld notification
+                    // permission.
+                    revert_web_push_toggle(WEB_PUSH_NOTIFICATIONS_BLOCKED_BANNER);
+                }
+                // "superseded": a newer toggle overtook this one; its handler
+                // owns persistence, checkbox state, and any banner.
+            })();
+            return;
         }
 
         change_notification_setting(
