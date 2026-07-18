@@ -106,12 +106,20 @@ def web_app_manifest_icon(request: HttpRequest, size: int) -> HttpResponse:
         # The original can be missing or unreadable even when icon_source is
         # UPLOADED (e.g. a lost or half-migrated original): local storage
         # raises FileNotFoundError, the S3 backend raises ClientError. Treat
-        # any of these, like a corrupt image, as a 404.
-        from botocore.exceptions import ClientError
+        # any of these, like a corrupt image, as a 404. botocore is only
+        # guaranteed to be installed when the S3 backend is in use, so don't
+        # let the import itself break local-storage deployments.
+        missing_exceptions: tuple[type[Exception], ...] = (BadImageError, FileNotFoundError)
+        try:
+            from botocore.exceptions import ClientError
+
+            missing_exceptions = (*missing_exceptions, ClientError)
+        except ImportError:  # nocoverage
+            pass
 
         try:
             resized = resize_avatar(get_realm_icon_image(realm), size)
-        except (BadImageError, FileNotFoundError, ClientError):
+        except missing_exceptions:
             return HttpResponse(status=404)
         cache_set(cache_key, resized)
 
