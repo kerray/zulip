@@ -14,6 +14,7 @@ from urllib.parse import urljoin
 
 import lxml.html
 import orjson
+import requests
 from aioapns.common import NotificationResult, PushType
 from django.conf import settings
 from django.db import transaction
@@ -1349,7 +1350,10 @@ def handle_remove_push_notification(user_profile_id: int, message_ids: list[int]
     mobile app, when the message is read on the server, to remove the
     message from the notification.
     """
-    if not push_notifications_configured():
+    # Mirrors the handle_push_notification guard: on a web-push-only server
+    # this must still run so the active_mobile_push_notification flags set by
+    # the send path get cleared, even though no web push remove is sent.
+    if not push_notifications_configured() and not has_webpush_credentials():
         return
 
     user_profile = get_user_profile_by_id(user_profile_id)
@@ -1720,7 +1724,9 @@ def send_web_push_notifications(
 
     Web Push has no multicast, so each subscription is a separate encrypted
     HTTPS POST performed serially in the worker thread (users have few browser
-    subscriptions). Failures are isolated per subscription so a single dead
+    subscriptions). Failures — including connection-level errors, which
+    pywebpush raises as plain requests exceptions rather than
+    WebPushException — are isolated per subscription so a single dead
     endpoint never aborts the loop or the mobile channels; a 404/410 Gone
     prunes the now-defunct subscription.
     """
@@ -1748,6 +1754,16 @@ def send_web_push_notifications(
                 # so pass a fresh copy for each send to avoid a stale claim.
                 vapid_claims=dict(vapid_claims),
                 ttl=24 * 60 * 60,
+                # pywebpush forwards timeout to requests.post; without it a
+                # hung push service blocks the notification worker forever.
+                timeout=30,
+            )
+        except requests.RequestException as e:
+            logger.warning(
+                "Web push connection error for user %s, subscription %s: %s",
+                user_profile.id,
+                subscription.id,
+                e,
             )
         except WebPushException as e:
             status_code = getattr(e.response, "status_code", None)
@@ -1845,6 +1861,7 @@ def handle_push_notification(user_profile_id: int, missed_message: dict[str, Any
     if not (
         user_profile.enable_offline_push_notifications
         or user_profile.enable_online_push_notifications
+        or user_profile.enable_web_push_notifications
     ):
         # BUG: Investigate why it's possible to get here.
         return  # nocoverage
