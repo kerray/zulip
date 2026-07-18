@@ -7,6 +7,7 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from django.test import override_settings
 from pywebpush import WebPushException
 
+from zerver.actions.message_send import get_recipient_info
 from zerver.actions.user_settings import do_change_user_setting
 from zerver.lib.push_notifications import (
     handle_push_notification,
@@ -270,3 +271,30 @@ class WebPushSendTest(ZulipTestCase):
         _message_id, mock_webpush = self.send_dm_and_handle(content="lorem ipsum " * 500)
         serialized = mock_webpush.call_args[0][1]
         self.assertLess(len(serialized), 3500)
+
+
+class WebPushDeviceRegisteredTest(ZulipTestCase):
+    def test_web_push_subscription_counts_as_push_device(self) -> None:
+        """A user whose only push registration is a web push subscription must
+        still be marked push_device_registered by the message-send pipeline —
+        that annotation gates every push notification trigger, so without it
+        web push never fires for users without the mobile app."""
+        hamlet = self.example_user("hamlet")
+        othello = self.example_user("othello")
+        WebPushSubscription.objects.create(
+            user=othello,
+            endpoint=EXAMPLE_ENDPOINT,
+            p256dh_key=EXAMPLE_SUBSCRIPTION["p256dh_key"],
+            auth_secret=EXAMPLE_SUBSCRIPTION["auth_secret"],
+            user_agent=EXAMPLE_SUBSCRIPTION["user_agent"],
+        )
+        recipient = othello.recipient
+        assert recipient is not None
+        info = get_recipient_info(
+            realm_id=othello.realm_id,
+            recipient=recipient,
+            sender_id=hamlet.id,
+            stream_topic=None,
+        )
+        self.assertIn(othello.id, info.push_device_registered_user_ids)
+        self.assertNotIn(hamlet.id, info.push_device_registered_user_ids)
