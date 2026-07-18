@@ -68,7 +68,7 @@ from zerver.lib.topic import get_topic_display_name
 from zerver.lib.url_decoding import is_same_server_message_link
 from zerver.lib.url_encoding import message_link_url
 from zerver.lib.users import check_can_access_user
-from zerver.lib.web_push_vapid import get_vapid_private_key_pem
+from zerver.lib.web_push_vapid import load_vapid_private_key
 from zerver.models import (
     AbstractPushDeviceToken,
     ArchivedMessage,
@@ -1735,7 +1735,13 @@ def send_web_push_notifications(
     from pywebpush import WebPushException, webpush
 
     assert settings.WEB_PUSH_VAPID_PRIVATE_KEY is not None
-    vapid_private_key = get_vapid_private_key_pem(settings.WEB_PUSH_VAPID_PRIVATE_KEY)
+    # Validate the key parses before entering the send loop, and pass the
+    # secret's native base64url PKCS#8 DER form straight to pywebpush:
+    # py_vapid's from_string urlsafe-b64decodes its input, so handing it a
+    # PEM (standard base64 with +/ and newlines) silently corrupts the DER
+    # and fails with an ASN.1 error at send time.
+    load_vapid_private_key(settings.WEB_PUSH_VAPID_PRIVATE_KEY)
+    vapid_private_key = settings.WEB_PUSH_VAPID_PRIVATE_KEY
     contact = settings.WEB_PUSH_VAPID_CONTACT_EMAIL or settings.ZULIP_ADMINISTRATOR
     vapid_claims = {"sub": f"mailto:{contact}"}
     data = orjson.dumps(payload)

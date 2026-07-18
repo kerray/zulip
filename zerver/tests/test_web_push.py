@@ -56,6 +56,21 @@ class WebPushVapidTest(ZulipTestCase):
         self.assertEqual(len(point), 65)
         self.assertEqual(point[0], 0x04)
 
+    def test_secret_form_is_parseable_by_py_vapid(self) -> None:
+        """The send path hands the secret's base64url PKCS#8 DER form directly
+        to pywebpush, whose py_vapid urlsafe-b64decodes it — this must keep
+        working without any PEM round-trip (which py_vapid silently corrupts),
+        and must sign with the same key browsers subscribed against."""
+        from py_vapid import Vapid, b64urlencode
+
+        private_key_b64 = generate_vapid_private_key_b64()
+        vapid = Vapid.from_string(private_key=private_key_b64)
+        assert vapid.public_key is not None
+        point = vapid.public_key.public_bytes(
+            serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint
+        )
+        self.assertEqual(b64urlencode(point), derive_vapid_public_key(private_key_b64))
+
 
 class WebPushSubscriptionEndpointTest(ZulipTestCase):
     ENDPOINT = "/api/v1/users/me/web_push_subscriptions"
