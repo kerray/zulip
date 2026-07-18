@@ -59,6 +59,17 @@ const DESKTOP_NOTIFICATIONS_BANNER: banners.Banner = {
     custom_classes: "desktop-setting-notifications",
 };
 
+const WEB_PUSH_NOTIFICATIONS_BLOCKED_BANNER: banners.Banner = {
+    intent: "warning",
+    label: $t({
+        defaultMessage:
+            "Zulip needs your permission to send push notifications from this browser.",
+    }),
+    buttons: [],
+    close_button: true,
+    custom_classes: "web-push-setting-notifications",
+};
+
 const MOBILE_PUSH_NOTIFICATION_BANNER: banners.Banner = {
     intent: "warning",
     label: $t({
@@ -525,8 +536,26 @@ export function set_up(settings_panel: SettingsPanel): void {
 
         if (setting_name === "enable_web_push_notifications") {
             // Subscribe or unsubscribe this browser from within the same user
-            // gesture, so the permission prompt is allowed to appear.
-            void web_push.handle_setting_change(setting_value === true);
+            // gesture, so the permission prompt is allowed to appear. Persist
+            // the setting only when the change can take effect — otherwise a
+            // denied permission would leave the toggle claiming web push is
+            // on while the browser blocks delivery.
+            void web_push.handle_setting_change(setting_value === true).then((effective) => {
+                if (effective) {
+                    change_notification_setting(
+                        setting_name,
+                        setting_value,
+                        $input_elem.closest(".subsection-parent").find(".alert-notification"),
+                    );
+                } else {
+                    $input_elem.prop("checked", user_settings[setting_name]);
+                    const $banner_container = $(".desktop-notification-settings-banners");
+                    if ($banner_container.find(".web-push-setting-notifications").length === 0) {
+                        banners.append(WEB_PUSH_NOTIFICATIONS_BLOCKED_BANNER, $banner_container);
+                    }
+                }
+            });
+            return;
         }
 
         change_notification_setting(

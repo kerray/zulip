@@ -98,18 +98,23 @@ export function initialize(): void {
     }
 }
 
-export async function handle_setting_change(enabled: boolean): Promise<void> {
+export async function handle_setting_change(enabled: boolean): Promise<boolean> {
     // Invoked from the settings toggle change handler, so this runs inside a
-    // user gesture and may request the Notification permission.
+    // user gesture and may request the Notification permission. Returns
+    // whether the change can take effect in this browser — false only when
+    // enabling failed because the notification permission was not granted,
+    // so the caller can avoid persisting a setting that cannot work.
     if (!is_configured()) {
-        return;
+        return true;
     }
     if (enabled) {
         const permission = await Notification.requestPermission();
-        if (permission === "granted") {
-            await subscribe();
+        if (permission !== "granted") {
+            return false;
         }
-    } else {
-        await unsubscribe();
+        await subscribe();
+        return true;
     }
+    await unsubscribe();
+    return true;
 }

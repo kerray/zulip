@@ -76,7 +76,8 @@ function reset() {
 
 run_test("subscribe posts subscription when enabled", async () => {
     reset();
-    await web_push.handle_setting_change(true);
+    const effective = await web_push.handle_setting_change(true);
+    assert.equal(effective, true);
     assert.equal(posted.length, 1);
     const {url, data} = posted[0];
     assert.equal(url, "/json/users/me/web_push_subscriptions");
@@ -101,13 +102,27 @@ run_test("long user agent is truncated to the server's 255-char cap", async () =
 run_test("no VAPID key short-circuits", async () => {
     reset();
     set_realm({server_web_push_vapid_public_key: ""});
-    await web_push.handle_setting_change(true);
+    const effective = await web_push.handle_setting_change(true);
+    // Nothing to gate on: the setting may be persisted even though this
+    // server has web push unconfigured.
+    assert.equal(effective, true);
+    assert.equal(posted.length, 0);
+});
+
+run_test("denied permission returns false and does not subscribe", async () => {
+    reset();
+    const original_request_permission = Notification.requestPermission;
+    Notification.requestPermission = () => Promise.resolve("denied");
+    const effective = await web_push.handle_setting_change(true);
+    Notification.requestPermission = original_request_permission;
+    assert.equal(effective, false);
     assert.equal(posted.length, 0);
 });
 
 run_test("disabling unsubscribes", async () => {
     reset();
-    await web_push.handle_setting_change(false);
+    const effective = await web_push.handle_setting_change(false);
+    assert.equal(effective, true);
     assert.equal(deleted.length, 1);
     assert.equal(deleted[0].data.endpoint, "https://push.example.com/abc");
 });
