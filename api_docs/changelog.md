@@ -18,9 +18,9 @@ clients should check the `zulip_feature_level` field, present in the
 /register`](/api/register-queue) responses, to determine the API
 format used by the Zulip server that they are interacting with.
 
-## Unreleased local changes (urur web push fork)
+## Unreleased local changes (web push fork)
 
-These entries document API additions made by this deployment's Web Push
+These entries document API additions made by this Web Push
 (RFC 8291) fork on top of Zulip 12.1. The API feature level is
 intentionally **not** bumped: these changes ship only in this fork, so
 clients must not key off a feature-level number to detect them.
