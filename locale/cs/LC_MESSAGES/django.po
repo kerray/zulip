@@ -69,7 +69,7 @@ msgstr "Čas začátku je později než čas konce. Začátek: {start}, konec: {
 #: analytics/views/stats.py
 msgid "No analytics data available. Please contact your server administrator."
 msgstr ""
-"Žádná analytická data nejsou k dispozici. Spojte se, prosím, se správcem "
+"Žádná analytická data nejsou k dispozici. Obrať se prosím na správce "
 "serveru."
 
 #: corporate/lib/registration.py
@@ -437,8 +437,8 @@ msgid ""
 "<a href=\"mailto:%(support_email)s\">Contact this server's "
 "administrators</a> for support."
 msgstr ""
-"V případě potřeby podpory se <a href=\"mailto:%(support_email)s\">obraťte na"
-" správce tohoto serveru</a>."
+"V případě potřeby podpory se <a href=\"mailto:%(support_email)s\">obrať na "
+"správce tohoto serveru</a>."
 
 #: templates/500.html
 #, python-format
@@ -456,7 +456,7 @@ msgstr "Statistiky pro %(target_name)s | kmenový chat"
 
 #: templates/analytics/stats.html
 msgid "Analytics are fully available 24 hours after organization creation."
-msgstr "Analytikové jsou plně dostupní 24 hodin po vytvoření organizace."
+msgstr "Statistiky jsou plně dostupné 24 hodin po vytvoření kmene."
 
 #: templates/analytics/stats.html
 #, python-format
@@ -465,7 +465,7 @@ msgstr "Statistiky pro %(target_name)s"
 
 #: templates/analytics/stats.html
 msgid "Organization summary"
-msgstr "Přehled organizace"
+msgstr "Přehled kmene"
 
 #: templates/analytics/stats.html
 msgid "Number of users"
@@ -633,7 +633,7 @@ msgstr "Jejda. Platnost potvrzovacího odkazu vypršela nebo byl vypnut."
 
 #: templates/confirmation/link_expired.html
 msgid "Please contact your organization administrator for a new link."
-msgstr "Požádej správce kmene o nový odkaz."
+msgstr "Požádej rychtáře kmene o nový odkaz."
 
 #: templates/confirmation/link_malformed.html
 msgid "Confirmation link malformed"
@@ -723,7 +723,7 @@ msgid ""
 "questions, <a href=\"mailto:{{ support_email }}\">contact support</a>."
 msgstr ""
 "Pro přesunutí plánu ze serveru na tuto organizaci nebo v případě dalších "
-"dotazů <a href=\"mailto:{{ support_email }}\">kontaktujte podporu</a>."
+"dotazů <a href=\"mailto:{{ support_email }}\">kontaktuj podporu</a>."
 
 #: templates/corporate/billing/remote_server_login_error_for_any_realm_on_active_plan.html
 msgid ""
@@ -917,7 +917,7 @@ msgstr "Snímek obrazovky rozhovoru v Zulipu s botem Sentry"
 
 #: templates/corporate/role/engineers.html
 msgid "Screenshot of Zulip inbox"
-msgstr "Snímek obrazovky Nepřečteného v Zulipu"
+msgstr "Snímek obrazovky zobrazení Nepřečtené v Zulipu"
 
 #: templates/corporate/role/engineers.html
 msgid "Open laptop with book inside"
@@ -1184,7 +1184,7 @@ msgid ""
 "href=\"%(root_domain_url)s/new/\">create a permanent organization</a>."
 msgstr ""
 "E-mail není vyžadován. Nebo si <a class=\"registration-lead-subtitle-link\" "
-"href=\"%(root_domain_url)s/new/\">vytvořte stálou organizaci</a>."
+"href=\"%(root_domain_url)s/new/\">vytvoř stálou organizaci</a>."
 
 #: templates/zerver/create_realm/create_demo_realm.html
 #| msgid "Try Zulip now"
@@ -1193,7 +1193,7 @@ msgstr "Vyzkoušet Zulip"
 
 #: templates/zerver/create_realm/create_realm.html
 msgid "Create a new organization"
-msgstr "Vytvořit novou organizaci"
+msgstr "Vytvořit nový kmen"
 
 #: templates/zerver/create_realm/create_realm.html
 msgid "Create a new Zulip organization"
@@ -1207,7 +1207,7 @@ msgid ""
 "email required!"
 msgstr ""
 "Nebo si <a class=\"registration-lead-subtitle-link\" "
-"href=\"%(root_domain_url)s/new/demo/\">vytvořte ukázkovou organizaci</a> — "
+"href=\"%(root_domain_url)s/new/demo/\">vytvoř ukázkovou organizaci</a> — "
 "e-mail není vyžadován!"
 
 #: templates/zerver/create_realm/create_realm.html templates/zerver/reset.html
@@ -1267,12 +1267,12 @@ msgstr "Vyberte možnost"
 #: templates/zerver/create_realm/realm_creation_base_form_fields.html
 #: templates/zerver/create_user/register.html
 msgid "Organization type"
-msgstr "Druh organizace"
+msgstr "Druh kmene"
 
 #: templates/zerver/create_realm/realm_creation_base_form_fields.html
 #: templates/zerver/create_user/register.html
 msgid "Organization language"
-msgstr "Jazyk organizace"
+msgstr "Jazyk kmene"
 
 #: templates/zerver/create_realm/realm_creation_import_form_field.html
 msgid ""
@@ -1292,13 +1292,13 @@ msgstr "Importovat historii rozhovorů?"
 #: templates/zerver/create_realm/realm_creation_name_form_field.html
 #: templates/zerver/create_user/register.html
 msgid "Organization name"
-msgstr "Název organizace"
+msgstr "Název kmene"
 
 #: templates/zerver/create_realm/realm_creation_subdomain_form_field.html
 #: templates/zerver/create_user/register.html
 #: templates/zerver/realm_redirect.html
 msgid "Organization URL"
-msgstr "Adresa organizace"
+msgstr "Adresa kmene"
 
 #: templates/zerver/create_realm/realm_creation_subdomain_form_field.html
 #, python-format
@@ -1378,13 +1378,13 @@ msgstr ""
 msgid ""
 "Administrators of this Zulip organization will be able to see this email "
 "address."
-msgstr "Tuto e-mailovou adresu uvidí správci kmene."
+msgstr "Tuto e-mailovou adresu uvidí rychtáři kmene."
 
 #: templates/zerver/create_user/new_user_email_address_visibility.html
 msgid ""
 "Administrators and moderators of this Zulip organization will be able to see"
 " this email address."
-msgstr "Tuto e-mailovou adresu uvidí správci a moderátoři kmene."
+msgstr "Tuto e-mailovou adresu uvidí rychtáři a moderátoři kmene."
 
 #: templates/zerver/create_user/new_user_email_address_visibility.html
 msgid ""
@@ -1395,7 +1395,7 @@ msgstr "Tuto e-mailovou adresu neuvidí nikdo v kmeni."
 msgid ""
 "Other users in this Zulip organization will be able to see this email "
 "address."
-msgstr "Tuto e-mailovou adresu uvidí ostatní členové kmene."
+msgstr "Tuto e-mailovou adresu uvidí ostatní uživatelé v kmeni."
 
 #: templates/zerver/create_user/new_user_email_address_visibility.html
 msgid "Change"
@@ -1407,7 +1407,7 @@ msgstr "Registrace"
 
 #: templates/zerver/create_user/register.html
 msgid "Create your organization"
-msgstr "Vytvořte si organizaci"
+msgstr "Vytvoř si kmen"
 
 #: templates/zerver/create_user/register.html
 msgid "Create your account"
@@ -1481,11 +1481,11 @@ msgstr ""
 
 #: templates/zerver/deactivated.html
 msgid "Deactivated organization"
-msgstr "Vypnutá organizace"
+msgstr "Vypnutý kmen"
 
 #: templates/zerver/deactivated.html
 msgid "Organization moved"
-msgstr "Organizace byla přesunuta"
+msgstr "Kmen byl přesunut"
 
 #: templates/zerver/deactivated.html
 #, python-format
@@ -1493,7 +1493,7 @@ msgid ""
 "This organization has moved to <a "
 "href=\"%(deactivated_redirect)s\">%(deactivated_redirect)s</a>."
 msgstr ""
-"Tato organizace byla přesunuta na <a "
+"Tento kmen byl přesunut na <a "
 "href=\"%(deactivated_redirect)s\">%(deactivated_redirect)s</a>."
 
 #: templates/zerver/deactivated.html
@@ -1514,7 +1514,7 @@ msgstr ""
 msgid ""
 "This organization has been deactivated, and all organization data has been "
 "deleted."
-msgstr "Tato organizace byla vypnuta a všechna její data byla smazána."
+msgstr "Tento kmen byl vypnut a všechna jeho data byla smazána."
 
 #: templates/zerver/deactivated.html
 #, python-format
@@ -1542,7 +1542,7 @@ msgstr ""
 #: templates/zerver/deactivated.html
 #| msgid "This organization has been deactivated"
 msgid "This organization has been deactivated."
-msgstr "Tato organizace byla vypnuta."
+msgstr "Tento kmen byl vypnut."
 
 #: templates/zerver/deactivated.html
 #, python-format
@@ -1555,7 +1555,7 @@ msgid ""
 "href=\"mailto:%(support_email)s\">contact Zulip support</a> to reactivate "
 "it."
 msgstr ""
-"Pokud jsi vlastníkem tohoto kmene, můžeš <a "
+"Pokud jsi správcem tohoto kmene, můžeš <a "
 "href=\"mailto:%(support_email)s\">kontaktovat podporu Zulipu</a> a požádat o"
 " jeho opětovné zapnutí."
 
@@ -1566,7 +1566,7 @@ msgid ""
 "directly."
 msgstr ""
 "Pokud jsi členem kmene a chceš vědět, proč byl vypnut, obrať se prosím přímo"
-" na jeho správce."
+" na jeho rychtáře."
 
 #: templates/zerver/deactivated.html
 #, python-format
@@ -1579,7 +1579,7 @@ msgid ""
 "href=\"mailto:%(support_email)s\">contact this Zulip server's "
 "administrators</a> to reactivate it."
 msgstr ""
-"Pokud jsi vlastníkem tohoto kmene, můžeš <a "
+"Pokud jsi správcem tohoto kmene, můžeš <a "
 "href=\"mailto:%(support_email)s\">kontaktovat správce tohoto serveru "
 "Zulip</a> a požádat o jeho opětovné zapnutí."
 
@@ -1644,11 +1644,11 @@ msgstr "Anonym"
 
 #: templates/zerver/development/dev_login.html zerver/models/groups.py
 msgid "Owners"
-msgstr "Vlastníci"
+msgstr "Správci"
 
 #: templates/zerver/development/dev_login.html zerver/models/groups.py
 msgid "Administrators"
-msgstr "Správci"
+msgstr "Rychtáři"
 
 #: templates/zerver/development/dev_login.html zerver/models/groups.py
 msgid "Moderators"
@@ -1660,7 +1660,7 @@ msgstr "Hosté"
 
 #: templates/zerver/development/dev_login.html
 msgid "Normal users"
-msgstr "Normální uživatelé"
+msgstr "Běžní uživatelé"
 
 #: templates/zerver/development/email_log.html
 msgid "Forward emails to an email account"
@@ -1717,7 +1717,7 @@ msgstr ""
 #: templates/zerver/emails/confirm_registration.txt
 #, python-format
 msgid "Organization URL: %(organization_url)s"
-msgstr "Adresa organizace: %(organization_url)s"
+msgstr "Adresa kmene: %(organization_url)s"
 
 #: templates/zerver/emails/account_registered.html
 #: templates/zerver/emails/account_registered.txt
@@ -1738,7 +1738,7 @@ msgstr "Váš e-mailový účet: %(email)s"
 
 #: templates/zerver/emails/account_registered.html
 msgid "Go to organization"
-msgstr "Přejít na organizaci"
+msgstr "Přejít do kmene"
 
 #: templates/zerver/emails/account_registered.html
 #, python-format
@@ -1834,7 +1834,8 @@ msgid ""
 "If you have any questions, please contact this Zulip server's administrators"
 " at %(support_email)s."
 msgstr ""
-"Pokud máš jakékoli otázky, napiš správcům kmene na adresu %(support_email)s."
+"Pokud máš jakékoli otázky, napiš správcům serveru na adresu "
+"%(support_email)s."
 
 #: templates/zerver/emails/confirm_demo_organization_email.html
 #: templates/zerver/emails/confirm_demo_organization_email.txt
@@ -1916,7 +1917,7 @@ msgstr "Tvoje žádost o nový kmen:"
 #: templates/zerver/emails/confirm_registration.txt
 #, python-format
 msgid "Organization type: %(organization_type)s"
-msgstr "Druh organizace: %(organization_type)s"
+msgstr "Druh kmene: %(organization_type)s"
 
 #: templates/zerver/emails/confirm_registration.html
 #: templates/zerver/emails/confirm_registration.txt
@@ -1992,7 +1993,7 @@ msgstr ""
 #: templates/zerver/emails/deactivate.html
 #: templates/zerver/emails/deactivate.txt
 msgid "The administrators provided the following comment:"
-msgstr "Správci poskytli následující vysvětlení:"
+msgstr "Rychtáři poskytli následující vysvětlení:"
 
 #: templates/zerver/emails/deactivate.subject.txt
 #, python-format
@@ -2451,7 +2452,7 @@ msgstr ""
 #: templates/zerver/emails/missed_message.subject.txt
 #, python-format
 msgid "Group DMs with %(direct_message_group_display_name)s"
-msgstr "Skupinové PM s %(direct_message_group_display_name)s"
+msgstr "Skupinové přímé zprávy s %(direct_message_group_display_name)s"
 
 #: templates/zerver/emails/missed_message.subject.txt
 #, python-format
@@ -2533,8 +2534,7 @@ msgstr ""
 msgid ""
 "Organization: %(organization_url)s Time: %(login_time)s Email: "
 "%(user_email)s"
-msgstr ""
-"Organizace: %(organization_url)s Čas: %(login_time)s E-mail: %(user_email)s"
+msgstr "Kmen: %(organization_url)s Čas: %(login_time)s E-mail: %(user_email)s"
 
 #: templates/zerver/emails/notify_new_login.html
 #: templates/zerver/emails/notify_new_login.txt
@@ -2544,7 +2544,7 @@ msgstr "Zaznamenali jsme nedávné přihlášení k následujícímu kmenovému 
 #: templates/zerver/emails/notify_new_login.html
 #, python-format
 msgid "Organization: %(organization_link)s"
-msgstr "Organizace: %(organization_link)s"
+msgstr "Kmen: %(organization_link)s"
 
 #: templates/zerver/emails/notify_new_login.html
 #: templates/zerver/emails/notify_new_login.txt
@@ -2609,7 +2609,7 @@ msgstr "Nové přihlášení z %(device_browser)s na %(device_os)s"
 #: templates/zerver/emails/notify_new_login.txt
 #, python-format
 msgid "Organization: %(organization_url)s"
-msgstr "Organizace: %(organization_url)s"
+msgstr "Kmen: %(organization_url)s"
 
 #: templates/zerver/emails/notify_new_login.txt
 #, python-format
@@ -2917,7 +2917,7 @@ msgid ""
 "href=\"%(help_link)s\">reactivate your account</a>."
 msgstr ""
 "Tvůj dřívější účet na %(organization_url)s byl vypnut. Můžeš se obrátit na "
-"správce kmene a požádat o <a href=\"%(help_link)s\">jeho opětovné "
+"rychtáře kmene a požádat o <a href=\"%(help_link)s\">jeho opětovné "
 "zapnutí</a>."
 
 #: templates/zerver/emails/password_reset.html
@@ -2928,7 +2928,7 @@ msgstr "V tomto kmeni nemáš účet."
 #: templates/zerver/emails/password_reset.html
 #: templates/zerver/emails/password_reset.txt
 msgid "You do have active accounts in the following organization(s)."
-msgstr "Máte aktivní účty v těchto organizacích."
+msgstr "Máš aktivní účty v těchto kmenech."
 
 #: templates/zerver/emails/password_reset.html
 #: templates/zerver/emails/password_reset.txt
@@ -2960,8 +2960,8 @@ msgid ""
 "You previously had an account on %(realm_url)s, but it has been deactivated."
 " You can contact an organization administrator to reactivate your account."
 msgstr ""
-"Tvůj dřívější účet na %(realm_url)s byl vypnut. Můžeš se obrátit na správce "
-"kmene a požádat o jeho opětovné zapnutí."
+"Tvůj dřívější účet na %(realm_url)s byl vypnut. Můžeš se obrátit na rychtáře"
+" kmene a požádat o jeho opětovné zapnutí."
 
 #: templates/zerver/emails/realm_auto_downgraded.html
 #, python-format
@@ -3015,7 +3015,7 @@ msgid ""
 "Your Zulip demo organization, %(realm_name)s, was deactivated by "
 "%(deactivating_owner)s on %(localized_date)s."
 msgstr ""
-"Tvoje ukázková organizace Zulip, %(realm_name)s, byla vypnuta uživatelem "
+"Tvoje ukázková organizace Zulip, %(realm_name)s, byla vypnuta správcem "
 "%(deactivating_owner)s dne %(localized_date)s."
 
 #: templates/zerver/emails/realm_deactivated.html
@@ -3047,7 +3047,7 @@ msgid ""
 "Your Zulip organization, %(realm_name)s, was deactivated by "
 "%(deactivating_owner)s on %(localized_date)s."
 msgstr ""
-"Tvůj kmen (%(realm_name)s) byl vypnut uživatelem %(deactivating_owner)s dne "
+"Tvůj kmen (%(realm_name)s) byl vypnut správcem %(deactivating_owner)s dne "
 "%(localized_date)s."
 
 #: templates/zerver/emails/realm_deactivated.html
@@ -3062,7 +3062,7 @@ msgstr "Tvůj kmen (%(realm_name)s) byl vypnut dne %(localized_date)s."
 #: templates/zerver/emails/realm_deactivated.txt
 msgid ""
 "All data associated with this organization has been permanently deleted."
-msgstr "Všechna data spojená s touto organizací byla trvale odstraněna."
+msgstr "Všechna data spojená s tímto kmenem byla trvale odstraněna."
 
 #: templates/zerver/emails/realm_deactivated.html
 #: templates/zerver/emails/realm_deactivated.txt
@@ -3071,7 +3071,7 @@ msgid ""
 "All data associated with this organization will be permanently deleted on "
 "%(deletion_date)s."
 msgstr ""
-"Všechna data spojená s touto organizací budou trvale odstraněna dne "
+"Všechna data spojená s tímto kmenem budou trvale odstraněna dne "
 "%(deletion_date)s."
 
 #: templates/zerver/emails/realm_deactivated.html
@@ -3092,7 +3092,7 @@ msgstr "Tvůj kmen (%(realm_name)s) byl vypnut"
 #: templates/zerver/emails/realm_reactivation.txt
 #, python-format
 msgid "Dear former administrators of %(realm_name)s,"
-msgstr "Drazí bývalí správci %(realm_name)s,"
+msgstr "Drazí bývalí rychtáři kmene %(realm_name)s,"
 
 #: templates/zerver/emails/realm_reactivation.html
 #: templates/zerver/emails/realm_reactivation.txt
@@ -3101,7 +3101,7 @@ msgid ""
 "One of your administrators requested reactivation of the previously "
 "deactivated Zulip demo organization hosted at %(realm_url)s."
 msgstr ""
-"Jeden z tvých správců požádal o opětovné zapnutí dříve vypnuté ukázkové "
+"Jeden z tvých rychtářů požádal o opětovné zapnutí dříve vypnuté ukázkové "
 "organizace Zulip provozované na %(realm_url)s."
 
 #: templates/zerver/emails/realm_reactivation.html
@@ -3111,7 +3111,7 @@ msgid ""
 "One of your administrators requested reactivation of the previously "
 "deactivated Zulip organization hosted at %(realm_url)s."
 msgstr ""
-"Jeden z tvých správců požádal o opětovné zapnutí dříve vypnutého kmene "
+"Jeden z tvých rychtářů požádal o opětovné zapnutí dříve vypnutého kmene "
 "provozovaného na %(realm_url)s."
 
 #: templates/zerver/emails/realm_reactivation.html
@@ -3120,7 +3120,7 @@ msgstr "Kmen znovu zapneš klepnutím na tlačítko níže."
 
 #: templates/zerver/emails/realm_reactivation.html
 msgid "Reactivate organization"
-msgstr "Znovu zapnout organizaci"
+msgstr "Znovu zapnout kmen"
 
 #: templates/zerver/emails/realm_reactivation.html
 #: templates/zerver/emails/realm_reactivation.txt
@@ -3304,8 +3304,8 @@ msgid ""
 "Enter your email address to receive an email with the URLs for all the Zulip"
 " organizations on this server in which you have active accounts."
 msgstr ""
-"Zadej svoji e-mailovou adresu a přijde ti e-mail s adresami URL všech kmenů "
-"na tomto serveru, ve kterých máš aktivní účty."
+"Zadej svoji e-mailovou adresu a přijde ti e-mail s adresami URL všech "
+"organizací na tomto serveru, ve kterých máš aktivní účty."
 
 #: templates/zerver/find_account.html
 msgid ""
@@ -3618,7 +3618,7 @@ msgstr "Nebyla nalezena žádná organizace"
 #: templates/zerver/invalid_realm.html
 #, python-format
 msgid "There is no Zulip organization at <b>%(current_url)s</b>."
-msgstr "Na adrese <b>%(current_url)s</b> není žádný kmen."
+msgstr "Na adrese <b>%(current_url)s</b> není žádná organizace."
 
 #: templates/zerver/invalid_realm.html
 #, python-format
@@ -3782,7 +3782,7 @@ msgstr "Stáhnout nejnovější vydání."
 #: templates/zerver/portico_error_pages/rate_limit_exceeded.html
 msgid ""
 "You have exceeded the limit for how often a user can perform this action."
-msgstr "Byl překročen limit, jak často může uživatel tuto akci provádět."
+msgstr "Byl překročen limit toho, jak často může uživatel tuto akci provádět."
 
 #: templates/zerver/portico_error_pages/realm_creation_disabled.html
 msgid "Organization creation link required"
@@ -3796,10 +3796,10 @@ msgid ""
 "organizations.html\">documentation</a> on creating a new organization for "
 "more information."
 msgstr ""
-"Vytvoření nového kmene na tomto serveru vyžaduje platný odkaz pro vytvoření "
-"kmene. Více informací najdeš v <a "
+"Vytvoření nové organizace na tomto serveru vyžaduje platný odkaz pro "
+"vytvoření organizace. Více informací najdeš v <a "
 "href=\"https://zulip.readthedocs.io/en/stable/production/multiple-"
-"organizations.html\">dokumentaci</a> k zakládání nových kmenů."
+"organizations.html\">dokumentaci</a> k zakládání nových organizací."
 
 #: templates/zerver/portico_error_pages/realm_creation_link_invalid.html
 msgid "Organization creation link expired or invalid"
@@ -3811,7 +3811,7 @@ msgid ""
 " <a href=\"/new/\">obtain a new link</a> and try again."
 msgstr ""
 "Bohužel toto není platný odkaz pro vytvoření organizace. <a "
-"href=\"/new/\">Získejte prosím nový odkaz</a> a zkuste to znovu."
+"href=\"/new/\">Získej prosím nový odkaz</a> a zkus to znovu."
 
 #: templates/zerver/portico_error_pages/remote_realm_server_mismatch_error.html
 msgid "Unexpected Zulip server registration"
@@ -3824,8 +3824,8 @@ msgid ""
 "server installation. Please <a href=\"mailto:%(support_email)s\">contact "
 "Zulip support</a> for assistance in resolving this issue."
 msgstr ""
-"Tvůj kmen je registrován jako spojený s jinou instalací serveru Zulip. Pro "
-"pomoc s vyřešením tohoto problému se prosím <a "
+"Tvoje organizace je zaregistrována jako spojená s jinou instalací serveru "
+"Zulip. Pro pomoc s vyřešením tohoto problému se prosím <a "
 "href=\"mailto:%(support_email)s\">obrať na podporu Zulipu</a>."
 
 #: templates/zerver/portico_error_pages/unsupported_browser.html
@@ -3892,19 +3892,19 @@ msgstr "Vytvořit nový účet"
 
 #: templates/zerver/realm_reactivation.html
 msgid "Organization successfully reactivated"
-msgstr "Organizace byla úspěšně znovu zapnuta"
+msgstr "Kmen byl úspěšně znovu zapnut"
 
 #: templates/zerver/realm_reactivation.html
 msgid "Your organization has been successfully reactivated."
-msgstr "Tvůj kmen byl znovu zapnut."
+msgstr "Tvůj kmen byl úspěšně znovu zapnut."
 
 #: templates/zerver/realm_reactivation_link_error.html
 msgid "Organization reactivation link expired or invalid"
-msgstr "Odkaz na opětovnou aktivaci organizace vypršel nebo je neplatný"
+msgstr "Odkaz na opětovné zapnutí kmene vypršel nebo je neplatný"
 
 #: templates/zerver/realm_reactivation_link_error.html
 msgid "The organization reactivation link has expired or is not valid."
-msgstr "Odkaz na opětovnou aktivaci organizace buď vypršel, nebo je neplatný."
+msgstr "Odkaz na opětovné zapnutí kmene buď vypršel, nebo je neplatný."
 
 #: templates/zerver/realm_redirect.html
 msgid "Log in to your organization"
@@ -3912,7 +3912,7 @@ msgstr "Přihlášení do kmene"
 
 #: templates/zerver/realm_redirect.html
 msgid "your-organization"
-msgstr "vase-organizace"
+msgstr "tvuj-kmen"
 
 #: templates/zerver/realm_redirect.html
 msgid "Don't know your organization URL?"
@@ -4002,7 +4002,8 @@ msgstr "E-mail s postupem pro reset hesla byl odeslán!"
 
 #: templates/zerver/reset_emailed.html
 msgid "Check your email in a few minutes to finish the process."
-msgstr "Zkontrolujte svoji e-mailovou schránku pro dokončení resetu hesla."
+msgstr ""
+"Za pár minut zkontroluj svou e-mailovou schránku a dokonči celý postup."
 
 #: templates/zerver/slack_import.html
 msgid "Import from Slack"
@@ -4098,7 +4099,7 @@ msgid ""
 "Or <span id=\"cancel-slack-import\" tabindex=\"0\">create "
 "organization</span> without importing data."
 msgstr ""
-"Nebo <span id=\"cancel-slack-import\" tabindex=\"0\">vytvořte "
+"Nebo <span id=\"cancel-slack-import\" tabindex=\"0\">vytvoř "
 "organizaci</span> bez importu dat."
 
 #: templates/zerver/slack_import_file_upload_instruction.html
@@ -4216,18 +4217,18 @@ msgstr "přihlášení"
 #: zerver/actions/create_user.py
 #, python-brace-format
 msgid "{user} joined this organization."
-msgstr "{user} se připojil k této organizaci."
+msgstr "{user} se připojuje ke kmeni."
 
 #: zerver/actions/create_user.py
 #, python-brace-format
 msgid "{user} accepted your invitation to join Zulip!"
-msgstr "{user} přijal tvoje pozvání a připojil se ke kmeni!"
+msgstr "{user} přijímá tvoje pozvání a připojuje se ke kmeni!"
 
 #: zerver/actions/create_user.py
 msgid ""
 "Cannot activate a placeholder account; ask the user to sign up, instead."
 msgstr ""
-"Nelze aktivovat zástupný účet; požádejte místo toho uživatele, aby se "
+"Nelze aktivovat zástupný účet; požádej místo toho uživatele, aby se "
 "zaregistroval."
 
 #: zerver/actions/create_user.py
@@ -4240,7 +4241,7 @@ msgid ""
 "You are not allowed to change this field. Contact an administrator to update"
 " it."
 msgstr ""
-"Toto pole nesmíš měnit. Pokud je potřeba ho změnit, obrať se na správce."
+"Toto pole nesmíš měnit. Pokud je potřeba ho změnit, obrať se na rychtáře."
 
 #: zerver/actions/custom_profile_fields.py zerver/lib/users.py
 #: zerver/views/custom_profile_fields.py
@@ -4316,7 +4317,7 @@ msgid ""
 "organization admin, or a more experienced user."
 msgstr ""
 "Tvůj účet je zatím příliš čerstvý, a tak jménem kmene ještě nemůžeš posílat "
-"pozvánky. Popros správce kmene nebo někoho zkušenějšího."
+"pozvánky. Popros rychtáře kmene nebo někoho zkušenějšího."
 
 #: zerver/actions/invites.py
 msgid "Some emails did not validate, so we didn't send any invitations."
@@ -4381,12 +4382,12 @@ msgstr "{user} označil toto téma jako nevyřešené."
 #: zerver/actions/message_edit.py
 #, python-brace-format
 msgid "This topic was moved to {new_location} by {user}."
-msgstr "Toto téma sem bylo přesunuto {user} do {new_location}."
+msgstr "{user} přesunul toto téma do {new_location}."
 
 #: zerver/actions/message_edit.py
 #, python-brace-format
 msgid "A message was moved from this topic to {new_location} by {user}."
-msgstr "Zpráva byla {user} přesunuta z tohoto tématu do {new_location}."
+msgstr "{user} přesunul zprávu z tohoto tématu do {new_location}."
 
 #: zerver/actions/message_edit.py
 #, python-brace-format
@@ -4394,29 +4395,26 @@ msgid ""
 "{changed_messages_count} messages were moved from this topic to "
 "{new_location} by {user}."
 msgstr ""
-"{changed_messages_count} zpráv bylo {user} přesunuto z tohoto tématu do "
+"{changed_messages_count} zpráv přesunul {user} z tohoto tématu do "
 "{new_location}."
 
 #: zerver/actions/message_edit.py
 #, python-brace-format
 msgid "This topic was moved here from {old_location} by {user}."
-msgstr "Toto téma sem bylo přesunuto {user} z {old_location}."
+msgstr "{user} sem přesunul toto téma z {old_location}."
 
 #: zerver/actions/message_edit.py
 #, python-brace-format
 msgid ""
 "[A message]({message_link}) was moved here from {old_location} by {user}."
-msgstr ""
-"[Zpráva]({message_link}) sem byla přesunuta z {old_location} uživatelem "
-"{user}."
+msgstr "{user} sem přesunul [zprávu]({message_link}) z {old_location}."
 
 #: zerver/actions/message_edit.py
 #, python-brace-format
 msgid ""
 "{changed_messages_count} messages were moved here from {old_location} by "
 "{user}."
-msgstr ""
-"{changed_messages_count} zpráv sem bylo {user} přesunuto z {old_location}."
+msgstr "{changed_messages_count} zpráv sem přesunul {user} z {old_location}."
 
 #: zerver/actions/message_edit.py
 #| msgid "You do not have permission to post in this channel."
@@ -4501,7 +4499,7 @@ msgid ""
 "The channel exists but does not have any subscribers."
 msgstr ""
 "Tvůj robot {bot_identity} se pokusil odeslat zprávu do větve {channel_name}."
-" Větev existuje, ale nemá žádné odběratele."
+" Větev existuje, ale nemá žádné účastníky."
 
 #: zerver/actions/message_send.py
 msgid "You do not have permission to access some of the recipients."
@@ -4613,7 +4611,7 @@ msgstr "Větev je již vypnuta"
 #: zerver/actions/streams.py
 #, python-brace-format
 msgid "Channel #**{channel_name}** has been archived."
-msgstr "Větev #**{channel_name}** byla archivována."
+msgstr "Větev #**{channel_name}** byla uspána."
 
 #: zerver/actions/streams.py
 msgid "Channel is not currently deactivated"
@@ -4626,12 +4624,12 @@ msgstr "Větev s názvem {channel_name} již existuje"
 
 #: zerver/actions/streams.py
 msgid "Channel is private and have no subscribers"
-msgstr "Větev je soukromá a nemá žádné odběratele"
+msgstr "Větev je soukromá a nemá žádné účastníky"
 
 #: zerver/actions/streams.py
 #, python-brace-format
 msgid "Channel #**{channel_name}** has been unarchived."
-msgstr "Větev #**{channel_name}** byla obnovena z archivu."
+msgstr "Větev #**{channel_name}** byla probuzena."
 
 #: zerver/actions/streams.py
 #, python-brace-format
@@ -4755,7 +4753,7 @@ msgstr "Neplatné ID uživatele {user_id}"
 #: zerver/actions/user_groups.py
 #, python-brace-format
 msgid "User group '{group_name}' already exists."
-msgstr "Uživatelská skupina „{group_name}“ již existuje."
+msgstr "Kruh „{group_name}“ již existuje."
 
 #: zerver/decorator.py zerver/lib/streams.py zerver/lib/user_groups.py
 #: zerver/lib/users.py zerver/views/invite.py zerver/views/message_summary.py
@@ -4778,7 +4776,7 @@ msgstr "Tento \"endpoint\" nepřijímá požadavky robotů."
 
 #: zerver/decorator.py
 msgid "Must be an server administrator"
-msgstr "Musí být správce serveru"
+msgstr "Musí být správcem serveru"
 
 #: zerver/decorator.py
 msgid "This endpoint requires HTTP basic authentication."
@@ -4807,7 +4805,7 @@ msgid ""
 "organization administrator to reactivate it."
 msgstr ""
 "Tvůj účet {username} byl vypnut. Pokud ho chceš znovu zapnout, obrať se na "
-"správce kmene."
+"rychtáře kmene."
 
 #: zerver/forms.py
 msgid "The password is too weak."
@@ -4846,12 +4844,11 @@ msgstr "Kmen, ke kterému se pomocí {email} pokoušíš připojit, neexistuje."
 #, python-brace-format
 msgid ""
 "Please request an invite for {email} from the organization administrator."
-msgstr "Vyžádejte si, prosím, pozvánku pro {email} od správce organizace."
+msgstr "Vyžádej si prosím pozvánku pro {email} od rychtáře kmene."
 
 #: zerver/forms.py
 msgid "Can't join the organization: password authentication is not enabled."
-msgstr ""
-"Nelze se připojit k organizaci: přihlašování pomocí hesla není povoleno."
+msgstr "Ke kmeni se nelze připojit: přihlašování pomocí hesla není povoleno."
 
 #: zerver/forms.py
 #, python-brace-format
@@ -4859,12 +4856,12 @@ msgid ""
 "Your email address, {email}, is not in one of the domains that are allowed "
 "to register for accounts in this organization."
 msgstr ""
-"Váš e-mail {email} není součástí ani jedné domény, které jsou pro tuto "
-"organizaci povoleny."
+"Tvůj e-mail {email} nepatří do žádné z domén, které jsou pro registraci v "
+"tomto kmeni povoleny."
 
 #: zerver/forms.py
 msgid "Email addresses containing + are not allowed in this organization."
-msgstr "E-mailové adresy obsahující + nejsou pro tuto organizaci povoleny."
+msgstr "E-mailové adresy obsahující + nejsou v tomto kmeni povoleny."
 
 #: zerver/forms.py
 msgid ""
@@ -4908,7 +4905,7 @@ msgid ""
 "{retry_after_string} or contact your organization administrator for help."
 msgstr ""
 "Přihlašuješ se příliš často. Zkus to znovu za {retry_after_string} nebo "
-"požádej o pomoc správce kmene."
+"požádej o pomoc rychtáře kmene."
 
 #: zerver/forms.py
 msgid ""
@@ -4994,7 +4991,7 @@ msgstr "Neplatný identifikátor složky větve"
 #: zerver/lib/demo_organizations.py
 #| msgid "Confirm your email address"
 msgid "Configure owner account email address."
-msgstr "Nastavte e-mailovou adresu účtu vlastníka."
+msgstr "Nastav e-mailovou adresu účtu správce."
 
 #: zerver/lib/demo_organizations.py
 #, python-brace-format
@@ -5067,11 +5064,11 @@ msgstr "Pro zprávy do větve je nutné zadat přesně 1 identifikátor větve"
 
 #: zerver/lib/drafts.py
 msgid "User has disabled synchronizing drafts."
-msgstr "Uživatel vypnul synchronizaci konceptů."
+msgstr "Uživatel vypnul synchronizaci rozepsaných zpráv."
 
 #: zerver/lib/drafts.py
 msgid "Draft does not exist"
-msgstr "Návrh neexistuje"
+msgstr "Rozepsaná zpráva neexistuje"
 
 #: zerver/lib/email_mirror.py
 #, python-brace-format
@@ -5155,7 +5152,7 @@ msgstr "Neplatný typ obrázečku."
 
 #: zerver/lib/emoji.py
 msgid "Must be an organization administrator or emoji author"
-msgstr "Musí být správcem organizace nebo tvůrcem obrázečku"
+msgstr "Musí být rychtářem kmene nebo tvůrcem obrázečku"
 
 #: zerver/lib/emoji.py
 msgid "Emoji names must end with either a letter or digit."
@@ -5179,7 +5176,7 @@ msgstr "Nepodařilo se přidělit event queue"
 
 #: zerver/lib/exceptions.py
 msgid "Not logged in: API authentication or user session required"
-msgstr "Nepřihlášen: API autentikace nebo uživatelská session je vyžadována"
+msgstr "Nepřihlášen: je vyžadováno ověření přes API nebo uživatelská relace"
 
 #: zerver/lib/exceptions.py
 #, python-brace-format
@@ -5208,7 +5205,7 @@ msgstr "{required_parameter} je povinný, když je nastaven {set_parameter}."
 
 #: zerver/lib/exceptions.py
 msgid "organization owner"
-msgstr "Vlastník organizace"
+msgstr "správce kmene"
 
 #: zerver/lib/exceptions.py
 msgid "user"
@@ -5239,11 +5236,11 @@ msgstr "Nevalidní JSON"
 
 #: zerver/lib/exceptions.py zerver/views/invite.py
 msgid "Must be an organization administrator"
-msgstr "Musí být správcem organizace"
+msgstr "Musí být rychtářem kmene"
 
 #: zerver/lib/exceptions.py
 msgid "Must be an organization owner"
-msgstr "Musí být vlastníkem organizace"
+msgstr "Musí být správcem kmene"
 
 #: zerver/lib/exceptions.py
 #| msgid "Must be an organization owner"
@@ -5256,7 +5253,7 @@ msgstr "Tvoje uživatelské jméno nebo heslo není správné"
 
 #: zerver/lib/exceptions.py
 msgid "This organization has been deactivated"
-msgstr "Tato organizace byla vypnuta"
+msgstr "Tento kmen byl vypnut"
 
 #: zerver/lib/exceptions.py
 msgid ""
@@ -5266,7 +5263,7 @@ msgstr "Registrace oznámení po telefonu pro váš server byla vypnuta"
 
 #: zerver/lib/exceptions.py
 msgid "Password authentication is disabled in this organization"
-msgstr "Přihlašování pomocí hesla je v této organizaci vypnuto"
+msgstr "Přihlašování pomocí hesla je v tomto kmeni vypnuto"
 
 #: zerver/lib/exceptions.py
 msgid "Your password has been disabled and needs to be reset"
@@ -5333,12 +5330,12 @@ msgstr ""
 
 #: zerver/lib/exceptions.py
 msgid "Direct messages are disabled in this organization."
-msgstr "Přímé zprávy jsou v této organizaci zakázány."
+msgstr "Přímé zprávy jsou v tomto kmeni zakázány."
 
 #: zerver/lib/exceptions.py
 msgid "This conversation does not include any users who can authorize it."
 msgstr ""
-"Tento rozhovor nezahrnuje žádné uživatele, kteří ji mohou autorizovat."
+"Tento rozhovor nezahrnuje žádné uživatele, kteří jej mohou autorizovat."
 
 #: zerver/lib/exceptions.py
 msgid "Access denied"
@@ -5361,7 +5358,7 @@ msgstr "Reakce již existuje."
 
 #: zerver/lib/exceptions.py
 msgid "Reaction doesn't exist."
-msgstr "Odpověď neexistuje."
+msgstr "Reakce neexistuje."
 
 #: zerver/lib/exceptions.py
 msgid ""
@@ -5395,11 +5392,11 @@ msgstr "Hodnota '{field_name}' neodpovídá očekávané hodnotě."
 #: zerver/lib/exceptions.py
 #, python-brace-format
 msgid "'{setting_name}' must be a system user group."
-msgstr "'{setting_name}' musí být systémová uživatelská skupina."
+msgstr "'{setting_name}' musí být systémový kruh."
 
 #: zerver/lib/exceptions.py
 msgid "Cannot deactivate user group in use."
-msgstr "Nelze vypnout používanou uživatelskou skupinu."
+msgstr "Nelze vypnout používaný kruh."
 
 #: zerver/lib/exceptions.py
 msgid "You do not have permission to administer this channel."
@@ -5611,7 +5608,7 @@ msgstr "Zpráva nesmí obsahovat nulové bajty"
 #: zerver/lib/message.py
 #, python-brace-format
 msgid "You are not allowed to mention user group '{user_group_name}'."
-msgstr "Nemáte oprávnění zmínit uživatelskou skupinu „{user_group_name}“."
+msgstr "Nemáš oprávnění zmínit kruh „{user_group_name}“."
 
 #: zerver/lib/message.py
 #, python-brace-format
@@ -5748,7 +5745,7 @@ msgid ""
 "We also have a guide for [moving your organization to Zulip]({organization_setup_url}).\n"
 msgstr ""
 "\n"
-"Máme také průvodce [přesunem tvé organizace do Zulipu]({organization_setup_url}).\n"
+"Máme také průvodce [přesunem tvého kmene do Zulipu]({organization_setup_url}).\n"
 
 #: zerver/lib/onboarding.py
 #, python-brace-format
@@ -5763,9 +5760,9 @@ msgid ""
 "a permanent organization]({convert_demo_organization_help_url}).\n"
 msgstr ""
 "\n"
-"Tato [ukázková organizace]({demo_organization_help_url}) bude **automaticky\n"
-"smazána** {deletion_global_time}, pokud nebude [převedena na\n"
-"trvalou organizaci]({convert_demo_organization_help_url}).\n"
+"Tento [ukázkový kmen]({demo_organization_help_url}) bude **automaticky\n"
+"smazán** {deletion_global_time}, pokud nebude [převeden na\n"
+"trvalý kmen]({convert_demo_organization_help_url}).\n"
 
 #: zerver/lib/onboarding.py
 msgid ""
@@ -5775,7 +5772,7 @@ msgid ""
 msgstr ""
 "\n"
 "Zahájil jsem několik rozhovorů, které ti pomohou začít. Najdeš\n"
-"je ve své [Došlé poště](/#inbox).\n"
+"je mezi [Nepřečtenými](/#inbox).\n"
 
 #: zerver/lib/onboarding.py
 #, python-brace-format
@@ -5855,7 +5852,7 @@ msgstr ""
 "Větve uspořádávají rozhovory podle toho, kdo je potřebuje vidět. Například\n"
 "je běžné mít vlastní větev pro každou skupinu v kmeni.\n"
 "\n"
-"[Procházej větve a přihlas se k jejich odběru]({settings_link}).\n"
+"[Procházej větve a připoj se k nim]({settings_link}).\n"
 
 #: zerver/lib/onboarding.py
 msgid ""
@@ -5997,7 +5994,7 @@ msgid ""
 "conversations with unread messages.\n"
 msgstr ""
 "\n"
-":point_right: Až budeš mít chuť, podívej se do své [Došlé pošty](/#inbox) na další\n"
+":point_right: Až budeš mít chuť, podívej se do [Nepřečtených](/#inbox) na další\n"
 "rozhovory s nepřečtenými zprávami.\n"
 
 #: zerver/lib/onboarding.py
@@ -6188,8 +6185,8 @@ msgid ""
 "Push notification configuration issue on server, contact the server "
 "administrator or retry later."
 msgstr ""
-"Problém s nastavením push oznámení na serveru, obraťte se na správce serveru"
-" nebo to zkuste znovu později."
+"Problém s nastavením push oznámení na serveru, obrať se na správce serveru "
+"nebo to zkus znovu později."
 
 #: zerver/lib/push_registration.py
 #| msgid "Invalid API key"
@@ -6277,7 +6274,7 @@ msgid ""
 "{user_silent_mention} [sent]({conversation_url}) a {widget} to "
 "{list_of_recipient_mentions}."
 msgstr ""
-"{user_silent_mention} [odeslal]({conversation_url}) {widget} uživatelům "
+"{user_silent_mention} [odeslal]({conversation_url}) {widget} členům "
 "{list_of_recipient_mentions}."
 
 #: zerver/lib/reminders.py
@@ -6286,7 +6283,7 @@ msgid ""
 "{user_silent_mention} [said]({conversation_url}) to "
 "{list_of_recipient_mentions}:"
 msgstr ""
-"{user_silent_mention} [napsal]({conversation_url}) uživatelům "
+"{user_silent_mention} [napsal]({conversation_url}) členům "
 "{list_of_recipient_mentions}:"
 
 #: zerver/lib/reminders.py
@@ -6395,11 +6392,11 @@ msgstr "Neplatný znak v tématu na pozici {position}!"
 
 #: zerver/lib/subscription_info.py
 msgid "Subscriber data is not available for this channel"
-msgstr "Údaje o odběratelích nejsou pro tuto větev k dispozici"
+msgstr "Údaje o účastnících nejsou pro tuto větev k dispozici"
 
 #: zerver/lib/subscription_info.py
 msgid "Unable to retrieve subscribers for private channel"
-msgstr "Nelze získat odběratele soukromé větve"
+msgstr "Nelze získat účastníky soukromé větve"
 
 #: zerver/lib/thumbnail.py
 msgid "Could not decode image; did you upload an image file?"
@@ -6567,60 +6564,60 @@ msgstr "Velikost obrázku překračuje limit"
 
 #: zerver/lib/user_groups.py
 msgid "User group is deactivated."
-msgstr "Uživatelská skupina je vypnutá."
+msgstr "Kruh je vypnutý."
 
 #: zerver/lib/user_groups.py
 msgid "Invalid user group"
-msgstr "Neplatná skupina uživatele"
+msgstr "Neplatný kruh"
 
 #: zerver/lib/user_groups.py
 #, python-brace-format
 #| msgid "Invalid user group"
 msgid "Invalid user group ID: {user_group_id}"
-msgstr "Neplatné ID uživatelské skupiny: {user_group_id}"
+msgstr "Neplatné ID kruhu: {user_group_id}"
 
 #: zerver/lib/user_groups.py
 msgid "Invalid system group name."
-msgstr "Neplatný název systémové skupiny."
+msgstr "Neplatný název systémového kruhu."
 
 #: zerver/lib/user_groups.py
 #, python-brace-format
 msgid "Invalid user group ID: {group_id}"
-msgstr "Neplatné ID uživatelské skupiny: {group_id}"
+msgstr "Neplatné ID kruhu: {group_id}"
 
 #: zerver/lib/user_groups.py
 #, python-brace-format
 msgid "'{setting_name}' setting cannot be set to 'role:internet' group."
-msgstr "Nastavení '{setting_name}' nelze nastavit na skupinu 'role:internet'."
+msgstr "Nastavení '{setting_name}' nelze nastavit na kruh 'role:internet'."
 
 #: zerver/lib/user_groups.py
 #, python-brace-format
 msgid "'{setting_name}' setting cannot be set to 'role:nobody' group."
-msgstr "Nastavení '{setting_name}' nelze nastavit na skupinu 'role:nobody'."
+msgstr "Nastavení '{setting_name}' nelze nastavit na kruh 'role:nobody'."
 
 #: zerver/lib/user_groups.py
 #, python-brace-format
 msgid "'{setting_name}' setting cannot be set to 'role:everyone' group."
-msgstr "Nastavení '{setting_name}' nelze nastavit na skupinu 'role:everyone'."
+msgstr "Nastavení '{setting_name}' nelze nastavit na kruh 'role:everyone'."
 
 #: zerver/lib/user_groups.py
 #, python-brace-format
 msgid "'{setting_name}' setting cannot be set to '{group_name}' group."
-msgstr "Nastavení '{setting_name}' nelze nastavit na skupinu '{group_name}'."
+msgstr "Nastavení '{setting_name}' nelze nastavit na kruh '{group_name}'."
 
 #: zerver/lib/user_groups.py
 msgid "User group name can't be empty!"
-msgstr "Název uživatelské skupiny nemůže být prázdný!"
+msgstr "Název kruhu nemůže být prázdný!"
 
 #: zerver/lib/user_groups.py
 #, python-brace-format
 msgid "User group name cannot exceed {max_length} characters."
-msgstr "Název uživatelské skupiny nemůže přesáhnout {max_length} znaků."
+msgstr "Název kruhu nemůže přesáhnout {max_length} znaků."
 
 #: zerver/lib/user_groups.py
 #, python-brace-format
 msgid "User group name cannot start with '{prefix}'."
-msgstr "Název uživatelské skupiny nemůže začínat na '{prefix}'."
+msgstr "Název kruhu nemůže začínat na '{prefix}'."
 
 #: zerver/lib/user_groups.py
 #, python-brace-format
@@ -6628,16 +6625,16 @@ msgid ""
 "'{setting_name}' must be restricted to organization administrators for "
 "groups used in 'workplace_users_group'."
 msgstr ""
-"'{setting_name}' musí být omezeno na správce organizace pro skupiny použité "
-"v 'workplace_users_group'."
+"'{setting_name}' musí být pro kruhy použité v 'workplace_users_group' "
+"omezeno na rychtáře kmene."
 
 #: zerver/lib/user_groups.py
 msgid ""
 "'can_manage_all_groups' must be restricted to organization administrators "
 "when 'workplace_users_group' includes user-defined groups."
 msgstr ""
-"'can_manage_all_groups' musí být omezeno na správce organizace, pokud "
-"'workplace_users_group' zahrnuje uživatelsky definované skupiny."
+"'can_manage_all_groups' musí být omezeno na rychtáře kmene, pokud "
+"'workplace_users_group' zahrnuje uživatelsky definované kruhy."
 
 #: zerver/lib/user_status.py
 msgid "Client did not pass any new values."
@@ -6669,7 +6666,7 @@ msgstr "Neplatný formát!"
 
 #: zerver/lib/users.py
 msgid "Unique names required in this organization."
-msgstr "V této organizaci jsou vyžadována jedinečná jména."
+msgstr "V tomto kmeni jsou vyžadována jedinečná jména."
 
 #: zerver/lib/users.py
 msgid "Name is already in use."
@@ -6721,7 +6718,7 @@ msgstr "Žádný takový uživatel"
 
 #: zerver/lib/users.py
 msgid "User is deactivated"
-msgstr "Uživatel je vypnut"
+msgstr "Uživatel je vypnutý"
 
 #: zerver/lib/validator.py
 #, python-brace-format
@@ -6840,8 +6837,8 @@ msgid ""
 "'workplace_users_group' must be a group whose membership can only be managed"
 " by organization administrators."
 msgstr ""
-"'workplace_users_group' musí být skupina, jejíž členství mohou spravovat "
-"pouze správci organizace."
+"'workplace_users_group' musí být kruh, jehož členství mohou spravovat pouze "
+"rychtáři kmene."
 
 #: zerver/lib/zcommand.py
 msgid "There should be a leading slash in the zcommand."
@@ -6985,7 +6982,7 @@ msgid ""
 "Group %(name)r in alternative URL template is not present in linkifier "
 "pattern."
 msgstr ""
-"Skupina %(name)r v alternativní předloze URL není přítomna ve vzoru "
+"Skupina %(name)r v alternativní šabloně URL není přítomna ve vzoru "
 "generátoru odkazů."
 
 #: zerver/models/linkifiers.py
@@ -6995,7 +6992,7 @@ msgid ""
 "template."
 msgstr ""
 "Skupina %(name)r ve vzoru generátoru odkazů není přítomna v alternativní "
-"předloze URL."
+"šabloně URL."
 
 #: zerver/models/messages.py
 msgid "Unicode emoji"
@@ -7107,19 +7104,19 @@ msgstr "Soukromá, chráněná historie"
 
 #: zerver/models/users.py
 msgid "Admins, moderators, members and guests"
-msgstr "Správci, moderátoři, členové a hosté"
+msgstr "Rychtáři, moderátoři, členové a hosté"
 
 #: zerver/models/users.py
 msgid "Admins, moderators and members"
-msgstr "Správci, moderátoři a členové"
+msgstr "Rychtáři, moderátoři a členové"
 
 #: zerver/models/users.py
 msgid "Admins and moderators"
-msgstr "Správci a moderátoři"
+msgstr "Rychtáři a moderátoři"
 
 #: zerver/models/users.py
 msgid "Admins only"
-msgstr "Pouze správci"
+msgstr "Pouze rychtáři"
 
 #: zerver/models/users.py
 msgid "Unknown user"
@@ -7127,11 +7124,11 @@ msgstr "Neznámý uživatel"
 
 #: zerver/models/users.py
 msgid "Organization owner"
-msgstr "Vlastník organizace"
+msgstr "Správce kmene"
 
 #: zerver/models/users.py
 msgid "Organization administrator"
-msgstr "Správce organizace"
+msgstr "Rychtář kmene"
 
 #: zerver/models/users.py
 msgid "Moderator"
@@ -7187,7 +7184,7 @@ msgstr "Nepodařilo se vytvořit ověřovací výzvu"
 
 #: zerver/views/auth.py
 msgid "JWT authentication is not enabled for this organization"
-msgstr "Ověřování JWT není pro tuto organizaci povoleno"
+msgstr "Ověřování JWT není pro tento kmen povoleno"
 
 #: zerver/views/auth.py
 msgid "No JSON web token passed in request"
@@ -7293,7 +7290,7 @@ msgstr "Nelze provést dotaz na memcached"
 
 #: zerver/views/invite.py
 msgid "No such invitation"
-msgstr "Žádné taková pozvánka"
+msgstr "Žádná taková pozvánka"
 
 #: zerver/views/invite.py
 #| msgid "Confirmation link expired or deactivated"
@@ -7312,7 +7309,7 @@ msgstr ""
 
 #: zerver/views/invite.py
 msgid "You do not have permission to subscribe other users to channels."
-msgstr "Nemáš oprávnění přihlašovat ostatní uživatele k odběru větví."
+msgstr "Nemáš oprávnění připojovat ostatní uživatele k větvím."
 
 #: zerver/views/invite.py
 msgid "You must specify at least one email address."
@@ -7328,7 +7325,7 @@ msgstr ""
 
 #: zerver/views/message_edit.py
 msgid "Message edit history is disabled in this organization"
-msgstr "Historie úprav zprávy je v této organizaci vypnuta"
+msgstr "Historie úprav zprávy je v tomto kmeni vypnuta"
 
 #: zerver/views/message_edit.py
 msgid "You don't have permission to delete this message"
@@ -7364,7 +7361,7 @@ msgstr "Je vyžadováno vysvětlení."
 #: zerver/views/message_report.py
 #| msgid "Zephyr mirroring is not allowed in this organization"
 msgid "Message reporting is not enabled in this organization."
-msgstr "Nahlašování zpráv není v této organizaci povoleno."
+msgstr "Nahlašování zpráv není v tomto kmeni povoleno."
 
 #: zerver/views/message_send.py
 msgid "Missing sender"
@@ -7491,7 +7488,7 @@ msgstr ""
 
 #: zerver/views/read_receipts.py
 msgid "Read receipts are disabled in this organization."
-msgstr "Potvrzení o přečtení jsou v této organizaci zakázána."
+msgstr "Potvrzení o přečtení jsou v tomto kmeni zakázána."
 
 #: zerver/views/realm.py
 #, python-brace-format
@@ -7570,7 +7567,7 @@ msgstr "Musíš nahrát přesně jeden soubor."
 
 #: zerver/views/realm_emoji.py
 msgid "Only administrators can override default emoji."
-msgstr "Výchozí obrázeček mohou přepsat pouze správci."
+msgstr "Výchozí obrázeček mohou přepsat pouze rychtáři."
 
 #: zerver/views/realm_emoji.py zerver/views/realm_icon.py
 #: zerver/views/realm_logo.py zerver/views/user_settings.py
@@ -7584,8 +7581,7 @@ msgstr "Nahraný soubor je větší než povolený limit {max_size} MiB"
 msgid ""
 "Exports of all public and private data are not enabled for this "
 "organization."
-msgstr ""
-"Export všech veřejných a soukromých dat není pro tuto organizaci povolen."
+msgstr "Export všech veřejných a soukromých dat není pro tento kmen povolen."
 
 #: zerver/views/realm_export.py
 msgid "Exceeded rate limit."
@@ -7737,12 +7733,12 @@ msgstr "Nic k provedení. Zadej alespoň jedno z \"add\" nebo \"delete\"."
 #: zerver/views/streams.py
 #, python-brace-format
 msgid "{user_full_name} subscribed you to {channel_name}."
-msgstr "{user_full_name} tě přihlásil k odběru větve {channel_name}."
+msgstr "{user_full_name} tě připojil k větvi {channel_name}."
 
 #: zerver/views/streams.py
 #, python-brace-format
 msgid "{user_full_name} subscribed you to the following channels:"
-msgstr "{user_full_name} tě přihlásil k odběru následujících větví:"
+msgstr "{user_full_name} tě připojil k těmto větvím:"
 
 #: zerver/views/streams.py
 #, python-brace-format
@@ -7799,12 +7795,12 @@ msgstr "{property} není boolean"
 #: zerver/views/streams.py
 #, python-brace-format
 msgid "Unknown subscription property: {property}"
-msgstr "Neznámá vlastnost odběru: {property}"
+msgstr "Neznámá vlastnost účasti ve větvi: {property}"
 
 #: zerver/views/streams.py
 #, python-brace-format
 msgid "Not subscribed to channel ID {channel_id}"
-msgstr "Není nastaven odběr větve s ID {channel_id}"
+msgstr "Není účastníkem větve s ID {channel_id}"
 
 #: zerver/views/submessage.py
 msgid "Invalid json for submessage"
@@ -7892,57 +7888,55 @@ msgstr ""
 #: zerver/views/user_groups.py
 #, python-brace-format
 msgid "{user_full_name} added you to the group {group_name}."
-msgstr "{user_full_name} tě přidal do skupiny {group_name}."
+msgstr "{user_full_name} tě přidal do kruhu {group_name}."
 
 #: zerver/views/user_groups.py
 #, python-brace-format
 msgid "{user_full_name} removed you from the group {group_name}."
-msgstr "{user_full_name} tě odstranil ze skupiny {group_name}."
+msgstr "{user_full_name} tě odebral z kruhu {group_name}."
 
 #: zerver/views/user_groups.py
 #, python-brace-format
 msgid "User {user_id} is already a member of this group"
-msgstr "Uživatel {user_id} již je členem této skupiny"
+msgstr "Uživatel {user_id} již je členem tohoto kruhu"
 
 #: zerver/views/user_groups.py
 #, python-brace-format
 msgid "There is no member '{user_id}' in this user group"
-msgstr "V této uživatelské skupině není člen '{user_id}'"
+msgstr "V tomto kruhu není člen '{user_id}'"
 
 #: zerver/views/user_groups.py
 #, python-brace-format
 msgid "User group {group_id} is already a subgroup of this group."
-msgstr "Uživatelská skupina {group_id} je již podskupinou této skupiny."
+msgstr "Kruh {group_id} je již podskupinou tohoto kruhu."
 
 #: zerver/views/user_groups.py
 #, python-brace-format
 msgid ""
 "User group {user_group_id} is already a subgroup of one of the passed "
 "subgroups."
-msgstr ""
-"Uživatelská skupina {user_group_id} je již podskupinou jedné z předaných "
-"podskupin."
+msgstr "Kruh {user_group_id} je již podskupinou jedné z předaných podskupin."
 
 #: zerver/views/user_groups.py
 msgid ""
 "Subgroups of a group used for 'workplace_users_group' must allow only "
 "organization administrators to manage their membership."
 msgstr ""
-"Podskupiny skupiny, která se používá pro 'workplace_users_group', musí "
-"umožňovat správu svého členství pouze správcům organizace."
+"Podskupiny kruhu, který se používá pro 'workplace_users_group', musí "
+"umožňovat správu svého členství pouze rychtářům kmene."
 
 #: zerver/views/user_groups.py
 #, python-brace-format
 msgid "User group {group_id} is not a subgroup of this group."
-msgstr "Uživatelská skupina {group_id} není podskupinou této skupiny."
+msgstr "Kruh {group_id} není podskupinou tohoto kruhu."
 
 #: zerver/views/user_settings.py
 msgid "Avatar changes are disabled in this organization."
-msgstr "Změny avatarů jsou v této organizaci zakázány."
+msgstr "Změny avatarů jsou v tomto kmeni zakázány."
 
 #: zerver/views/user_settings.py
 msgid "Email address changes are disabled in this organization."
-msgstr "Změny e-mailu jsou v této organizaci zakázány."
+msgstr "Změny e-mailu jsou v tomto kmeni zakázány."
 
 #: zerver/views/user_settings.py
 msgid "Invalid default_language"
@@ -7994,7 +7988,7 @@ msgstr "Téma není ztlumeno"
 
 #: zerver/views/users.py
 msgid "Cannot deactivate the only organization owner"
-msgstr "Nelze vypnout jediného vlastníka organizace"
+msgstr "Nelze vypnout jediného správce kmene"
 
 #: zerver/views/users.py
 msgid "User is not allowed to delete other user's messages."
@@ -8007,7 +8001,7 @@ msgstr "Uživatel není oprávněn měnit e-maily uživatelů"
 #: zerver/views/users.py
 msgid ""
 "The owner permission cannot be removed from the only organization owner."
-msgstr "Nelze odstranit vlastnická oprávnění jediného vlastníka organizace."
+msgstr "Oprávnění správce nelze odebrat jedinému správci kmene."
 
 #: zerver/views/users.py
 msgid "Invalid new email address."
@@ -8027,7 +8021,7 @@ msgid ""
 "Please contact your server administrator."
 msgstr ""
 "E-mail robota nelze změnit, dokud není FAKE_EMAIL_DOMAIN správně nastaveno.\n"
-"Spojte se, prosím, se správcem serveru."
+"Spoj se, prosím, se správcem serveru."
 
 #: zerver/views/users.py
 #| msgid "Email address"
@@ -8051,8 +8045,8 @@ msgid ""
 "Can't create bots until FAKE_EMAIL_DOMAIN is correctly configured.\n"
 "Please contact your server administrator."
 msgstr ""
-"Roboty nelze vytvářet, dokud FAKE_EMAIL_DOMAIN není správně nastaveno\n"
-"Spojte se, prosím, se správcem serveru."
+"Roboty nelze vytvářet, dokud FAKE_EMAIL_DOMAIN není správně nastaveno.\n"
+"Spoj se, prosím, se správcem serveru."
 
 #: zerver/views/users.py
 msgid "Embedded bots are not enabled."
@@ -8069,11 +8063,11 @@ msgstr "Uživatel není oprávněn vytvářet uživatele"
 #: zerver/views/users.py
 #, python-brace-format
 msgid "Email '{email}' not allowed in this organization"
-msgstr "Adresa elektronické pošty '{email}' není v této organizaci povolena"
+msgstr "E-mailová adresa „{email}“ není v tomto kmeni povolena"
 
 #: zerver/views/users.py
 msgid "Disposable email addresses are not allowed in this organization"
-msgstr "Jednorázové e-maily nejsou v této organizaci povoleny"
+msgstr "Jednorázové e-maily nejsou v tomto kmeni povoleny"
 
 #: zerver/views/video_calls.py
 #, python-brace-format
@@ -8292,7 +8286,7 @@ msgstr "Chybějící ios_app_id"
 
 #: zilencer/views.py
 msgid "Missing user_id or user_uuid"
-msgstr "Chybí uživatelské_id nebo user_uuid"
+msgstr "Chybí user_id nebo user_uuid"
 
 #: zilencer/views.py
 #, python-brace-format
