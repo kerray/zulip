@@ -196,7 +196,7 @@ msgstr "Nastala chyba. Spojte se, prosím, s {email}."
 
 #: corporate/lib/stripe.py
 msgid "Something went wrong. Please reload the page."
-msgstr "Něco se nepodařilo. Načtěte prosím stránku znovu."
+msgstr "Něco se nepodařilo. Načti prosím stránku znovu."
 
 #: corporate/lib/stripe.py
 msgid "Something went wrong. Please wait a few seconds and try again."
@@ -234,7 +234,7 @@ msgid ""
 "Unable to update licenses manually. Your plan is on automatic license "
 "management."
 msgstr ""
-"Ruční aktualizace licencí se nezdařila. Váš platební plán má nastavenu "
+"Ruční aktualizace licencí se nezdařila. Tvůj platební plán má nastavenu "
 "automatickou správu licencí."
 
 #: corporate/lib/stripe.py
@@ -242,7 +242,7 @@ msgstr ""
 msgid ""
 "Your plan is already on {licenses} licenses in the current billing period."
 msgstr ""
-"Váš aktuální platební plán již využívá {licenses} licencí v aktuálním "
+"Tvůj aktuální platební plán již využívá {licenses} licencí v aktuálním "
 "zúčtovacím období."
 
 #: corporate/lib/stripe.py
@@ -263,8 +263,8 @@ msgid ""
 "Your plan is already scheduled to renew with {licenses_at_next_renewal} "
 "licenses."
 msgstr ""
-"Váš platební plán je již nastaven aby v dalším zúčtovacím období obnovil "
-"{licenses_at_next_renewal} licencí."
+"Tvůj platební plán je již nastaven tak, aby v dalším zúčtovacím období "
+"obnovil {licenses_at_next_renewal} licencí."
 
 #: corporate/lib/stripe.py
 #, python-brace-format
@@ -382,7 +382,7 @@ msgstr ""
 
 #: templates/4xx.html
 msgid "Make sure that your browser allows cookies for this site."
-msgstr "Ujistěte se, že váš prohlížeč povoluje cookies pro tento web."
+msgstr "Ujisti se, že tvůj prohlížeč povoluje cookies pro tento web."
 
 #: templates/4xx.html
 msgid ""
@@ -612,7 +612,7 @@ msgstr "Potvrzovací odkaz neexistuje"
 
 #: templates/confirmation/link_does_not_exist.html
 msgid "Whoops. We couldn't find your confirmation link in the system."
-msgstr "Jejda. V systému jsme nenašli váš potvrzovací odkaz."
+msgstr "Jejda. V systému jsme nenašli tvůj potvrzovací odkaz."
 
 #: templates/confirmation/link_does_not_exist.html
 #: templates/confirmation/link_malformed.html
@@ -758,7 +758,7 @@ msgstr "Překročen mez rychlosti."
 msgid ""
 "Your server has exceeded the limit for how often this action can be "
 "performed."
-msgstr "Váš server překročil omezení toho, jak často lze tuto akci provádět."
+msgstr "Tvůj server překročil omezení toho, jak často lze tuto akci provádět."
 
 #: templates/corporate/billing/remote_server_rate_limit_exceeded.html
 #: templates/zerver/portico_error_pages/rate_limit_exceeded.html
@@ -1246,7 +1246,7 @@ msgstr "Vyberte možnost"
 
 #: templates/zerver/create_realm/found_zulip_form_field.html
 msgid "Please describe"
-msgstr "Upřesněte prosím"
+msgstr "Upřesni prosím"
 
 #: templates/zerver/create_realm/found_zulip_form_field.html
 msgid "Where did you see the ad?"
@@ -1280,7 +1280,7 @@ msgid ""
 "mattermost\">Mattermost</a> or <a href=\"/help/import-from-"
 "rocketchat\">Rocket.Chat</a>."
 msgstr ""
-"Zjistěte, jak importovat z <a href=\"/help/import-from-"
+"Zjisti, jak importovat z <a href=\"/help/import-from-"
 "mattermost\">Mattermostu</a> nebo <a href=\"/help/import-from-"
 "rocketchat\">Rocket.Chatu</a>."
 
@@ -1423,7 +1423,7 @@ msgstr "Tvůj kmen"
 
 #: templates/zerver/create_user/register.html
 msgid "Your account"
-msgstr "Váš účet"
+msgstr "Tvůj účet"
 
 #: templates/zerver/create_user/register.html
 msgid "Don&rsquo;t import settings"
@@ -1596,8 +1596,8 @@ msgid ""
 "Use your web browser to finish logging in, then come back here to paste in "
 "your login token."
 msgstr ""
-"Použijte prohlížeč internetu na dokončení přihlášení se, potom jděte zpět "
-"sem pro vložení svého přihlašovacího elektronického klíče."
+"Dokonči přihlášení v prohlížeči, potom se sem vrať a vlož svůj přihlašovací "
+"token."
 
 #: templates/zerver/desktop_login.html
 msgid "Paste token here"
@@ -1613,7 +1613,7 @@ msgstr "Nesprávný elektronický klíč."
 
 #: templates/zerver/desktop_login.html
 msgid "Token accepted.  Logging you in…"
-msgstr "Elektronický klíč přijat. Jste přihlašován…"
+msgstr "Elektronický klíč přijat. Přihlašování…"
 
 #: templates/zerver/desktop_redirect.html
 msgid "Log in to desktop app"
@@ -1728,13 +1728,13 @@ msgstr "Tvoje uživatelské jméno: %(ldap_username)s"
 #: templates/zerver/emails/account_registered.html
 #: templates/zerver/emails/account_registered.txt
 msgid "Use your LDAP account to log in"
-msgstr "Pro přihlášení použijte váš LDAP účet"
+msgstr "Pro přihlášení použij svůj LDAP účet"
 
 #: templates/zerver/emails/account_registered.html
 #: templates/zerver/emails/account_registered.txt
 #, python-format
 msgid "Your account email: %(email)s"
-msgstr "Váš e-mailový účet: %(email)s"
+msgstr "E-mail tvého účtu: %(email)s"
 
 #: templates/zerver/emails/account_registered.html
 msgid "Go to organization"
@@ -1935,7 +1935,7 @@ msgstr ""
 
 #: templates/zerver/emails/confirm_registration.html
 msgid "Click the button below to complete registration."
-msgstr "Klepněte na tlačítko níže pro dokončení registrace."
+msgstr "Klepni na tlačítko níže pro dokončení registrace."
 
 #: templates/zerver/emails/confirm_registration.html
 #: templates/zerver/emails/invitation.html
@@ -1953,7 +1953,7 @@ msgstr "Aktivuj svůj kmenový účet"
 
 #: templates/zerver/emails/confirm_registration.txt
 msgid "Click the link below to complete registration."
-msgstr "Klepněte na odkaz níže pro dokončení registrace."
+msgstr "Klepni na odkaz níže pro dokončení registrace."
 
 #: templates/zerver/emails/confirm_registration.txt
 #: templates/zerver/emails/invitation.txt
@@ -2161,7 +2161,7 @@ msgstr "Plavající ryba"
 #: templates/zerver/emails/find_team.html
 #: templates/zerver/emails/find_team.txt
 msgid "Thanks for your request!"
-msgstr "Díky za váš požadavek!"
+msgstr "Díky za tvůj požadavek!"
 
 #: templates/zerver/emails/find_team.html
 #: templates/zerver/emails/find_team.txt
@@ -2266,7 +2266,7 @@ msgstr ""
 #: templates/zerver/emails/invitation.html
 #: templates/zerver/emails/invitation_reminder.html
 msgid "To get started, click the button below."
-msgstr "Začněte klepnutím na tlačítko níže."
+msgstr "Začni klepnutím na tlačítko níže."
 
 #: templates/zerver/emails/invitation.subject.txt
 #, python-format
@@ -2286,7 +2286,7 @@ msgstr ""
 #: templates/zerver/emails/invitation.txt
 #: templates/zerver/emails/invitation_reminder.txt
 msgid "To get started, click the link below."
-msgstr "Začněte klepnutím na odkaz níže."
+msgstr "Začni klepnutím na odkaz níže."
 
 #: templates/zerver/emails/invitation_reminder.html
 #: templates/zerver/emails/invitation_reminder.txt
@@ -2688,7 +2688,7 @@ msgstr "Zrušit odběr uvítacích e-mailů pro %(realm_name)s"
 
 #: templates/zerver/emails/onboarding_team_to_zulip.subject.txt
 msgid "Choosing the chat app for your team"
-msgstr "Výběr chatovací aplikace pro váš tým"
+msgstr "Výběr chatovací aplikace pro tvůj tým"
 
 #: templates/zerver/emails/onboarding_team_to_zulip.txt
 msgid ""
@@ -3080,8 +3080,8 @@ msgid ""
 "If you have any questions or concerns, please reply to this email as soon as"
 " possible."
 msgstr ""
-"Máte-li jakékoli dotazy nebo připomínky, odpovězte prosím na tento e-mail co"
-" nejdříve."
+"Máš-li jakékoli dotazy nebo připomínky, odpověz prosím na tento e-mail co "
+"nejdříve."
 
 #: templates/zerver/emails/realm_deactivated.subject.txt
 #, python-format
@@ -3157,7 +3157,7 @@ msgstr ""
 #: templates/zerver/emails/remote_billing_legacy_server_confirm_login.html
 #| msgid "Click the button below to complete registration."
 msgid "Click the button below to log in."
-msgstr "Klepněte na tlačítko níže pro přihlášení."
+msgstr "Klepni na tlačítko níže pro přihlášení."
 
 #: templates/zerver/emails/remote_billing_legacy_server_confirm_login.html
 #: templates/zerver/emails/remote_billing_legacy_server_confirm_login.txt
@@ -3172,8 +3172,8 @@ msgid ""
 "Questions? <a href=\"%(billing_help_link)s\">Learn more</a> or contact "
 "%(billing_contact_email)s."
 msgstr ""
-"Máte otázky? <a href=\"%(billing_help_link)s\">Zjistěte více</a> nebo se "
-"obraťte na %(billing_contact_email)s."
+"Máš otázky? <a href=\"%(billing_help_link)s\">Zjisti více</a> nebo se obrať "
+"na %(billing_contact_email)s."
 
 #: templates/zerver/emails/remote_billing_legacy_server_confirm_login.subject.txt
 msgid "Log in to Zulip plan management"
@@ -3190,7 +3190,7 @@ msgstr ""
 
 #: templates/zerver/emails/remote_billing_legacy_server_confirm_login.txt
 msgid "Click the link below to log in."
-msgstr "Pro přihlášení klepněte na odkaz níže."
+msgstr "Pro přihlášení klepni na odkaz níže."
 
 #: templates/zerver/emails/remote_billing_legacy_server_confirm_login.txt
 #: templates/zerver/emails/remote_realm_billing_confirm_login.txt
@@ -3199,7 +3199,7 @@ msgid ""
 "Questions? Learn more at %(billing_help_link)s or contact "
 "%(billing_contact_email)s."
 msgstr ""
-"Máte otázky? Zjistěte více na %(billing_help_link)s nebo se obraťte na "
+"Máš otázky? Zjisti více na %(billing_help_link)s nebo se obrať na "
 "%(billing_contact_email)s."
 
 #: templates/zerver/emails/remote_realm_billing_confirm_login.html
@@ -3270,7 +3270,7 @@ msgstr ""
 
 #: templates/zerver/find_account.html
 msgid "Find your accounts"
-msgstr "Najděte své účty"
+msgstr "Najdi své účty"
 
 #: templates/zerver/find_account.html
 msgid "Find your Zulip accounts"
@@ -4137,8 +4137,7 @@ msgstr "<h1 class=\"get-started\">Vybrat účet</h1>"
 #: templates/zerver/social_auth_select_email.html
 msgid ""
 "Your GitHub account also has unverified email addresses associated with it."
-msgstr ""
-"Váš účet u GitHub má také s ním spojené neověřené adresy elektronické pošty."
+msgstr "S tvým účtem na GitHubu jsou spojené i neověřené e-mailové adresy."
 
 #: templates/zerver/social_auth_select_email.html
 msgid ""
@@ -4833,7 +4832,7 @@ msgstr "Subdoména je rezervovaná. Zvolte prosím jinou."
 
 #: zerver/forms.py zerver/lib/email_validation.py zilencer/views.py
 msgid "Please use your real email address."
-msgstr "Použijte prosím váš skutečný e-mail."
+msgstr "Použij prosím svůj skutečný e-mail."
 
 #: zerver/forms.py
 #, python-brace-format
@@ -5259,7 +5258,7 @@ msgstr "Tento kmen byl vypnut"
 msgid ""
 "The mobile push notification service registration for your server has been "
 "deactivated"
-msgstr "Registrace oznámení po telefonu pro váš server byla vypnuta"
+msgstr "Registrace služby push oznámení pro tvůj server byla vypnuta"
 
 #: zerver/lib/exceptions.py
 msgid "Password authentication is disabled in this organization"
@@ -5348,7 +5347,7 @@ msgid ""
 "{total_messages_allowed_to_move}/{total_messages_in_topic} most recent "
 "messages in this topic."
 msgstr ""
-"Máte oprávnění přesunout pouze "
+"Máš oprávnění přesunout pouze "
 "{total_messages_allowed_to_move}/{total_messages_in_topic} nejnovějších "
 "zpráv v tomto tématu."
 
@@ -5822,8 +5821,8 @@ msgid ""
 "and edit your [profile information](/help/edit-your-profile).\n"
 msgstr ""
 "\n"
-"Přejděte do [Nastavení profilu](#settings/profile), přidejte si [profilový obrázek](/help/change-your-profile-picture)\n"
-"a upravte své [profilové údaje](/help/edit-your-profile).\n"
+"Přejdi do [Nastavení profilu](#settings/profile), přidej si [profilový obrázek](/help/change-your-profile-picture)\n"
+"a uprav své [profilové údaje](/help/edit-your-profile).\n"
 
 #: zerver/lib/onboarding.py
 msgid ""
@@ -8294,12 +8293,12 @@ msgid ""
 "Your plan doesn't allow sending push notifications. Reason provided by the "
 "server: {reason}"
 msgstr ""
-"Váš plán neumožňuje odesílání push oznámení. Důvod uvedený serverem: "
+"Tvůj plán neumožňuje odesílání push oznámení. Důvod uvedený serverem: "
 "{reason}"
 
 #: zilencer/views.py
 msgid "Your plan doesn't allow sending push notifications."
-msgstr "Váš plán neumožňuje odesílání push oznámení."
+msgstr "Tvůj plán neumožňuje odesílání push oznámení."
 
 #: zilencer/views.py
 #, python-brace-format
