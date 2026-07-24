@@ -97,8 +97,12 @@ https://bugzilla.mozilla.org/show_bug.cgi?id=1943053 -->
     justify-content: center;
     }
     .app-loading-logo {
-    height: 64px;
-    padding: 10px;
+    /* The Ur mark is a square tile, not a disc like upstream's logo, so it needs
+       more padding to stay clear of the ring: a 60px square has an 84.9px diagonal,
+       which fits the ring's 92px inner diameter. Logo box (60 + 2*20) must stay
+       equal to the spinner size below — that is what keeps the two concentric. */
+    height: 60px;
+    padding: 20px;
     }
     @keyframes zspinner {
     to {transform: rotate(360deg);}
@@ -107,8 +111,8 @@ https://bugzilla.mozilla.org/show_bug.cgi?id=1943053 -->
     content: '';
     box-sizing: border-box;
     position: absolute;
-    width: 84px;
-    height: 84px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     border: 4px solid hsl(0,0%,94%);
     border-top-color: hsl(0,0%,52%);
@@ -139,7 +143,12 @@ Accessing messages requires an account and Zulip API key.
     <div id="app-loading-middle-content">
         <div class="app-loading-spinner-container">
             <div class="app-loading-spinner"></div>
-            <svg class="app-loading-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 774 774"><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#50adff"/><stop offset="1" stop-color="#7877fc"/></linearGradient><circle cx="387" cy="387" r="370" fill="url(#a)"/><path d="M567.32 527.81c0 33.07-24.26 60.11-53.91 60.11H260.59c-29.65 0-53.91-27.04-53.91-60.11 0-20.24 9.10-38.25 22.95-49.14l134.50-120.12c2.50-2.14 5.75 1.31 3.94 4.20l-49.34 98.79c-1.38 2.76.41 6.17 3.25 6.17h191.42c29.65 0 53.91 27.04 53.91 60.11zm0-281.75c0 20.24-9.10 38.25-22.95 49.14l-134.50 120.12c-2.50 2.14-5.75-1.31-3.94-4.20l49.34-98.79c1.38-2.76-.41-6.17-3.25-6.17H260.59c-29.65 0-53.91-27.04-53.91-60.11s24.26-60.11 53.91-60.11h252.81c29.65 0 53.91 27.04 53.91 60.11z" fill="#fff"/></svg>
+            {# Ur mark tile — verbatim geometry from urur.cz/favicon.svg, the same
+               asset as the realm icon / PWA icon. Kept inline (like upstream's logo)
+               so the loading screen needs no extra request. Self-contrasting cream on
+               near-black, so it reads on both the light and dark loading backgrounds
+               without theme-conditional styling. #}
+            <svg class="app-loading-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="64" fill="#0d0a08"/><g transform="translate(16.1 175.8) scale(0.399)" fill="#f0ead6" stroke="#0d0a08" stroke-width="42" stroke-linejoin="miter"><polygon points="1.22 0 1.22 191.91 169.3 191.99 1.22 0"/><polygon points="401.1 209.67 168.37 209.57 168.37 209.55 0 209.47 167.61 400.91 168.37 400.91 168.37 400.92 568.71 401.11 401.1 209.67"/><polygon points="592.62 204.19 413.86 0 413.86 197.59 592.62 401.71 592.62 204.19"/><polygon points="817.08 209.69 984.75 401.13 1188.34 401.33 1020.68 209.88 817.08 209.69"/><polygon points="1202.51 191.87 1034.84 .42 633.69 .21 801.29 191.66 1202.51 191.87"/><polygon points="788.94 204.24 610.17 .12 610.17 197.6 788.94 401.79 788.94 204.24"/></g></svg>
         </div>
         <div id="app-loading-unsupported-browser" hidden>
             <p>{% trans %}Because you're using an unsupported or very old browser, Zulip may not load.{% endtrans %}</p>
