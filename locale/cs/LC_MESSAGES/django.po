@@ -49,7 +49,7 @@ msgstr "Přímé zprávy"
 
 #: analytics/views/stats.py
 msgid "Group direct messages"
-msgstr "Seskupit přímé zprávy"
+msgstr "Skupinové přímé zprávy"
 
 #: analytics/views/stats.py
 #, python-brace-format
@@ -920,7 +920,7 @@ msgstr "Snímek obrazovky rozhovoru v Zulipu s botem Sentry"
 
 #: templates/corporate/role/engineers.html
 msgid "Screenshot of Zulip inbox"
-msgstr "Snímek obrazovky doručené pošty v Zulipu"
+msgstr "Snímek obrazovky Nepřečteného v Zulipu"
 
 #: templates/corporate/role/engineers.html
 msgid "Open laptop with book inside"
