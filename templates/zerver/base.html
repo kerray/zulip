@@ -39,6 +39,22 @@
 
         {% block customhead %}
         {% endblock %}
+
+        {#
+            Ur branding layer. The stylesheet itself is NOT in this fork — it is
+            versioned in the Ur infra repo (web/branding/ur.css) and served by
+            Caddy at /branding/ur.css, so changing a colour costs one apply
+            (seconds) instead of an image build plus a digest pin.
+
+            This one line is the whole fork-side cost, and it sits here on
+            purpose: after the webpack loop above, so it is last in the cascade
+            and its :root overrides win; and OUTSIDE the customhead block, which
+            zerver/app/index.html overrides and would otherwise drop it on the
+            app page. base.html is the anchor because both the app and the
+            portico extend it, and it changed zero lines across Zulip 10.x → 12.x
+            — a patch that never moves is a patch that cannot conflict on rebase.
+        #}
+        <link href="/branding/ur.css" rel="stylesheet" {% if csp_nonce %}nonce="{{ csp_nonce }}"{% endif %} />
     </head>
 
     <body>
