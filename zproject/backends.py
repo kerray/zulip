@@ -13,6 +13,7 @@
 # settings.AUTHENTICATION_BACKENDS that have a function signature
 # matching the args/kwargs passed in the authenticate() call.
 import binascii
+import hashlib
 import json
 import logging
 from abc import ABC, abstractmethod
@@ -90,6 +91,7 @@ from zerver.actions.user_settings import (
 from zerver.actions.users import do_change_user_role, do_deactivate_user
 from zerver.lib.avatar import avatar_url, is_avatar_new
 from zerver.lib.avatar_hash import user_avatar_content_hash
+from zerver.lib.cache import cache_get, cache_set
 from zerver.lib.dev_ldap_directory import init_fakeldap
 from zerver.lib.email_validation import email_allowed_for_realm, validate_email_not_already_in_realm
 from zerver.lib.exceptions import JsonableError
@@ -4090,6 +4092,12 @@ def patch_saml_auth_require_messages_signed(auth: OneLogin_Saml2_Auth) -> None:
     assert auth.get_settings().get_security_data()["wantMessagesSigned"] is True
 
 
+# How long to cache an IdP's /.well-known/openid-configuration document. This is
+# essentially static configuration; IdPs publish signing key rotations through the
+# separate JWKS endpoint, so an hour of staleness here is harmless.
+OIDC_CONFIG_CACHE_SECONDS = 60 * 60
+
+
 @external_auth_method
 class GenericOpenIdConnectBackend(SocialAuthMixin, OpenIdConnectAuth):
     name = "oidc"
@@ -4233,16 +4241,33 @@ class GenericOpenIdConnectBackend(SocialAuthMixin, OpenIdConnectAuth):
     @override
     def oidc_config(self) -> dict[Any, Any]:
         # Overridden from superclass to remove class-level caching, which is incompatible
-        # with our multi-IdP support implementation.
-        # TODO: We should add our own caching, to avoid unnecessary requests on every
-        # auth attempt.
-        # A simple instance-level caching is necessary to avoid making a new request every time
-        # a property from /openid-configuration needs to be ready (which can be multiple times during
-        # the processing of a single authentication attempt).
-        if self._cached_oidc_config is None:
-            self._cached_oidc_config = self.get_json(
-                self.oidc_endpoint() + "/.well-known/openid-configuration"
-            )
+        # with our multi-IdP support implementation: the superclass stores the config on
+        # the class, so whichever IdP was used first would serve its configuration to all
+        # the others.
+        #
+        # We cache in memcached instead, keyed by the IdP's endpoint - which is precisely
+        # what determines the response, so the entries cannot collide between IdPs.
+        # Without this, every authentication attempt makes a synchronous HTTP request to
+        # the IdP before the user can even be redirected, so an IdP that is merely slow
+        # turns the login page into a 500 rather than just delaying it.
+        #
+        # The instance-level cache is kept as a cheap short-circuit, since several
+        # properties of /openid-configuration are read while processing a single
+        # authentication attempt.
+        if self._cached_oidc_config is not None:
+            return self._cached_oidc_config
+
+        endpoint = self.oidc_endpoint()
+        cache_key = "oidc_config:" + hashlib.sha256(endpoint.encode()).hexdigest()
+
+        cached = cache_get(cache_key)
+        if cached is not None:
+            self._cached_oidc_config = cached[0]
+            return self._cached_oidc_config
+
+        config = self.get_json(endpoint + "/.well-known/openid-configuration")
+        cache_set(cache_key, config, timeout=OIDC_CONFIG_CACHE_SECONDS)
+        self._cached_oidc_config = config
 
         return self._cached_oidc_config
 
