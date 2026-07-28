@@ -714,9 +714,15 @@ run_test("user_type", () => {
     people.add_active_user(moderator);
     people.add_active_user(bot_botson);
     assert.equal(people.get_user_type(me.user_id), $t({defaultMessage: "Member"}));
-    assert.equal(people.get_user_type(realm_admin.user_id), $t({defaultMessage: "Administrator"}));
+    assert.equal(
+        people.get_user_type(realm_admin.user_id),
+        $t({defaultMessage: "Organization administrator"}),
+    );
     assert.equal(people.get_user_type(guest.user_id), $t({defaultMessage: "Guest"}));
-    assert.equal(people.get_user_type(realm_owner.user_id), $t({defaultMessage: "Owner"}));
+    assert.equal(
+        people.get_user_type(realm_owner.user_id),
+        $t({defaultMessage: "Organization owner"}),
+    );
     assert.equal(people.get_user_type(moderator.user_id), $t({defaultMessage: "Moderator"}));
     assert.equal(people.get_user_type(bot_botson.user_id), $t({defaultMessage: "Moderator"}));
 });
