@@ -465,11 +465,11 @@ export const user_role_values: Record<
     },
     admin: {
         code: 200,
-        description: $t({defaultMessage: "Administrator"}),
+        description: $t({defaultMessage: "Organization administrator"}),
     },
     owner: {
         code: 100,
-        description: $t({defaultMessage: "Owner"}),
+        description: $t({defaultMessage: "Organization owner"}),
     },
 };
 
