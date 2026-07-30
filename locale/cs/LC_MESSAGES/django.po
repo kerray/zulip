@@ -2631,7 +2631,7 @@ msgstr "Zrušit odběr oznámení o přihlášení"
 #: templates/zerver/emails/notify_new_login.subject.txt
 #, python-format
 msgid "New login from %(device_browser)s on %(device_os)s"
-msgstr "Nové přihlášení z%(device_browser)s na %(device_os)s"
+msgstr "Nové přihlášení z %(device_browser)s na %(device_os)s"
 
 #: templates/zerver/emails/notify_new_login.txt
 #, python-format
