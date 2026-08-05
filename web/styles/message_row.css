@@ -574,6 +574,130 @@
     }
 }
 
+/* WIDER MESSAGE TEXT ON A NARROW MESSAGE LIST
+   ===========================================
+   On a narrow message list--a phone-width window, or the middle column
+   of a smaller desktop one--the hover controls and the timestamp appear
+   on the sender line alone, but the columns holding them narrow every
+   line of message text below them too. Measured at a 360px viewport,
+   195px of the 360 went to the avatar, controls, gap and timestamp
+   columns and 165px to the message, so text wrapped after three or four
+   words. Spanning those columns takes it to 271px.
+
+   Me-messages are left alone: their text is rendered inline on the
+   sender line itself, so it has no row of its own to span.
+
+   MAINTENANCE. This block redeclares `grid-template-areas` for
+   `.messagebox-content`, and everything below follows from that, so it
+   is coupled to the base grid earlier in this file. When merging
+   upstream changes, check that:
+
+     - the area templates here still match the base ones row for row;
+       they drop only the `controls` and `time` areas, whose items are
+       placed by line number below instead;
+     - any item newly placed with `grid-area: controls` or
+       `grid-area: time` is given an explicit placement here, since
+       those names do not exist in this block. As of this commit the
+       full set is `.message_controls`, `.message-time` and
+       `.slow-send-spinner`;
+     - any item newly placed into the `message` area is kept off row 1,
+       which the timestamp occupies--as `.message_edit` and a collapsed
+       message's `.message_length_controller` are below;
+     - `--message-box-narrow-first-line-reserve` in app_variables.css
+       still adds up to the width of the columns it stands in for, and
+       `.message-time`'s line-height is still what its height is
+       derived from. */
+@container message-lists (width < $cq_sm_min) {
+    .messagebox-content:not(.is-me-message) {
+        grid-template-areas:
+            "edited message   message   message   message"
+            ".      message   message   message   message"
+            ".      more      more      more      more"
+            ".      reactions reactions reactions reactions"
+            ".      reminders reminders reminders reminders";
+
+        .message_controls {
+            grid-row: 1;
+            grid-column: 3;
+            /* The message now spans the first row, so that row grows
+               with it. Hold the controls at the top of it, in line with
+               the timestamp, rather than letting them stretch and
+               centre themselves against the whole message. */
+            align-self: start;
+            height: var(--message-box-sender-line-height);
+        }
+
+        .message-time,
+        .slow-send-spinner {
+            grid-row: 1;
+            grid-column: 5;
+        }
+
+        .slow-send-spinner {
+            /* Likewise pin the spinner that stands in for the timestamp
+               on a locally echoed message, and centre it on the line the
+               timestamp occupies. */
+            align-self: start;
+            height: var(--message-box-sender-line-height);
+            line-height: var(--message-box-sender-line-height);
+        }
+
+        .message_edit_notice,
+        .edit-notifications {
+            /* These are centred against their row, which now grows with
+               the message; keep them on the timestamp's line. */
+            align-self: start;
+            line-height: var(--message-box-sender-line-height);
+        }
+
+        /* The message area now reaches the timestamp's column, so the
+           two things that take it over--the edit box, and the SHOW MORE
+           button of a collapsed message--start on the row below it
+           rather than covering it. */
+        &.content_edit_mode .message_edit,
+        .collapsed ~ .message_length_controller {
+            grid-row: 2;
+            grid-column: 2 / -1;
+        }
+    }
+
+    .messagebox-includes-sender .messagebox-content:not(.is-me-message) {
+        /* Where there is a sender line, the text starts on the row
+           beneath the controls and the timestamp and has nothing to
+           avoid. The sender name keeps a column of its own, so that a
+           long one is ellipsized before it reaches them. */
+        grid-template-areas:
+            "avatar sender    .         .         ."
+            "avatar message   message   message   message"
+            ".      more      more      more      more"
+            ".      reactions reactions reactions reactions"
+            ".      reminders reminders reminders reminders";
+    }
+
+    .message_row:not(.messagebox-includes-sender) {
+        .message_content:not(.status-message)::before {
+            /* A senderless message shares its first row with the
+               controls and the timestamp, so the start of it stops
+               short of them. The height is theirs, not one line of
+               text: the timestamp sets its line-height to the whole
+               sender-line height, which reaches past the first line of
+               a message and would otherwise be overlapped by the
+               second. */
+            content: "";
+            float: right;
+            width: var(--message-box-narrow-first-line-reserve);
+            height: var(--message-box-sender-line-height);
+        }
+
+        .message_content > :first-child:not(p) {
+            /* Content establishing its own formatting context is laid
+               out beside the reserved space, and so narrowed by it,
+               rather than flowing below it as text does. */
+            clear: right;
+        }
+    }
+}
+
 .message_controls {
     grid-area: controls;
     /* Let the controls occupy the entire height
