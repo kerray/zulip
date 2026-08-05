@@ -550,6 +550,20 @@
     /* This width is updated with an exact pixel
        width upon UI initialization. */
     --message-box-timestamp-column-width: 0;
+    /* A narrow message list displays two control buttons; see the
+       `nth-last-child(3)` rule in message_row.css. */
+    --message-box-narrow-controls-width: calc(
+        var(--message-box-icon-width) * 2
+    );
+    /* How much of its first line a senderless message leaves clear on a
+       narrow message list, where the controls and the timestamp share
+       that line: the two columns holding them, the 8px column between
+       them, and a gap so that the text does not run up against the
+       timestamp. */
+    --message-box-narrow-first-line-reserve: calc(
+        var(--message-box-narrow-controls-width) + 8px +
+            var(--message-box-timestamp-column-width) + 0.25em
+    );
     --last-message-row-border-radius: 0 0 7px 7px;
 
     /* This length is the primary reference for height
