@@ -1,4 +1,8 @@
 #!/bin/sh
 set -eu
 ZULIP_PATH="$(dirname "$0")/.."
-exec "$ZULIP_PATH/node_modules/.bin/tsc" --project "$ZULIP_PATH" "$@"
+"$ZULIP_PATH/node_modules/.bin/tsc" --project "$ZULIP_PATH" "$@"
+# The service worker is excluded from the root program, since its WebWorker lib
+# collides with lib.dom there, so it needs its own pass to be checked at all.
+exec "$ZULIP_PATH/node_modules/.bin/tsc" \
+    --project "$ZULIP_PATH/web/tsconfig.service-worker.json" "$@"
