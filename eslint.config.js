@@ -333,6 +333,10 @@ export default defineConfig(
     },
     {
         files: ["web/src/**"],
+        // The service worker files get the service-worker globals below
+        // instead; flat config merges `globals` rather than replacing them, so
+        // they have to be kept out of this block to not receive both.
+        ignores: ["web/src/service-worker.ts", "web/src/service_worker_handlers.ts"],
         languageOptions: {
             globals: {
                 ...globals.browser,
