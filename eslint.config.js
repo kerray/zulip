@@ -348,7 +348,7 @@ export default defineConfig(
         // collides with lib.dom there — see web/tsconfig.service-worker.json),
         // so point typed linting at that dedicated project and give it the
         // service-worker globals rather than the browser ones.
-        files: ["web/src/service-worker.ts"],
+        files: ["web/src/service-worker.ts", "web/src/service_worker_handlers.ts"],
         languageOptions: {
             globals: {
                 ...globals.serviceworker,
