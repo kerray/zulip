@@ -173,7 +173,7 @@ msgid ""
 " page. To complete the upgrade, please contact {email}."
 msgstr ""
 "Účty s více než {max_licenses} licencemi nelze zpracovat z této stránky. Pro"
-" dokončení povýšení se, prosím, spojte s {email}."
+" dokončení povýšení se prosím obrať na {email}."
 
 #: corporate/lib/stripe.py
 msgid "No payment method on file."
@@ -187,12 +187,12 @@ msgstr "{brand} končí za {last4}"
 #: corporate/lib/stripe.py
 #, python-brace-format
 msgid "Unknown payment method. Please contact {email}."
-msgstr "Neznámá platební metoda. Spojte se, prosím, s {email}."
+msgstr "Neznámá platební metoda. Obrať se prosím na {email}."
 
 #: corporate/lib/stripe.py
 #, python-brace-format
 msgid "Something went wrong. Please contact {email}."
-msgstr "Nastala chyba. Spojte se, prosím, s {email}."
+msgstr "Nastala chyba. Obrať se prosím na {email}."
 
 #: corporate/lib/stripe.py
 msgid "Something went wrong. Please reload the page."
@@ -200,15 +200,15 @@ msgstr "Něco se nepodařilo. Načti prosím stránku znovu."
 
 #: corporate/lib/stripe.py
 msgid "Something went wrong. Please wait a few seconds and try again."
-msgstr "Něco se nepodařilo. Počkejte prosím několik sekund a zkuste to znovu."
+msgstr "Něco se nepodařilo. Počkej prosím několik sekund a zkus to znovu."
 
 #: corporate/lib/stripe.py
 msgid "Please add a credit card before starting your free trial."
-msgstr "Před zahájením bezplatné zkušební verze přidejte kreditní kartu."
+msgstr "Před zahájením bezplatné zkušební verze přidej kreditní kartu."
 
 #: corporate/lib/stripe.py
 msgid "Please add a credit card to schedule upgrade."
-msgstr "Pro naplánování aktualizace přidejte prosím kreditní kartu."
+msgstr "Pro naplánování aktualizace přidej prosím kreditní kartu."
 
 #: corporate/lib/stripe.py
 msgid ""
@@ -293,7 +293,7 @@ msgstr "Záměr platby nenalezen"
 
 #: corporate/lib/stripe.py
 msgid "Pass stripe_session_id or stripe_invoice_id"
-msgstr "Vložte stripe_session_id nebo stripe_invoice_id"
+msgstr "Vlož stripe_session_id nebo stripe_invoice_id"
 
 #: corporate/lib/stripe.py
 #, python-brace-format
@@ -324,8 +324,8 @@ msgid ""
 "Couldn't reconcile billing data between server and realm. Please contact "
 "{support_email}"
 msgstr ""
-"Nepodařilo se sladit fakturační údaje mezi serverem a oblastí. Spojte se, "
-"prosím, s {support_email}"
+"Nepodařilo se sladit fakturační údaje mezi serverem a oblastí. Obrať se "
+"prosím na {support_email}"
 
 #: corporate/views/remote_billing_page.py
 msgid "User account doesn't exist yet."
@@ -621,7 +621,7 @@ msgid ""
 "Anyway, shoot us a line at %(support_email_html_tag)s and we'll get this "
 "resolved shortly."
 msgstr ""
-"Každopádně nám napište na %(support_email_html_tag)s a brzy to vyřešíme."
+"Každopádně nám napiš na %(support_email_html_tag)s a brzy to vyřešíme."
 
 #: templates/confirmation/link_expired.html
 msgid "Confirmation link expired or deactivated"
@@ -882,7 +882,7 @@ msgstr "Vlastní hostování Zulipu"
 #: templates/corporate/for/open-source.html
 #: templates/corporate/for/research.html
 msgid "Request sponsorship"
-msgstr "Požádejte o sponzorství"
+msgstr "Požádat o sponzorství"
 
 #: templates/corporate/for/education.html
 msgid "Education pricing"
@@ -1045,7 +1045,7 @@ msgstr "Pokračovat"
 
 #: templates/zerver/accounts_send_confirm.html
 msgid "Confirm your email address"
-msgstr "Potvrďte svoji adresu elektronické pošty"
+msgstr "Potvrď svoji adresu elektronické pošty"
 
 #: templates/zerver/accounts_send_confirm.html
 #, python-format
@@ -1099,7 +1099,7 @@ msgid ""
 "If this message does not go away, try <a class=\"reload-lnk\">reloading</a> "
 "the page."
 msgstr ""
-"Pokud tato zpráva nezmizí, zkuste stránku <a class=\"reload-lnk\">znovu "
+"Pokud tato zpráva nezmizí, zkus stránku <a class=\"reload-lnk\">znovu "
 "načíst</a>."
 
 #: templates/zerver/app/index.html
@@ -1212,7 +1212,7 @@ msgstr ""
 
 #: templates/zerver/create_realm/create_realm.html templates/zerver/reset.html
 msgid "Enter your email address"
-msgstr "Zadejte svůj e-mail"
+msgstr "Zadej svůj e-mail"
 
 #: templates/zerver/create_realm/create_realm.html
 msgid "Your email"
@@ -1224,7 +1224,7 @@ msgid ""
 "href=\"/help/import-from-mattermost\">Mattermost</a>, or <a "
 "href=\"/help/import-from-rocketchat\">Rocket.Chat</a>."
 msgstr ""
-"Nebo importujte ze <a href=\"/help/import-from-slack\">Slacku</a>, <a "
+"Nebo importuj ze <a href=\"/help/import-from-slack\">Slacku</a>, <a "
 "href=\"/help/import-from-mattermost\">Mattermostu</a> nebo <a "
 "href=\"/help/import-from-rocketchat\">Rocket.Chatu</a>."
 
@@ -1242,7 +1242,7 @@ msgstr ""
 
 #: templates/zerver/create_realm/found_zulip_form_field.html
 msgid "Select an option"
-msgstr "Vyberte možnost"
+msgstr "Vyber možnost"
 
 #: templates/zerver/create_realm/found_zulip_form_field.html
 msgid "Please describe"
@@ -1262,7 +1262,7 @@ msgstr "Který?"
 
 #: templates/zerver/create_realm/realm_creation_base_form_fields.html
 msgid "Select one"
-msgstr "Vyberte možnost"
+msgstr "Vyber možnost"
 
 #: templates/zerver/create_realm/realm_creation_base_form_fields.html
 #: templates/zerver/create_user/register.html
@@ -1411,7 +1411,7 @@ msgstr "Vytvoř si kmen"
 
 #: templates/zerver/create_user/register.html
 msgid "Create your account"
-msgstr "Vytvořte si účet"
+msgstr "Vytvoř si účet"
 
 #: templates/zerver/create_user/register.html
 msgid "<p>Enter your account details to complete registration.</p>"
@@ -1468,7 +1468,7 @@ msgstr "Síla hesla"
 
 #: templates/zerver/create_user/register.html
 msgid "What are you interested in?"
-msgstr "O co se zajímáte?"
+msgstr "O co se zajímáš?"
 
 #: templates/zerver/create_user/terms_of_service_form_field.html
 #, python-format
@@ -1906,7 +1906,7 @@ msgstr "Potvrdit změnu e-mailu"
 #: templates/zerver/emails/confirm_new_email.subject.txt
 #, python-format
 msgid "Verify your new email address for %(organization_host)s"
-msgstr "Ověřte svou novou e-mailovou adresu pro %(organization_host)s"
+msgstr "Ověř svou novou e-mailovou adresu pro %(organization_host)s"
 
 #: templates/zerver/emails/confirm_registration.html
 #: templates/zerver/emails/confirm_registration.txt
@@ -2372,7 +2372,7 @@ msgid ""
 "You are receiving this because all topic participants were mentioned in "
 "#%(channel_name)s > %(topic_name)s."
 msgstr ""
-"Tento e-mail dostáváte, protože byli zmíněni všichni účastníci tématu v "
+"Tento e-mail dostáváš, protože byli zmíněni všichni účastníci tématu v "
 "#%(channel_name)s > %(topic_name)s."
 
 #: templates/zerver/emails/missed_message.html
@@ -2390,7 +2390,7 @@ msgstr ""
 msgid ""
 "You are receiving this because everyone was mentioned in #%(channel_name)s."
 msgstr ""
-"Tento e-mail dostáváte, protože v #%(channel_name)s byli zmíněni všichni."
+"Tento e-mail dostáváš, protože v #%(channel_name)s byli zmíněni všichni."
 
 #: templates/zerver/emails/missed_message.html
 #: templates/zerver/emails/missed_message.txt
@@ -2653,7 +2653,7 @@ msgstr ""
 #: templates/zerver/emails/onboarding_team_to_zulip.html
 #: templates/zerver/emails/onboarding_team_to_zulip.txt
 msgid "Use the app itself to chat about your impressions."
-msgstr "Použijte samotnou aplikaci k rozhovoru o svých dojmech."
+msgstr "Použij samotnou aplikaci k rozhovoru o svých dojmech."
 
 #: templates/zerver/emails/onboarding_team_to_zulip.html
 #, python-format
@@ -2870,7 +2870,7 @@ msgstr "Přejít do kmene"
 
 #: templates/zerver/emails/onboarding_zulip_topics.subject.txt
 msgid "Keep your conversations organized with topics"
-msgstr "Udržujte rozhovory uspořádány pomocí témat"
+msgstr "Udržuj rozhovory uspořádané pomocí témat"
 
 #: templates/zerver/emails/onboarding_zulip_topics.txt
 msgid ""
@@ -3605,11 +3605,11 @@ msgstr ""
 
 #: templates/zerver/invalid_email.html
 msgid "Please sign up using a valid email address."
-msgstr "Zaregistrujte se, prosím, pomocí platné adresy elektronické pošty."
+msgstr "Zaregistruj se prosím pomocí platné adresy elektronické pošty."
 
 #: templates/zerver/invalid_email.html
 msgid "Please sign up using an allowed email address."
-msgstr "Zaregistrujte se, prosím, pomocí povolené adresy elektronické pošty."
+msgstr "Zaregistruj se prosím pomocí povolené adresy elektronické pošty."
 
 #: templates/zerver/invalid_realm.html
 msgid "No organization found"
@@ -3883,7 +3883,7 @@ msgstr ""
 #: templates/zerver/realm_import_post_process.html
 #| msgid "Create your account"
 msgid "Select your account"
-msgstr "Vyberte svůj účet"
+msgstr "Vyber svůj účet"
 
 #: templates/zerver/realm_import_post_process.html
 #| msgid "Create your account"
@@ -3969,7 +3969,7 @@ msgstr "Odeslat odkaz na reset hesla"
 
 #: templates/zerver/reset_confirm.html
 msgid "Set a new password"
-msgstr "Nastavte nové heslo"
+msgstr "Nastav nové heslo"
 
 #: templates/zerver/reset_confirm.html
 msgid "Confirm password"
@@ -3990,7 +3990,7 @@ msgstr "Máš nové heslo!"
 #: templates/zerver/reset_done.html
 #, python-format
 msgid "Please <a href=\"%(login_url)s\">log in</a> with your new password."
-msgstr "<a href=\"%(login_url)s\">Přihlašte se</a> prosím svým novým heslem."
+msgstr "<a href=\"%(login_url)s\">Přihlas se</a> prosím svým novým heslem."
 
 #: templates/zerver/reset_emailed.html
 msgid "Password reset email sent"
@@ -4048,7 +4048,7 @@ msgstr "OAuth token robotického uživatele Slacku"
 
 #: templates/zerver/slack_import.html
 msgid "Upload your Slack export file"
-msgstr "Nahrajte soubor s exportem ze Slacku"
+msgstr "Nahraj soubor s exportem ze Slacku"
 
 #: templates/zerver/slack_import.html
 msgid ""
@@ -4109,7 +4109,7 @@ msgid ""
 "href=\"/help/import-from-slack#import-your-data-into-zulip\" rel=\"noopener "
 "noreferrer\" target=\"_blank\">process</a> for imports via support."
 msgstr ""
-"Maximální velikost: %(max_file_size)s MiB. U větších exportů se řiďte <a "
+"Maximální velikost: %(max_file_size)s MiB. U větších exportů se řiď <a "
 "href=\"/help/import-from-slack#import-your-data-into-zulip\" rel=\"noopener "
 "noreferrer\" target=\"_blank\">postupem</a> pro importy prostřednictvím "
 "podpory."
@@ -4121,14 +4121,14 @@ msgid ""
 "href=\"/help/import-from-slack#import-your-data-into-zulip\" rel=\"noopener "
 "noreferrer\" target=\"_blank\">process</a> for self-hosted imports."
 msgstr ""
-"Maximální velikost: %(max_file_size)s MiB. U větších exportů se řiďte <a "
+"Maximální velikost: %(max_file_size)s MiB. U větších exportů se řiď <a "
 "href=\"/help/import-from-slack#import-your-data-into-zulip\" rel=\"noopener "
 "noreferrer\" target=\"_blank\">postupem</a> pro importy do vlastní "
 "instalace."
 
 #: templates/zerver/social_auth_select_email.html
 msgid "Select account for authentication"
-msgstr "Vyberte účet pro ověření"
+msgstr "Vyber účet pro ověření"
 
 #: templates/zerver/social_auth_select_email.html
 msgid "<h1 class=\"get-started\">Select account</h1>"
@@ -4362,7 +4362,7 @@ msgstr "V kmeni je vypnuté upravování zpráv"
 
 #: zerver/actions/message_edit.py
 msgid "You don't have permission to edit this message"
-msgstr "Nemáte oprávnění k upravení této zprávy"
+msgstr "Nemáš oprávnění k upravení této zprávy"
 
 #: zerver/actions/message_edit.py
 msgid "The time limit for editing this message has passed"
@@ -4426,7 +4426,7 @@ msgstr "Časová lhůta pro upravení tématu této zprávy vypršela."
 
 #: zerver/actions/message_edit.py
 msgid "You don't have permission to move this message"
-msgstr "Nemáte oprávnění k přesunutí této zprávy"
+msgstr "Nemáš oprávnění k přesunutí této zprávy"
 
 #: zerver/actions/message_edit.py
 msgid "The time limit for editing this message's channel has passed"
@@ -4502,7 +4502,7 @@ msgstr ""
 
 #: zerver/actions/message_send.py
 msgid "You do not have permission to access some of the recipients."
-msgstr "Nemáte oprávnění pro přístup k některým příjemcům."
+msgstr "Nemáš oprávnění pro přístup k některým příjemcům."
 
 #: zerver/actions/message_send.py
 msgid "Widgets: API programmer sent invalid JSON content"
@@ -4824,11 +4824,11 @@ msgstr "Subdoména může obsahovat jen malá písmena, čísla a '-'."
 
 #: zerver/forms.py
 msgid "Subdomain is already in use. Please choose a different one."
-msgstr "Subdoména se již používá. Zvolte prosím jinou."
+msgstr "Subdoména se již používá. Zvol prosím jinou."
 
 #: zerver/forms.py
 msgid "Subdomain reserved. Please choose a different one."
-msgstr "Subdoména je rezervovaná. Zvolte prosím jinou."
+msgstr "Subdoména je rezervovaná. Zvol prosím jinou."
 
 #: zerver/forms.py zerver/lib/email_validation.py zilencer/views.py
 msgid "Please use your real email address."
@@ -4878,7 +4878,7 @@ msgstr "Ověřeno, že jsi člověk!"
 
 #: zerver/forms.py
 msgid "Verifying that you're not a bot…"
-msgstr "Ověřujeme, že nejste robot…"
+msgstr "Ověřujeme, že nejsi robot…"
 
 #: zerver/forms.py zerver/views/antispam.py
 #| msgid "Embedded bots are not enabled."
@@ -4887,7 +4887,7 @@ msgstr "Ověřovací výzvy nejsou povoleny."
 
 #: zerver/forms.py
 msgid "Validation failed, please try again."
-msgstr "Ověření se nezdařilo, zkuste to prosím znovu."
+msgstr "Ověření se nezdařilo, zkus to prosím znovu."
 
 #: zerver/forms.py
 msgid "New password"
@@ -4924,7 +4924,7 @@ msgstr "Rada: Můžeš zadat více e-mailových adres oddělených čárkami."
 
 #: zerver/forms.py
 msgid "Please enter at most 10 emails."
-msgstr "Zadejte prosím maximálně 10 e-mailů."
+msgstr "Zadej prosím maximálně 10 e-mailů."
 
 #: zerver/forms.py
 msgid "We couldn't find that Zulip organization."
@@ -4962,7 +4962,7 @@ msgstr "Neplatná příloha"
 #: zerver/lib/attachments.py
 msgid ""
 "An error occurred while deleting the attachment. Please try again later."
-msgstr "Při mazání přílohy se vyskytla chyba. Zkuste to, prosím, znovu."
+msgstr "Při mazání přílohy se vyskytla chyba. Zkus to prosím později znovu."
 
 #: zerver/lib/bot_lib.py
 msgid "Message must have recipients!"
@@ -5380,7 +5380,7 @@ msgstr "Nemáš oprávnění hromadně zmínit celou tuto větev."
 msgid ""
 "You do not have permission to use topic wildcard mentions in this topic."
 msgstr ""
-"Nemáte oprávnění používat v tomto tématu zmínky celého tématu vyjádřené "
+"Nemáš oprávnění používat v tomto tématu zmínky celého tématu vyjádřené "
 "zástupným symbolem."
 
 #: zerver/lib/exceptions.py
@@ -5951,7 +5951,7 @@ msgid ""
 ":point_right: Try moving this message to another topic and back.\n"
 msgstr ""
 "\n"
-":point_right: Zkuste tuto zprávu přesunout do jiného tématu a zpět.\n"
+":point_right: Zkus tuto zprávu přesunout do jiného tématu a zpět.\n"
 
 #: zerver/lib/onboarding.py
 #, python-brace-format
@@ -6829,7 +6829,7 @@ msgid ""
 "generating the URL."
 msgstr ""
 "Chybí tajný klíč zpětného volání HTTP. Při vytváření adresy URL prosím "
-"nastavte webhook_secret."
+"nastav webhook_secret."
 
 #: zerver/lib/webhooks/common.py
 msgid "Webhook signature verification failed."
@@ -7332,7 +7332,7 @@ msgstr "Historie úprav zprávy je v tomto kmeni vypnuta"
 
 #: zerver/views/message_edit.py
 msgid "You don't have permission to delete this message"
-msgstr "Nemáte oprávnění smazat tuto zprávu"
+msgstr "Nemáš oprávnění smazat tuto zprávu"
 
 #: zerver/views/message_edit.py
 msgid "The time limit for deleting this message has passed"
@@ -7446,7 +7446,7 @@ msgstr "Neplatný stav: {status}"
 #: zerver/views/push_notifications.py
 #| msgid "You do not have permission to post in this channel."
 msgid "You do not have permission to manage plans and billing."
-msgstr "Nemáte oprávnění spravovat plány a vyúčtování."
+msgstr "Nemáš oprávnění spravovat plány a vyúčtování."
 
 #: zerver/views/push_notifications.py
 msgid "Server doesn't use the push notification service"
@@ -7649,7 +7649,7 @@ msgstr "Import nelze zrušit poté, co byl zahájen."
 
 #: zerver/views/registration.py
 msgid "Unauthenticated"
-msgstr "Nejste přihlášeni"
+msgstr "Vyžadováno přihlášení"
 
 #: zerver/views/registration.py
 msgid ""
@@ -7715,7 +7715,7 @@ msgstr "Je třeba nastavit \"new_description\" nebo \"new_group_name\"."
 
 #: zerver/views/streams.py
 msgid "Invalid value for \"op\". Specify one of \"add\" or \"remove\"."
-msgstr "Neplatná hodnota pro \"op\". Nastavte buď \"add\" nebo \"remove\"."
+msgstr "Neplatná hodnota pro \"op\". Nastav buď \"add\" nebo \"remove\"."
 
 #: zerver/views/streams.py
 msgid "Invalid parameters"
@@ -7858,7 +7858,7 @@ msgstr "<p>Tento soubor neexistuje nebo byl smazán.</p>"
 
 #: zerver/views/upload.py
 msgid "<p>You are not authorized to view this file.</p>"
-msgstr "<p>Nejste oprávněn zobrazit tento soubor.</p>"
+msgstr "<p>Nemáš oprávnění zobrazit tento soubor.</p>"
 
 #: zerver/views/upload.py
 msgid "Invalid token"
@@ -8268,7 +8268,7 @@ msgid ""
 " try again later or reach out to {support_email} for assistance."
 msgstr ""
 "Byly dosaženy globální limity nedávného využití tohoto koncového bodu. "
-"Zkuste to, prosím, později, nebo se pro pomoc spojte s {support_email}."
+"Zkus to prosím později, nebo se pro pomoc obrať na {support_email}."
 
 #: zilencer/views.py
 msgid "Registration not found for this hostname"
