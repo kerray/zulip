@@ -587,7 +587,7 @@
    Me-messages are left alone: their text is rendered inline on the
    sender line itself, so it has no row of its own to span.
 
-   MAINTENANCE. This block re-declares `grid-template-areas` for
+   MAINTENANCE. This block redeclares `grid-template-areas` for
    `.messagebox-content`, and everything below follows from that, so it
    is coupled to the base grid earlier in this file. When merging
    upstream changes, check that:
