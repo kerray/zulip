@@ -45,11 +45,11 @@ msgstr "Soukromé větve"
 
 #: analytics/views/stats.py
 msgid "Direct messages"
-msgstr "Přímé zprávy"
+msgstr "Soukromé zprávy"
 
 #: analytics/views/stats.py
 msgid "Group direct messages"
-msgstr "Skupinové přímé zprávy"
+msgstr "Skupinové soukromé zprávy"
 
 #: analytics/views/stats.py
 #, python-brace-format
@@ -2452,12 +2452,12 @@ msgstr ""
 #: templates/zerver/emails/missed_message.subject.txt
 #, python-format
 msgid "Group DMs with %(direct_message_group_display_name)s"
-msgstr "Skupinové přímé zprávy s %(direct_message_group_display_name)s"
+msgstr "Skupinové soukromé zprávy s %(direct_message_group_display_name)s"
 
 #: templates/zerver/emails/missed_message.subject.txt
 #, python-format
 msgid "DMs with %(sender_str)s"
-msgstr "PM s %(sender_str)s"
+msgstr "Soukromé zprávy s %(sender_str)s"
 
 #: templates/zerver/emails/missed_message.subject.txt
 #, python-format
@@ -4334,11 +4334,11 @@ msgstr "Nic k upravení"
 
 #: zerver/actions/message_edit.py
 msgid "Direct messages cannot be moved to channels."
-msgstr "Přímé zprávy nelze přesunout do větví."
+msgstr "Soukromé zprávy nelze přesunout do větví."
 
 #: zerver/actions/message_edit.py
 msgid "Direct messages cannot have topics."
-msgstr "Přímé zprávy nemohou mít témata."
+msgstr "Soukromé zprávy nemohou mít témata."
 
 #: zerver/actions/message_edit.py
 msgid "Invalid propagate_mode without topic edit"
@@ -5300,7 +5300,7 @@ msgstr "Neplatná subdoména"
 
 #: zerver/lib/exceptions.py
 msgid "You do not have permission to initiate direct message conversations."
-msgstr "Nemáte oprávnění zahajovat rozhovory v přímých zprávách."
+msgstr "Nemáš oprávnění zahajovat rozhovory v soukromých zprávách."
 
 #: zerver/lib/exceptions.py
 #, python-brace-format
@@ -5329,7 +5329,7 @@ msgstr ""
 
 #: zerver/lib/exceptions.py
 msgid "Direct messages are disabled in this organization."
-msgstr "Přímé zprávy jsou v tomto kmeni zakázány."
+msgstr "Soukromé zprávy jsou v tomto kmeni zakázány."
 
 #: zerver/lib/exceptions.py
 msgid "This conversation does not include any users who can authorize it."
@@ -6146,6 +6146,10 @@ msgid "{full_name} mentioned everyone:"
 msgstr "{full_name} zmínil všechny:"
 
 #: zerver/lib/push_notifications.py
+msgid "New direct message"
+msgstr "Nová soukromá zpráva"
+
+#: zerver/lib/push_notifications.py
 msgid "New message"
 msgstr "Nová zpráva"
 
@@ -6217,7 +6221,7 @@ msgstr "'{email}' už kmenový chat nepoužívá."
 
 #: zerver/lib/recipient_users.py
 msgid "You can't send direct messages outside of your organization."
-msgstr "Nemůžeš posílat přímé zprávy mimo svůj kmen."
+msgstr "Nemůžeš posílat soukromé zprávy mimo svůj kmen."
 
 #: zerver/lib/reminders.py
 #, python-brace-format
@@ -6244,12 +6248,12 @@ msgid ""
 "You requested a reminder for the following direct message. Note:\n"
 " > {note}"
 msgstr ""
-"Připomínáme ti následující přímou zprávu. Poznámka:\n"
+"Připomínáme ti následující soukromou zprávu. Poznámka:\n"
 " > {note}"
 
 #: zerver/lib/reminders.py
 msgid "You requested a reminder for the following direct message."
-msgstr "Připomínáme ti následující přímou zprávu."
+msgstr "Připomínáme ti následující soukromou zprávu."
 
 #: zerver/lib/reminders.py
 #, python-brace-format
@@ -7846,7 +7850,7 @@ msgstr "Prázdný 'do' seznamu"
 
 #: zerver/views/typing.py
 msgid "User has disabled typing notifications for direct messages"
-msgstr "Uživatel vypnul oznámení o psaní pro přímé zprávy"
+msgstr "Uživatel vypnul oznámení o psaní pro soukromé zprávy"
 
 #: zerver/views/upload.py
 msgid "<p>This file does not exist or has been deleted.</p>"
