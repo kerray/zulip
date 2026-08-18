@@ -41,20 +41,29 @@
         {% endblock %}
 
         {#
-            Ur branding layer. The stylesheet itself is NOT in this fork — it is
-            versioned in the Ur infra repo (web/branding/ur.css) and served by
-            Caddy at /branding/ur.css, so changing a colour costs one apply
-            (seconds) instead of an image build plus a digest pin.
+        Ur branding layer. The stylesheet itself is NOT in this fork — it is
+        versioned in the Ur infra repo (web/branding/ur.css) and served by
+        Caddy at /branding/ur.css, so changing a colour costs one apply
+        (seconds) instead of an image build plus a digest pin.
 
-            This one line is the whole fork-side cost, and it sits here on
-            purpose: after the webpack loop above, so it is last in the cascade
-            and its :root overrides win; and OUTSIDE the customhead block, which
-            zerver/app/index.html overrides and would otherwise drop it on the
-            app page. base.html is the anchor because both the app and the
-            portico extend it, and it changed zero lines across Zulip 10.x → 12.x
-            — a patch that never moves is a patch that cannot conflict on rebase.
+        This one line is the whole fork-side cost, and it sits here on
+        purpose: after the webpack loop above, so it is last in the cascade
+        and its :root overrides win; and OUTSIDE the customhead block, which
+        zerver/app/index.html overrides and would otherwise drop it on the
+        app page. base.html is the anchor because both the app and the
+        portico extend it, and it changed zero lines across Zulip 10.x → 12.x
+        — a patch that never moves is a patch that cannot conflict on rebase.
         #}
         <link href="/branding/ur.css" rel="stylesheet" {% if csp_nonce %}nonce="{{ csp_nonce }}"{% endif %} />
+        {#
+        Second hook, same contract: /branding/site.js is served by the
+        deployment's Caddy alongside the stylesheet and carries whatever
+        deployment-specific behaviour is wanted (today: anonymous visit
+        statistics). The fork only loads it; what it does — and whether it
+        exists at all — is decided in the infra repo with an apply, not
+        with an image build. Deferred, so it never delays the app bundle.
+        #}
+        <script defer src="/branding/site.js" {% if csp_nonce %}nonce="{{ csp_nonce }}"{% endif %}></script>
     </head>
 
     <body>
