@@ -198,6 +198,8 @@
 * [Remove an APNs device token](/api/remove-apns-token)
 * [Add an FCM registration token](/api/add-fcm-token)
 * [Remove an FCM registration token](/api/remove-fcm-token)
+* [Add a web push subscription](/api/add-web-push-subscription)
+* [Remove a web push subscription](/api/remove-web-push-subscription)
 
 ## Specialty endpoints
 
