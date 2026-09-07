@@ -298,6 +298,7 @@ export default defineConfig(
         languageOptions: {
             globals: {
                 CSS: "readonly",
+                Notification: "readonly",
                 document: "readonly",
                 navigator: "readonly",
                 window: "readonly",
@@ -332,12 +333,34 @@ export default defineConfig(
     },
     {
         files: ["web/src/**"],
+        // The service worker files get the service-worker globals below
+        // instead; flat config merges `globals` rather than replacing them, so
+        // they have to be kept out of this block to not receive both.
+        ignores: ["web/src/service-worker.ts", "web/src/service_worker_handlers.ts"],
         languageOptions: {
             globals: {
                 ...globals.browser,
                 DEVELOPMENT: "readonly",
                 StripeCheckout: "readonly",
                 ZULIP_VERSION: "readonly",
+            },
+        },
+    },
+    {
+        // The service worker runs in a WebWorker global scope, not the DOM. It
+        // is excluded from the main tsconfig.json program (its WebWorker lib
+        // collides with lib.dom there — see web/tsconfig.service-worker.json),
+        // so point typed linting at that dedicated project and give it the
+        // service-worker globals rather than the browser ones.
+        files: ["web/src/service-worker.ts", "web/src/service_worker_handlers.ts"],
+        languageOptions: {
+            globals: {
+                ...globals.serviceworker,
+            },
+            parserOptions: {
+                projectService: false,
+                project: "./web/tsconfig.service-worker.json",
+                tsConfigRootDir: import.meta.dirname,
             },
         },
     },

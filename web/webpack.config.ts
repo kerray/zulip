@@ -204,7 +204,15 @@ const config = (
         output: {
             path: path.resolve(import.meta.dirname, "../static/webpack-bundles"),
             publicPath: "auto",
-            filename: production ? "[name].[contenthash].js" : "[name].js",
+            // The service worker is served from the site root at a stable URL
+            // (see zerver/views/service_worker.py), so it must not carry a
+            // content hash; every other bundle keeps one in production.
+            filename: (pathData) =>
+                pathData.chunk?.name === "service-worker"
+                    ? "[name].js"
+                    : production
+                      ? "[name].[contenthash].js"
+                      : "[name].js",
             assetModuleFilename: production
                 ? "files/[name].[hash][ext][query]"
                 : // Avoid directory traversal bug that upstream won't fix
@@ -226,7 +234,11 @@ const config = (
                 "...",
             ],
             splitChunks: {
-                chunks: "all",
+                // The service worker is a single self-contained file served
+                // from the site root (see zerver/views/service_worker.py), so
+                // it must never have chunks split out of it; enforce that here
+                // rather than relying on it importing no app code.
+                chunks: (chunk) => chunk.name !== "service-worker",
                 // webpack/examples/many-pages suggests 20 requests for HTTP/2
                 maxAsyncRequests: 20,
                 maxInitialRequests: 20,

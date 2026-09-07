@@ -180,6 +180,7 @@ import * as user_topic_popover from "./user_topic_popover.ts";
 import * as user_topics from "./user_topics.ts";
 import * as util from "./util.ts";
 import * as watchdog from "./watchdog.ts";
+import * as web_push from "./web_push.ts";
 import * as widgets from "./widgets.ts";
 
 function update_page_loading_indicator_notice() {
@@ -697,6 +698,7 @@ export async function initialize_everything(state_data) {
         on_narrow_search: message_view.show,
     });
     desktop_notifications.initialize();
+    web_push.initialize();
     audible_notifications.initialize();
     compose_notifications.initialize({
         on_click_scroll_to_selected: message_viewport.scroll_to_selected,

@@ -70,6 +70,7 @@ from zerver.views.invite import (
     revoke_user_invite,
 )
 from zerver.views.llms_txt import llms_txt
+from zerver.views.manifest import web_app_manifest, web_app_manifest_icon
 from zerver.views.message_edit import (
     delete_message_backend,
     get_message_edit_history,
@@ -181,6 +182,7 @@ from zerver.views.scheduled_messages import (
     update_scheduled_message_backend,
 )
 from zerver.views.sentry import sentry_tunnel
+from zerver.views.service_worker import serve_service_worker
 from zerver.views.storage import get_storage, remove_storage, update_storage
 from zerver.views.streams import (
     add_default_stream,
@@ -275,6 +277,7 @@ from zerver.views.video_calls import (
     register_webex_user,
     register_zoom_user,
 )
+from zerver.views.web_push import add_web_push_subscription, remove_web_push_subscription
 from zerver.views.welcome_bot_custom_message import send_test_welcome_bot_custom_message
 from zproject import dev_urls
 
@@ -481,6 +484,12 @@ v1_api_and_json_patterns = [
     rest_path("mobile_push/test_notification", POST=send_test_push_notification_api),
     rest_path("mobile_push/e2ee/test_notification", POST=send_e2ee_test_push_notification_api),
     rest_path("mobile_push/register", POST=register_push_device),
+    # Endpoint used by browsers to register their Web Push subscriptions.
+    rest_path(
+        "users/me/web_push_subscriptions",
+        POST=add_web_push_subscription,
+        DELETE=remove_web_push_subscription,
+    ),
     # users/*/presence => zerver.views.presence.
     rest_path(
         "users/me/presence", POST=(update_active_status_backend, {"narrow_user_session_cache"})
@@ -849,6 +858,20 @@ urls += [
 # following the llms.txt specification (https://llmstxt.org/).
 urls += [
     path("llms.txt", llms_txt),
+]
+
+# The per-realm PWA web app manifest and its resized realm-icon assets. These
+# are public (installable without logging in) and served at the site root so
+# their scope covers the whole app.
+urls += [
+    path("manifest.webmanifest", web_app_manifest),
+    path("manifest/icon-<int:size>.png", web_app_manifest_icon),
+]
+
+# The web push service worker, served from the site root so its scope covers
+# the whole app.
+urls += [
+    path("service-worker.js", serve_service_worker),
 ]
 
 # Incoming webhook URLs
