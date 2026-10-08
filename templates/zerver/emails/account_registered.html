@@ -5,50 +5,28 @@
 {% endblock %}
 
 {% block content %}
-{% if realm_creation %}
-<p>
-    {% trans %}Congratulations, you have created a new Zulip
-    organization: <b>{{ realm_name }}</b>.{% endtrans %}
-</p>
-{% else %}
-<p>{{ _('Welcome to Zulip!') }}</p>
-<p>
-    {% trans %}You've joined the Zulip organization <b>{{ realm_name }}</b>.
-    {% endtrans %}
-</p>
-{% endif %}
+<p>Ahoj,</p>
 
 <p>
-    {% trans apps_page_link="https://zulip.com/apps/" %}You will use the following info to log into the Zulip web, <a href="{{ apps_page_link }}">mobile and desktop</a> apps:{% endtrans %}
-</p>
-<ul>
-    <li>{% trans organization_url=macros.link_tag(realm_url) %}Organization URL: {{ organization_url }}{% endtrans %}<br /></li>
-    {% if ldap %}
-        {% if ldap_username %}
-        <li>{% trans %}Your username: {{ ldap_username }}{% endtrans %}<br /></li>
-        {% else %}
-        <li>{{ _('Use your LDAP account to log in') }}<br /></li>
-        {% endif %}
-    {% else %}
-        <li>{% trans email=macros.email_tag(email) %}Your account email: {{ email }}{% endtrans %}<br /></li>
-    {% endif %}
-</ul>
-<p>
-    <a class="button" href="{{ realm_url }}">{{ _('Go to organization') }}</a>
+    máš účet v Mostu - to je chat, komunikační osa spolku Archetypal: {{ macros.link_tag(realm_url) }}<br />
+    Přihlásíš se stejným účtem jako na web, tlačítkem „Přihlásit se pomocí Authentik“. Tvůj účet: {{ macros.email_tag(email) }}.
 </p>
 
 <p>
-    {% trans %}If you are new to Zulip, check out our <a href="{{ getting_user_started_link }}">getting started guide</a>!{% endtrans %}
-    {% if is_realm_admin %}
-    {% trans %}We also have a guide for <a href="{{ getting_organization_started_link }}">moving your organization to Zulip</a>.{% endtrans %}
-    {% endif %}
+    <a class="button" href="{{ realm_url }}">Otevřít Most</a>
 </p>
 
 <p>
-    {% if corporate_enabled %}
-        {% trans %}Questions? <a href="mailto:{{ support_email }}">Contact us</a> — we'd love to help!{% endtrans %}
-    {% else %}
-        {{macros.contact_us_self_hosted(support_email)}}
-    {% endif %}
+    Upozornění na nové zprávy: otevři Most v prohlížeči a v menu prohlížeče zvol „Instalovat aplikaci“ (v telefonu „Přidat na plochu“). Takhle nainstalovaný Most Ti posílá upozornění. Oficiální aplikace Zulip pro mobil i počítač funguje taky, jen z ní upozornění nechodí.
 </p>
+
+<p>
+    V Mostu se mluví v kanálech a každý rozhovor má své téma. Začít můžeš třeba tím, že se představíš.
+</p>
+
+<p>
+    Kdyby něco nešlo, napiš na {{ macros.email_tag("predseda@archetypal.cz") }}.
+</p>
+
+<p>Archetypal</p>
 {% endblock %}
