@@ -183,6 +183,11 @@ class LocalUploadBackend(ZulipUploadBackend):
         return f"/user_avatars/{realm_id}/realm/icon.png?version={version}"
 
     @override
+    def get_realm_icon_image(self, realm: Realm) -> bytes:
+        file_path = os.path.join(self.realm_avatar_and_logo_path(realm), "icon.original")
+        return b"".join(read_local_file("avatars", file_path))
+
+    @override
     def store_realm_icon_image(
         self, icon_file: IO[bytes], user_profile: UserProfile, content_type: str
     ) -> None:

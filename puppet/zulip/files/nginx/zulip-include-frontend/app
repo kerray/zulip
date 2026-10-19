@@ -27,6 +27,16 @@ location /static/ {
     }
 }
 
+# The web push service worker is served from the site root (so its scope
+# covers the whole app) directly from the built bundle, rather than proxying
+# to Django. It must revalidate on each load and is allowed the root scope.
+location = /service-worker.js {
+    alias /home/zulip/prod-static/webpack-bundles/service-worker.js;
+    include /etc/nginx/zulip-include/headers;
+    add_header Service-Worker-Allowed /;
+    add_header Cache-Control no-cache;
+}
+
 # Canonical URL for the root is /help/.
 location = /help {
     return 301 /help/;

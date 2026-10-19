@@ -312,6 +312,7 @@ def json_change_settings(
     enable_stream_desktop_notifications: Json[bool] | None = None,
     enable_stream_email_notifications: Json[bool] | None = None,
     enable_stream_push_notifications: Json[bool] | None = None,
+    enable_web_push_notifications: Json[bool] | None = None,
     enter_sends: Json[bool] | None = None,
     fluid_layout_width: Json[bool] | None = None,
     full_name: str | None = None,

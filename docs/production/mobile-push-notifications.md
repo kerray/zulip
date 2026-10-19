@@ -186,6 +186,11 @@ notification forwarding service, which allows registered Zulip servers
 to send push notifications to the Zulip app indirectly (through the
 forwarding service).
 
+For browser and installed-PWA notifications, which do not have this app-store
+constraint, Zulip uses [web push notifications](web-push-notifications.md)
+instead; those are delivered directly by your server and need no forwarding
+service.
+
 ## Security and privacy
 
 :::{note}
